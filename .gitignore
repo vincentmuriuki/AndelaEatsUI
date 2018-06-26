@@ -8,3 +8,7 @@ app/dist
 .DS_Store
 app/package-lock.json
 app/yarn.lock
+
+# testing
+app/src/tests/components/__snapshots__
+app/coverage/
