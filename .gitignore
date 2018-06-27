@@ -1,13 +1,12 @@
 # dependencies
-app/node_modules
-
+node_modules
 # production
 app/dist
 
 # misc
 .DS_Store
 app/package-lock.json
-app/yarn.lock
+yarn.lock
 
 # testing
 app/src/tests/components/__snapshots__
