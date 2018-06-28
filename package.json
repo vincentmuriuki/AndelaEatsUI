@@ -8,8 +8,8 @@
     "build": "./node_modules/.bin/webpack --config webpack.dev.js",
     "build:production": "./node_modules/.bin/webpack --config webpack.prod.js",
     "start": "./node_modules/.bin/webpack-dev-server --config webpack.prod.js",
-    "test": "jest --config=jest.config.json",
-    "coverage": "jest --config=jest.config.json --coverage"
+    "test": "jest --config=./app/jest.config.json --updateSnapshot",
+    "coverage": "jest --config=./app/jest.config.json --coverage"
 
   },
   "keywords": [],
