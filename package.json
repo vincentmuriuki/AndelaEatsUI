@@ -12,10 +12,10 @@
     "test": "jest --config=./jest.config.json --updateSnapshot",
     "setup:hooks": "sh setup_hooks.sh",
     "precommit-msg": "echo 'Running pre-commit checks...' && exit 0",
-    "lint": "eslint ./src/**/*.js ./src/**/*.jsx",
+    "lint": "eslint /src/**/*.js /src/**/*.jsx",
     "coverage": "jest --config=./jest.config.json --coverage"
   },
-  "precommit": {
+  "pre-commit": {
     "run": [
       "setup:hooks",
       "precommit-msg",
@@ -45,7 +45,7 @@
     "babel-preset-react-hmre": "^1.1.1",
     "css-loader": "^0.28.9",
     "enzyme-to-json": "^3.3.4",
-    "eslint": "^5.0.1",
+    "eslint": "4.19.1",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
@@ -54,6 +54,7 @@
     "html-webpack-plugin": "^3.0.7",
     "jest": "^23.2.0",
     "node-sass": "^4.7.2",
+    "pre-commit": "^1.2.2",
     "react-hot-loader": "^3.1.3",
     "react-test-renderer": "^16.4.1",
     "sass-loader": "^6.0.6",

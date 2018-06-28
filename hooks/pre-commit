@@ -23,7 +23,7 @@ linting() {
   fi
   which "$2"  &> /dev/null
   if [[ "$?" == 1 ]]; then
-    echo "Please install $2 globally; run: yarn global add $2 javascript"
+    echo "Please install $2 globally; run: npm install $2 javascript"
     exit 1
   fi
   echo "Validating $3 ..........."
