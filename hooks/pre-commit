@@ -1,7 +1,5 @@
-#!/usr/bin/env bash
-
+#!/bin/bash
 ./node_modules/pre-commit/hook
-
 RESULT=$?
 
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep ".jsx\{0,1\}$")
@@ -47,6 +45,4 @@ if ! $PASS; then
 fi
 
 [ $RESULT -ne 0 ] && exit 1
-
 exit 0
-
