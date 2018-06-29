@@ -7,7 +7,7 @@ class Dashboard extends Component {
     return(
       <div>
         <Navbar />
-        <h1>I am Dashboard</h1>
+        <h1>I am Dashboard on it</h1>
       </div>
     )
   }

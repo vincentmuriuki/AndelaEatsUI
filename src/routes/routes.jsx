@@ -9,12 +9,11 @@ import Dashboard from '../pages/Dashboard/Dashboard';
 const Root = () => (
   <Router>
     <Switch>
-      <Route exact path='/login' component={LoginComponent} />
-      <Route path='/' component={DashboardContainer} />
+      <Route exact path="/login" component={LoginComponent} />
+      <Route path="/" component={DashboardContainer} />
       <Route path="/" component={Dashboard} />
     </Switch>
   </Router>
 );
 
 export default Root;
-

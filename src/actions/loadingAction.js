@@ -1,8 +1,8 @@
 import { IS_LOADING } from './actionTypes';
 
-export const loadingAction = status => {
-  return {
+export const loadingAction = status => (
+  {
     type: IS_LOADING,
     payload: status
   }
-};
+);
