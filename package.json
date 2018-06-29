@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "./node_modules/.bin/webpack-dev-server --config ./webpack.dev.js",
+    "dev": "./node_modules/.bin/webpack-dev-server --open --config ./webpack.dev.js",
+    "prebuild": "rm -rf ./dist",
     "build": "./node_modules/.bin/webpack --config ./webpack.dev.js",
     "build:production": "./node_modules/.bin/webpack --config ./webpack.prod.js",
     "start": "./node_modules/.bin/webpack-dev-server --config ./webpack.prod.js",
