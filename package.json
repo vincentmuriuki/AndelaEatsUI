@@ -4,15 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "./node_modules/.bin/webpack-dev-server --config ./app/webpack.dev.js",
-    "build": "./node_modules/.bin/webpack --config ./app/webpack.dev.js",
-    "build:production": "./node_modules/.bin/webpack --config ./app/webpack.prod.js",
-    "start": "./node_modules/.bin/webpack-dev-server --config ./app/webpack.prod.js",
-    "test": "jest --config=./app/jest.config.json --updateSnapshot",
+    "dev": "./node_modules/.bin/webpack-dev-server --config ./webpack.dev.js",
+    "build": "./node_modules/.bin/webpack --config ./webpack.dev.js",
+    "build:production": "./node_modules/.bin/webpack --config ./webpack.prod.js",
+    "start": "./node_modules/.bin/webpack-dev-server --config ./webpack.prod.js",
+    "test": "jest --config=./jest.config.json --updateSnapshot",
     "setup:hooks": "sh setup_hooks.sh",
     "precommit-msg": "echo 'Running pre-commit checks...' && exit 0",
-    "lint": "eslint ./app/src/**/*.js ./app/src/**/*.jsx",
-    "coverage": "jest --config=./app/jest.config.json --coverage"
+    "lint": "eslint ./src/**/*.js ./src/**/*.jsx",
+    "coverage": "jest --config=./jest.config.json --coverage"
   },
   "precommit": {
     "run": [
@@ -26,6 +26,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "pre-commit": "^1.2.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
@@ -41,9 +43,8 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-react-hmre": "^1.1.1",
     "css-loader": "^0.28.9",
-    "enzyme": "^3.3.0",
-    "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.4",
+    "eslint": "^5.0.1",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
