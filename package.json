@@ -12,7 +12,7 @@
     "test": "jest --config=./jest.config.json --updateSnapshot",
     "setup:hooks": "sh setup_hooks.sh",
     "precommit-msg": "echo 'Running pre-commit checks...' && exit 0",
-    "lint": "eslint /src/**/*.js /src/**/*.jsx",
+    "lint": "eslint ./src/**/*.js ./src/**/*.jsx",
     "coverage": "jest --config=./jest.config.json --coverage"
   },
   "pre-commit": {
@@ -27,8 +27,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "boom": "^7.2.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
+    "hoek": "^5.0.3",
     "pre-commit": "^1.2.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
