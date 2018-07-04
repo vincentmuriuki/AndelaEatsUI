@@ -3,8 +3,12 @@
   height: inherit;
   grid-template-columns: 50% auto;
   background-color: $color-blue;
+  color: $color-white
 }
-
+a{
+  text-decoration: none;
+  color:$color-blue
+}
 .main-wrapper {
   overflow: hidden;
 }
