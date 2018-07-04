@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { isAuthorized } from '../../helpers/authorization';
+import Navbar from '../../common/Navbar/Navbar';
+import Sidenav from '../../common/Sidenav/Sidenav';
+
 /**
  * Application order page
  */
@@ -25,10 +28,9 @@ class OrderPage extends Component {
       return <Redirect to="/" />;
     }
     return (
-      <div>
-        <h1>
-           this is the order page
-        </h1>
+      <div className="wrapper">
+        <Navbar />
+        <Sidenav />
       </div>
     );
   }
