@@ -6,6 +6,12 @@ import Root from './routes/routes';
 import store from './store/store';
 import './styles/main.scss';
 
+import { config } from './config';
+
+// eslint-disable-next-line
+Raven.config(config.SENTRY_URL)
+  .install();
+
 ReactDOM.render(
   <Provider store={store}>
     <Root />
