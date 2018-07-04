@@ -1,7 +1,18 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import logo from '../../assets/images/logo.png';
-import backgroundImg 
+import 
+backgroundImg 
   from '../../assets/images/google-logo-icon-PNG-Transparent-Background.png';
+
+// configuration
+import { config } from '../../config';
+
+// helper
+import checkLogin from '../../helpers/checkLogin';
+
+// style
+import '../../assets/scss/font.scss';
 
 /**
  * 
@@ -21,12 +32,18 @@ class Login extends Component {
   }
 
   /**
- * 
- * This is React render method that render the UI on the dom
- * @function SigninForm
- * @return { void }
- */
+   * 
+   * This is React render method that render the UI on the dom
+   * @function SigninForm
+   * @return { void }
+   */
   render() {
+    const redirectUrl = `${config.ANDELA_API_BASE_URL}/login?redirect_url=${config.BASE_URL}`;
+  
+    console.log(checkLogin())
+    if (checkLogin()) {
+      return <Redirect to="/ordermeal" />;
+    }
     return (
       <div className="main-wrapper">
         <div className="grid-container">
@@ -34,13 +51,13 @@ class Login extends Component {
             <div className="logo-container">
               <img src={logo} alt="logo" width="60" height="60" />
               <div className="logo-name">
-              AndelaEats
+                  AndelaEats
               </div>
             </div>
             <div className="login-page-caption">
-              A convinent way to 
+                A convinent way to 
               <br /> 
-              order your meals
+                order your meals
             </div>
             <div className="google-button">
               <div className="google-img">
@@ -50,7 +67,9 @@ class Login extends Component {
                 />
               </div>
               <div className="login-button">
-                LOGIN WITH GOOGLE
+                <a href={redirectUrl}>
+                  LOGIN WITH GOOGLE
+                </a>
               </div>
             </div>
           </div>
@@ -60,5 +79,4 @@ class Login extends Component {
     );
   }
 }
-
 export default Login;

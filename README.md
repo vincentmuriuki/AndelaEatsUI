@@ -29,6 +29,13 @@ Series of steps needed to get a development env running.
 
   `cd AndelaEatsUI/app`
 
+* You will require to create an alias for andelaeats-dev.andela.com in your /etc/hosts which you can access by running this command
+  ```sudo vim /etc/hosts``` which opens your /etc/hosts for editing using vim.
+  To edit it, get into insert mode by pressing ```i``` key and put these
+   ```127.0.0.1       andelaeats-dev.andela.com``` after the last line.
+
+* Be sure to rename `.env-sample` to `.env` and change the `NODE_ENV` and other environment variables appropriately. Starting the application for development and building for project is dependent on the `NODE_ENV` variable specified in the `.env` file.
+
 * Install all dependecies.
   `npm install`
 
