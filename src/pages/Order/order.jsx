@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-
+import { Redirect } from 'react-router-dom';
+import { isAuthorized } from '../../helpers/authorization';
 /**
  * Application order page
  */
@@ -20,6 +21,9 @@ class OrderPage extends Component {
    * @return { void }
    */
   render() {
+    if (!isAuthorized()) {
+      return <Redirect to="/" />;
+    }
     return (
       <div>
         <h1>

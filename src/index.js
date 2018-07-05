@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import Root from './routes/routes';
-import store from './store/store';
+import configureStore from './store/store';
 import './styles/main.scss';
-
+import './assets/images/favicon.ico';
 import { config } from './config';
+
+const store = configureStore({});
+
 
 // eslint-disable-next-line
 Raven.config(config.SENTRY_URL)
