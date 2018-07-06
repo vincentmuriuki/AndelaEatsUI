@@ -1,9 +1,8 @@
 import jwtDecode from 'jwt-decode';
-import { Redirect } from 'react-router-dom';
 import { isAuthorized } from './authorization';
 
 const isValid = () => {
-  const { cookie } = document.cookie;
+  const cookie = document.cookie;
   const token = cookie.split('jwt-token=');
   if (token.length === 2) {
     const jwtToken = token[1];
@@ -31,10 +30,10 @@ export const tokenValidator = store => next => action => {
       return next(action);
     }
     if (!isAuthorized()) {
-      window.location.href = "/";
+      // window.location.href = "/";
     } 
     document.cookie = '';
     localStorage.setItem('error', 'Session has expired, kindly re-login');
-    window.location.href = "/";
+    // window.location.href = "/";
   }
 };

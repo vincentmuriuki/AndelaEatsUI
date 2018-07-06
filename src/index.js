@@ -8,7 +8,7 @@ import './styles/main.scss';
 import './assets/images/favicon.ico';
 import { config } from './config';
 
-const store = configureStore({});
+const store = configureStore();
 
 
 // eslint-disable-next-line

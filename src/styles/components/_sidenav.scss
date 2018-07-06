@@ -45,12 +45,6 @@
     cursor: pointer;
     color: $color-dark-gray;
   }
-  &:hover::after {
-    border-width: 10px;
-    border-right-color: $color-blue;
-    border-bottom-color: $color-blue;
-  }
-  
 }
 
 .side-nav-item::before,
