@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
-import Root from './routes/routes';
+import App from './components/App';
 import configureStore from './store/store';
 import './styles/main.scss';
 import './assets/images/favicon.ico';
@@ -12,12 +12,11 @@ const store = configureStore();
 
 
 // eslint-disable-next-line
-Raven.config(config.SENTRY_URL)
-  .install();
+Raven.config(config.SENTRY_URL).install();
 
 ReactDOM.render(
   <Provider store={store}>
-    <Root />
+    <App />
   </Provider>, 
   document.getElementById('app')
 );
