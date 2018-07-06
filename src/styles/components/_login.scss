@@ -5,10 +5,12 @@
   background-color: $color-blue;
   color: $color-white
 }
+
 a{
   text-decoration: none;
   color:$color-blue
 }
+
 .main-wrapper {
   overflow: hidden;
 }
@@ -38,7 +40,6 @@ a{
 .login-picture-frame {
   background-image: url('./../assets/images/side_image.jpg');
   background-size: cover;
-
 }
 
 .login-page-caption {
@@ -52,7 +53,7 @@ a{
 .login-button {
   height: 50px;
   background-color: #fff;
-  color: #365edc;
+  color: $color-blue;
   width: 224px;
   padding: 8px;
   font-size: 18px;
