@@ -12,7 +12,7 @@ const SideNav = (props) => (
       </a>
       <a href="#">
         <li className="side-nav-item order">
-          <span>Home</span>
+          <span>Orders</span>
         </li>
       </a>
     </ul> 

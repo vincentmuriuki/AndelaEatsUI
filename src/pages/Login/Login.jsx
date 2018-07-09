@@ -79,19 +79,19 @@ class Login extends Component {
               <br /> 
                 order your meals
             </div>
-            <div className="google-button">
-              <div className="google-img">
-                <img 
-                  src={backgroundImg}
-                  alt="google-logo"
-                />
-              </div>
-              <a href={redirectUrl}>
+            <a href={redirectUrl}>
+              <div className="google-button">
+                <div className="google-img">
+                  <img 
+                    src={backgroundImg}
+                    alt="google-logo"
+                  />
+                </div>
                 <div className="login-button">
                   LOGIN WITH GOOGLE
                 </div>
-              </a>
-            </div>
+              </div>
+            </a>
             <ToastContainer />
           </div>
           <div className="login-picture-frame" />
