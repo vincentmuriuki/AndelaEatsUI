@@ -3,10 +3,11 @@ import { combineReducers } from 'redux';
 import userReducer from './userReducer';
 import loadingReducer from './loadingReducer';
 import ordersReducer from './ordersReducer';
+import menuReducer from './menuReducer';
 
-const rootReducer = combineReducers({
+export default combineReducers({
   userReducer,
-  upcomingMenus: ordersReducer,
-  isLoading: loadingReducer
+  upcomingMenus: menuReducer,
+  isLoading: loadingReducer,
+  orders: ordersReducer
 });
-export default rootReducer;

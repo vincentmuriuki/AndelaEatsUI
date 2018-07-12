@@ -52,7 +52,10 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
+        query: {
+          plugins: ['transform-class-properties', 'transform-object-rest-spread']
+        }
       }
     ]
   },
@@ -67,6 +70,6 @@ module.exports = {
         ...NODE_ENV
       }
     }),
-    new ExtractTextPlugin("bundle.css"),
+    new ExtractTextPlugin("bundle.css")
   ],
 };
