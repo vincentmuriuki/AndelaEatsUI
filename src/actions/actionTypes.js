@@ -1,2 +1,3 @@
 export const IS_LOADING = 'IS_LOADING';
 export const LOAD_ACTIVE_USER_SUCCESS = 'LOAD_ACTIVE_USER_SUCCESS';
+export const SET_MENUS = 'SET_MENUS';

@@ -36,6 +36,7 @@
       "no-lonely-if": 0,
       "import/extensions": 0,  
       "jsx-a11y/href-no-hash": 0,
+      "jsx-a11y/label-has-for": 0,
       "jsx-a11y/click-events-have-key-events": 0,
       "jsx-a11y/anchor-is-valid": 0,
       "jsx-a11y/no-static-element-interaction": 0,
@@ -73,7 +74,7 @@
       "require-jsdoc": ["error", {
         "require": {
             "FunctionDeclaration": true,
-            "MethodDefinition": true,
+            "MethodDefinition": false,
             "ClassDeclaration": true
         }
     }] 

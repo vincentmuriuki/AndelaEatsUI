@@ -2,7 +2,7 @@ import jwtDecode from 'jwt-decode';
 import { isAuthorized } from './authorization';
 
 const isValid = () => {
-  const cookie = document.cookie;
+  const { cookie } = document;
   const token = cookie.split('jwt-token=');
   if (token.length === 2) {
     const jwtToken = token[1];

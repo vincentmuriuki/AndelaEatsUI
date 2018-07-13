@@ -4,16 +4,16 @@ import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 
-import logo from '../../assets/images/andela-logo.png';
+import logo from '../../../assets/images/andela-logo.png';
 import 
 backgroundImg 
-  from '../../assets/images/google-logo-icon-PNG-Transparent-Background.png';
+  from '../../../assets/images/google-logo-icon-PNG-Transparent-Background.png';
 
 // Actions
-import loadActiveUser from '../../actions/activeUserAction';
+import loadActiveUser from '../../../actions/activeUserAction';
 
 // helper
-import logoutActiveUser from '../../helpers/logoutUser';
+import logoutActiveUser from '../../../helpers/logoutUser';
 
 /**
  * Application nav bar
@@ -47,7 +47,7 @@ class Navbar extends Component {
    */
   componentDidUpdate(prevProps) {
     if (prevProps.activeUser !== this.props.activeUser) {
-      this.setState({ activeUser: this.props.activeUser });
+      this.setState({ activeUser: this.props.activeUser }); // eslint-disable-line
     }
   }
 
@@ -118,4 +118,8 @@ Navbar.propTypes = {
   }),
 };
 
-export default connect(mapStateToProps, { loadActiveUser, logoutActiveUser })(Navbar);
+export default connect(mapStateToProps, 
+  { 
+    loadActiveUser,
+    logoutActiveUser 
+  })(Navbar);

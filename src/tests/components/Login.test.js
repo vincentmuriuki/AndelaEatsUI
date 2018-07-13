@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Login from '../../pages/Login/Login.jsx';
+import Login from '../../components/Login/Login';
 
 /* 
 global jest 
