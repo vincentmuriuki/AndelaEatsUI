@@ -6,8 +6,10 @@ dist
 
 # misc
 .DS_Store
+__snapshots__
+**.log
 
 # testing
-src/tests/components/__snapshots__
+**.snap
 coverage/
 pre-commit.old

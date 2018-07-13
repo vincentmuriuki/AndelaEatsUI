@@ -4,11 +4,7 @@ import moment from 'moment';
 import { Redirect, Route, NavLink } from 'react-router-dom';
 import PropType from 'prop-types';
 import Menus from './Menus';
-import { getUpComingMenus } from '../../actions/ordersAction';
-import Navbar from '../common/Navbar/Navbar';
-import Sidenav from '../common/Sidenav/Sidenav';
-import { isAuthorized } from '../../helpers/authorization';
-
+import { getUpComingMenus } from '../../actions/menuAction';
 
 /**
  *
@@ -56,12 +52,9 @@ class Orders extends Component {
 
 
   render() {
-    if (!isAuthorized()) return <Redirect to="/" />;
     const { match: { url }, menus } = this.props;
     return (
       <div className="wrapper">
-        <Navbar />
-        <Sidenav />
         <div className="orders-wrapper">
           <h3>Make Orders</h3>
 

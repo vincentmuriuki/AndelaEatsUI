@@ -7,12 +7,13 @@ const isValid = () => {
   if (token.length === 2) {
     const jwtToken = token[1];
     const decodedToken = jwtDecode(jwtToken);
-    const { exp } = decodedToken.exp;
-    if (exp > Math.floor(new Date().getTime() / 1000)) {
+    const { exp } = decodedToken;
+    if (exp > Math.floor(new Date().getTime() / 1000)) {      
       return true;
     } 
     return false;
   }
+  return true;
 };
 
 /**
@@ -25,15 +26,15 @@ const isValid = () => {
  * @returns {function} -  checkTokenStatus
  */
 export const tokenValidator = store => next => action => {
-  if (process.env.NODE_ENV !== 'test') {
+  if (process.env.NODE_ENV !== 'test') {    
     if (isValid()) {
       return next(action);
     }
     if (!isAuthorized()) {
-      // window.location.href = "/";
+      window.location.href = "/";
     } 
     document.cookie = '';
     localStorage.setItem('error', 'Session has expired, kindly re-login');
-    // window.location.href = "/";
+    window.location.href = "/";
   }
 };

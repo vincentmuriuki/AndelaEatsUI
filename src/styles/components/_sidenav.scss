@@ -45,6 +45,11 @@
     cursor: pointer;
     color: $color-dark-gray;
   }
+  &:hover::after {
+    border-width: 10px;
+    border-right-color: $color-blue;
+    border-bottom-color: $color-blue;
+  }
 }
 
 .side-nav-item::before,
@@ -82,3 +87,19 @@
     background-image: url('../assets/images/active-delivery-truck.png');
   }
 }
+
+.main-container {
+  margin-left: 150px;
+  width: calc(100% - 150px);
+  
+  .section {
+    width: 80%;
+    margin: 50px auto;
+    min-width: 400px;
+  }
+}
+
+.push-down {
+  padding-top: 80px;
+}
+

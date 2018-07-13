@@ -1,28 +1,34 @@
-
 import axios from 'axios';
-import { SET_MENUS } from './actionTypes';
+import {
+  FETCH_ORDERS_LOADING, FETCH_ORDERS_SUCCESS, FETCH_ORDERS_FAILURE
+} from './actionTypes';
 import { config } from '../config';
 
-const baseUrl = config.API_BASE_URL;
+export const base = `${config.API_BASE_URL}/orders`;
 
-/**
- *
- *
- * @export
- * @param {*} menus
- * @returns {object} object
- */
-export function setMenus(menus) {
-  return {
-    type: SET_MENUS,
-    payload: menus
-  };
-}
+export const setOrdersSuccess = (orders, currentPage) => ({
+  type: FETCH_ORDERS_SUCCESS,
+  orders: { ...orders, currentPage }
+});
 
+export const setOrdersFailure = (error) => ({
+  type: FETCH_ORDERS_FAILURE,
+  error
+});
 
-export const getUpComingMenus = () => (dispatch) => {
-  axios.get(`${baseUrl}/menu`)
+export const setOrdersLoading = (isLoading) => ({
+  type: FETCH_ORDERS_LOADING,
+  isLoading
+});
+
+export const fetchOrders = (page = 1, limit = 9) => (dispatch) => {
+  dispatch(setOrdersLoading(true));
+  return axios.get(`${base}?page=${page}&limit=${limit}`)
     .then((response) => {
-      dispatch(setMenus(response.data));
+      dispatch(setOrdersSuccess(response.data, page));
+      dispatch(setOrdersLoading(false));
+    }).catch((error) => {
+      dispatch(setOrdersFailure(error));
+      dispatch(setOrdersLoading(false));
     });
 };
