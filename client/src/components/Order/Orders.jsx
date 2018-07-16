@@ -3,8 +3,10 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { Redirect, Route, NavLink } from 'react-router-dom';
 import PropType from 'prop-types';
+
 import Menus from './Menus';
 import { getUpComingMenus } from '../../actions/menuAction';
+import canOrderMeal from '../../helpers/canOrderMeal';
 
 /**
  *
@@ -20,7 +22,9 @@ class Orders extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      endDate: new Date().getDate() + 7
+    };
   }
 
   componentWillMount() {
@@ -35,18 +39,29 @@ class Orders extends Component {
    */
   renderDates() {
     if (this.props.menus) {
-      return this.props.menus.map((currentDate) => (
-        <li key={currentDate.id} className="dates">
-          <NavLink
-            activeClassName="active"
-            to={`${this.props.match.url}/${currentDate.id}`}
-            className="date-link"
-          >
-            {moment(currentDate.date).format('dddd Do')}
-          </NavLink>
-          <div className="border-circle" />
-        </li>
-      ));
+      return this.props.menus.map((menuDate) => {
+        if (new Date(menuDate.date).getDate() >= new Date().getDate() 
+            && new Date(menuDate.date).getDate() <= this.state.endDate) {
+          return (
+            <li 
+              key={menuDate.id} 
+              className={canOrderMeal(menuDate) ? "dates" : 'dates-disable'}
+            >
+              <NavLink
+                activeClassName={canOrderMeal(menuDate) 
+                  ? "active" : 'isDisabled'}
+                
+                to={canOrderMeal(menuDate) 
+                  ? `${this.props.match.url}/${menuDate.id}` : '#'}
+              >
+                {moment(menuDate.date).format('dddd Do')}
+              </NavLink>
+              <div className="border-circle" />
+            </li>
+          );
+        }
+        return false;
+      });
     }
   }
 

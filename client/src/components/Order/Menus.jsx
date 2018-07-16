@@ -52,9 +52,9 @@ class Menus extends Component {
     let firstAccompaniment;
     let secondAccompaniment;
     if (menus) {
-      mainMeal = menus.meal.main;
-      firstAccompaniment = menus.meal.firstAccompaniment;
-      secondAccompaniment = menus.meal.secondAccompaniment;
+      mainMeal = menus.meal.main || 'No Meal to Display';
+      firstAccompaniment = menus.meal.firstAccompaniment || 'No Meal to Display';
+      secondAccompaniment = menus.meal.secondAccompaniment || 'No Meal to Display';
     }
 
     return (

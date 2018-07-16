@@ -8,8 +8,8 @@
   }
 
 .orders-container {
-  height: 500px;    
-  width: 90% !important;    
+  height: auto;    
+  width: 1080px; 
   border: 1px solid $color-light-gray;    
   background-color: $color-white;
   display: flex;
@@ -26,7 +26,7 @@
     }
 
     ul {
-      margin-top: 20%;
+      margin-top: 10%;
     }
 
     li {
@@ -191,19 +191,6 @@
     border: none;
     transition: border-width 0.2s ease-in;
 
-    &:active {
-      margin-left: -20px;
-      position: absolute;
-      height: 33px;
-      width: 175px;
-      padding-top: 6px;
-      text-align: center;
-      color: $color-blue !important;
-      border: 1px solid $color-blue;
-      border-radius: 16.5px;
-      background-color: $color-white; 
-    }
-
       &:hover {
         margin-left: -20px;
         position: absolute;
@@ -227,6 +214,37 @@
         border: 1px solid $color-blue;
         border-radius: 16.5px;
         background-color: $color-white; 
+      }
+      &.isDisabled {
+        color: $color-gray;
+        cursor: not-allowed;
+        opacity: 0.5;
+        text-decoration: none;
+      }
+  }
+  .border-circle {
+    height: 34px;
+    width: 34px;
+    border: 1px solid $color-light-gray;
+    border-radius: 50%;
+    margin-right: -26px;
+    background-color: $color-white;
+  }
+}
+
+
+.dates-disable {
+  display: flex;
+  
+  a {
+    flex: 1 1 auto;
+    border: none;
+    color: $color-gray !important;
+    transition: border-width 0.2s ease-in;
+
+      &:hover {
+        cursor: not-allowed;
+        border: none !important;
       }
   }
   .border-circle {
