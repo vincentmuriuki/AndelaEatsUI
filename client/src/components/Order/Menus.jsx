@@ -4,13 +4,12 @@ import Meal from './Meal';
 /* eslint-disable */
 
 
-class MealOptions extends Component {
+export class MealOptions extends Component {
   constructor() {
     super();
-    this.onChange = this.onChange.bind(this);
   }
 
-  onChange(mealId, checked) {
+  onChange = (mealId, checked) => {
     this.props.updateSelection(this.props.category, checked ? mealId : '');
   }
 
@@ -33,14 +32,13 @@ class MealOptions extends Component {
   }
 }
 
-class Menus extends Component {
+export class Menus extends Component {
   constructor() {
     super();
     this.state = {};
-    this.updateSelection = this.updateSelection.bind(this);
   }
 
-  updateSelection(mealCategory, mealId) {
+  updateSelection = (mealCategory, mealId) => {
     this.setState({ [mealCategory]: mealId });
   }
   
