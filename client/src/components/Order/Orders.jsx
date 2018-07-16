@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
+import { format } from 'date-fns';
 import { Redirect, Route, NavLink } from 'react-router-dom';
 import PropType from 'prop-types';
 
@@ -14,7 +14,7 @@ import canOrderMeal from '../../helpers/canOrderMeal';
  * @class Orders
  * @extends {Component}
  */
-class Orders extends Component {
+export class Orders extends Component {
   /**
    *Creates an instance of Orders.
    * @param {*} props
@@ -54,7 +54,7 @@ class Orders extends Component {
                 to={canOrderMeal(menuDate) 
                   ? `${this.props.match.url}/${menuDate.id}` : '#'}
               >
-                {moment(menuDate.date).format('dddd Do')}
+                {format(menuDate.date, 'dddd Do')}
               </NavLink>
               <div className="border-circle" />
             </li>
@@ -76,7 +76,7 @@ class Orders extends Component {
           <div className="orders-container">
             <div className="date-wrapper">
               <h3>
-                {moment(Date.now()).format("MMMM YYYY")}
+                {format(Date.now(), "MMMM YYYY")}
               </h3>
               <ul>
                 {this.renderDates()}

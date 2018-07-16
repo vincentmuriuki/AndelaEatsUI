@@ -3,7 +3,7 @@ import axios from 'axios';
 import { SET_MENUS } from './actionTypes';
 import { config } from '../config';
 
-const baseUrl = config.API_BASE_URL;
+export const baseUrl = config.API_BASE_URL;
 
 /**
  *
@@ -21,7 +21,7 @@ export function setMenus(menus) {
 
 
 export const getUpComingMenus = () => (dispatch) => {
-  axios.get(`${baseUrl}/menu`)
+  return axios.get(`${baseUrl}/menu`)
     .then((response) => {
       dispatch(setMenus(response.data));
     });
