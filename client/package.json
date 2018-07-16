@@ -53,6 +53,7 @@
     "redux-devtools-extension": "^2.13.5",
     "redux-immutable-state-invariant": "^2.1.0",
     "redux-thunk": "^2.3.0",
+    "toastr": "^2.1.4",
     "webpack": "^3.10.0",
     "webpack-merge": "^4.1.1"
   },
