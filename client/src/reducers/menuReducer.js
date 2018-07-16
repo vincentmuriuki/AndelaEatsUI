@@ -1,7 +1,7 @@
 import { SET_MENUS } from '../actions/actionTypes';
 import initialState from './initialState';
 
-const ordersReducer = (state = initialState.menus, action) => {
+const menuReducer = (state = initialState.menus, action) => {
   switch (action.type) {
     case SET_MENUS:
       return action.payload;
@@ -9,4 +9,4 @@ const ordersReducer = (state = initialState.menus, action) => {
       return state;
   }
 };
-export default ordersReducer;
+export default menuReducer;
