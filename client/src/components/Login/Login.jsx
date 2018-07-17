@@ -6,6 +6,7 @@ import
 backgroundImg 
   from '../../assets/images/google-logo-icon-PNG-Transparent-Background.png';
 
+import 'react-toastify/dist/ReactToastify.css';
 // configuration
 import { config } from '../../config';
 
@@ -41,6 +42,7 @@ class Login extends Component {
   render() {
     const redirectUrl = `${config.ANDELA_API_BASE_URL}/login?redirect_url=${config.BASE_URL}`;
     const options = {
+      position: 'top-right',
       autoClose: false,
       hideProgressBar: true,
     };
@@ -53,12 +55,9 @@ class Login extends Component {
 
     // Display Login Error
     if (loginError !== 'undefined') {
-      toast(
-        <div id="toaster">
-          {message}
-        </div>,
-        options);
+      toast.error(message, options);
       localStorage.clear();
+      return <Redirect to="/" />;
     }
 
     if (checkLogin()) {

@@ -1,3 +1,4 @@
+[![Coverage Status](https://coveralls.io/repos/github/andela/AndelaEatsUI/badge.svg?branch=develop)](https://coveralls.io/github/andela/AndelaEatsUI?branch=develop)
 # Andela Eats
 The Andela Eats client side implementation
 
