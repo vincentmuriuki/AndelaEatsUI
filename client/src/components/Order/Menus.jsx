@@ -43,12 +43,13 @@ class Menus extends Component {
   updateSelection(mealCategory, mealId) {
     this.setState({ [mealCategory]: mealId });
   }
+  
 
   render () {
     const { match, data } = this.props;
   
     const menus = data.find(meals => meals.id === Number(match.params.id));
-    let mainMeal;
+    let mainMeal = [];
     let firstAccompaniment;
     let secondAccompaniment;
     if (menus) {
@@ -57,15 +58,17 @@ class Menus extends Component {
       secondAccompaniment = menus.meal.secondAccompaniment;
     }
 
+    
     return (
       <div>
         <div className="menus-container">
-          <MealOptions
-            category="mainMeal"
-            title="Main Meal"
-            mealOptions={mainMeal}
-            selectedMealId={this.state.mainMeal}
-            updateSelection={this.updateSelection}
+         { mainMeal.length > 0 ? <div>
+            <MealOptions
+              category="mainMeal"
+              title="Main Meal"
+              mealOptions={mainMeal}
+              selectedMealId={this.state.mainMeal}
+              updateSelection={this.updateSelection}
             />
             <MealOptions
               category="acc1"
@@ -80,14 +83,15 @@ class Menus extends Component {
               mealOptions={secondAccompaniment}
               updateSelection={this.updateSelection}
               selectedMealId={this.state.acc2}
-          />
-          <div className="cta">
-          <div className="float-left"></div>
-          <div className="float-right">
-            <div className="btn reset-order">reset order</div>
-            <div className="btn submit-order">submit order</div>
-          </div>
-          </div>
+            />
+            <div className="cta">
+            <div className="float-left"></div>
+            <div className="float-right">
+              <div className="btn reset-order">reset order</div>
+              <div className="btn submit-order">submit order</div>
+            </div>
+            </div>
+           </div> : <div>No meals have been posted yet</div>}
         </div>
       </div>
     )
