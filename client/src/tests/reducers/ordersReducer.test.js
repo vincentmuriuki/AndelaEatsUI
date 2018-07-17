@@ -1,7 +1,7 @@
 import { orders } from "../../reducers/initialState";
 import ordersReducer from "../../reducers/ordersReducer";
-import { 
-  FETCH_ORDERS_LOADING, FETCH_ORDERS_SUCCESS, FETCH_ORDERS_FAILURE 
+import {
+  FETCH_ORDERS_LOADING, FETCH_ORDERS_SUCCESS, FETCH_ORDERS_FAILURE, FETCH_FILTERED_ORDERS
 } from "../../actions/actionTypes";
 
 /* 
@@ -41,7 +41,24 @@ describe('Past Orders Reducer', () => {
     });
   });
 
-  it('should retutn default state for unlisted initial state/action type', () => {
+  describe('FETCH_FILTERED_ORDERS action', () => {
+    it('should set filtered orders when successful', () => {
+      const action = {
+        type: FETCH_FILTERED_ORDERS,
+        orders: {
+          totalRecords: 1,
+          currentPage: 1,
+          meals: [{ name: "sweet food" }]
+        }
+      };
+      const newState = ordersReducer(orders, action);
+      expect(newState.currentPage).toEqual(1);
+      expect(newState.meals).toEqual(action.orders.meals);
+      expect(newState.isFiltered).toEqual(true);
+    });
+  });
+
+  it('should return default state for unlisted initial state/action type', () => { //eslint-disable-line
     const action = {
       type: 'FETCH_ME',
     };

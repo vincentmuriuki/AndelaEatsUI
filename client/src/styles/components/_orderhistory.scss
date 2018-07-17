@@ -2,6 +2,10 @@
   &.blurred {
     filter: blur(5px);
   }
+
+  button {
+    outline: none;
+  }
   
   .title {
     font-weight: 700;
@@ -11,10 +15,15 @@
     line-height: 27px;
     display: flex;
 
+    span:nth-child(2) {
+      color: $color-blue;
+    }
+
     .filter {
       margin-left: auto;
+      position: relative;
 
-      button {
+      .button {
         height: 37px;	
         width: 107px;	
         border: 1px solid $color-blue;
@@ -28,7 +37,6 @@
         &.active {
           background-color: $color-blue;
           color: $color-white;
-          cursor: not-allowed;
         }
       }
 
@@ -37,7 +45,7 @@
         position: absolute;
         padding: 20px;
         margin: 5px auto;
-        left: 76%;
+        right: 0px;
         border-radius: 3px;	
         background-color: $color-white;	
         box-shadow: 0 2px 10px 0 $color-dark-gray;
@@ -47,7 +55,7 @@
           display: block;
         }
 
-        input {
+        .input {
           height: 36px;
           width: 160px;
           border: 1px solid $color-light-grey;
@@ -59,9 +67,16 @@
             color: $color-light-grey;
             font-size: 14px;
           }
+
+          &.btn {
+            background-color: $color-blue;
+            color: $color-white;
+            margin-bottom: 5px;
+            cursor: pointer;
+          }
         }
 
-        label {
+        .date-label {
           display: block;
           margin: 15px 0px;
           color: $color-dark-gray;	
@@ -91,10 +106,44 @@
   }
 
   .rc-pagination {
-    margin: 0px auto;
+    padding: 0px 0px 0px 40px;
+
+    .rc-pagination-item {
+      outline: none;
+    }
+    
     .rc-pagination-item-active {
       background-color: $color-blue;
       border-color: $color-blue; 
     }
   }
+
+  .network-error {
+    color: $color-red;
+    padding: 0px 25px;
+    font-weight: bold;
+  }
+}
+
+.react-date-picker__button {
+  height: 36px;
+  width: 160px;
+  border: 1px solid $color-light-grey;
+  border-radius: 1px;
+  background-color: $color-white;
+
+  .react-date-picker__button__input__input {
+    width: 15px !important;
+    margin: 0px auto;
+
+    &.react-date-picker__button__input__year{
+      width: 30px !important;
+    }
+  }
+}
+
+.react-date-picker__calendar {
+  left: auto;
+  right: 0px;
+  top: 0px;
 }
