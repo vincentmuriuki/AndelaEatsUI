@@ -44,6 +44,8 @@
     "prop-types": "^15.6.2",
     "rc-pagination": "^1.16.5",
     "react": "^16.4.1",
+    "react-date-picker": "^6.10.4",
+    "react-day-picker": "^7.1.10",
     "react-dom": "^16.4.1",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",

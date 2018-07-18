@@ -9,5 +9,6 @@ export const orders = {
   error: "",
   totalRecords: 0,
   currentPage: 1,
-  meals: []
+  meals: [],
+  isFiltered: false
 };
