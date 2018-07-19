@@ -29,6 +29,7 @@ BRANCH_NAME=$CIRCLE_BRANCH
 setEnvironment $BRANCH_NAME
 
 export NODE_ENV=$ENVIRONMENT
+
 # ensure its an allowed deployment environment
 isAllowedDeployEnvironment $ENVIRONMENT
 # get K8s deployment name
