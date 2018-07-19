@@ -53,6 +53,3 @@ workflows:
                 - master
                 - /(release|hotfix)\/v[0-9].[0-9].[0-9]/
 
-notify:
-  webhooks:
-    - url: https://coveralls.io/webhook?repo_token=qFsrp4L8TSKwtoA529wlwkR2mN6OgZdvk
