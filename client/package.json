@@ -9,11 +9,11 @@
     "build": "./node_modules/.bin/webpack --config ./webpack.dev.js",
     "build:production": "./node_modules/.bin/webpack --config ./webpack.prod.js",
     "start": "./node_modules/.bin/webpack-dev-server --config ./webpack.prod.js",
-    "test": "jest --config=./jest.config.json --updateSnapshot",
+    "test": "jest --config jest.config.json --updateSnapshot --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "test-dev": "jest --config=./jest.config.json --updateSnapshot",
     "setup:hooks": "sh setup_hooks.sh",
     "precommit-msg": "echo 'Running pre-commit checks...' && exit 0",
-    "lint": "eslint ./src/**/*.js ./src/**/*.jsx",
-    "coverage": "jest --config=./jest.config.json --coverage"
+    "lint": "eslint ./src/**/*.js ./src/**/*.jsx"
   },
   "pre-commit": {
     "run": [
@@ -30,6 +30,7 @@
     "axios": "^0.18.0",
     "boom": "^7.2.0",
     "classnames": "^2.2.6",
+    "coveralls": "^3.0.2",
     "date-fns": "^1.29.0",
     "dotenv": "^6.0.0",
     "enzyme": "^3.3.0",
