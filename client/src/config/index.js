@@ -17,7 +17,7 @@ const allConfig = {
 
   staging: {
     ANDELA_API_BASE_URL: 'https://api-staging.andela.com',
-    API_BASE_URL: 'https://andelaeats-staging-test.andela.com/api/v1',
+    API_BASE_URL: 'https://private-b7e73-andelaeats.apiary-mock.com/api/v1/',
     BASE_URL: 'https://feed-staging.andela.com',
     SENTRY_URL: 'https://5a60f1efc4f8482eade3cbcfd0ab77dc@sentry.io/1234924'
   },
