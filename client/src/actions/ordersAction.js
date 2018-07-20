@@ -7,7 +7,7 @@ import {
 } from './actionTypes';
 import { config } from '../config';
 
-export const base = `${config.API_BASE_URL}orders`;
+export const base = `${config.API_BASE_URL}/orders`;
 
 export const setOrdersSuccess = (orders, currentPage) => ({
   type: FETCH_ORDERS_SUCCESS,
