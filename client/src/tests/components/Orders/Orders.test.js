@@ -2,18 +2,29 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Orders } from '../../../components/Order/Orders';
 
+const props = {
+  menus: [{}],
+  match: {
+    url: 'http:abc.css'
+  },
+  getUpComingMenus: () => Promise.resolve()
+};
+
+const context = {
+  router: {
+    history: {
+      push: jest.fn()
+    }
+  }
+};
+
 /* 
 global jest 
 expect 
 */
 describe('Orders Component', () => {
-  const getUpComingMenus = jest.fn();
-  const menus = [{}];
-  const match = {
-    url: 'http:abc.css'
-  };
   const wrapper = shallow(
-    <Orders menus={menus} getUpComingMenus={getUpComingMenus} match={match} />
+    <Orders {...props} />, { context }
   );
 
   it('should mount successfully', () => {

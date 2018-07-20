@@ -8,6 +8,10 @@ import Menus from './Menus';
 import { getUpComingMenus } from '../../actions/menuAction';
 import canOrderMeal from '../../helpers/canOrderMeal';
 
+
+const validateDate = (menu, endDate) => new Date(menu.date).getDate() <= endDate
+  && new Date(menu.date).getDate() >= new Date().getDate();
+
 /**
  *
  *
@@ -27,8 +31,20 @@ export class Orders extends Component {
     };
   }
 
-  componentWillMount() {
-    this.props.getUpComingMenus();
+  componentDidMount() {
+    this.props.getUpComingMenus()
+      .then(() => {
+        this.selectDefaultMenu();
+      });
+  }
+
+  selectDefaultMenu() {
+    const selectedMeal = this.props.menus.find(menu => canOrderMeal(menu)
+      && validateDate(menu, this.state.endDate)
+    );
+
+    this.context.router.history
+      .push(`${this.props.match.url}/${selectedMeal.id}`);
   }
 
   /**
@@ -40,18 +56,17 @@ export class Orders extends Component {
   renderDates() {
     if (this.props.menus) {
       return this.props.menus.map((menuDate) => {
-        if (new Date(menuDate.date).getDate() >= new Date().getDate() 
-            && new Date(menuDate.date).getDate() <= this.state.endDate) {
+        if (validateDate(menuDate, this.state.endDate)) {
           return (
-            <li 
-              key={menuDate.id} 
+            <li
+              key={menuDate.id}
               className={canOrderMeal(menuDate) ? "dates" : 'dates-disable'}
             >
               <NavLink
-                activeClassName={canOrderMeal(menuDate) 
+                activeClassName={canOrderMeal(menuDate)
                   ? "active" : 'isDisabled'}
-                
-                to={canOrderMeal(menuDate) 
+
+                to={canOrderMeal(menuDate)
                   ? `${this.props.match.url}/${menuDate.id}` : '#'}
               >
                 {format(menuDate.date, 'dddd Do')}
@@ -99,6 +114,10 @@ Orders.propTypes = {
   match: PropType.object,
   menus: PropType.array,
   getUpComingMenus: PropType.func
+};
+
+Orders.contextTypes = {
+  router: PropType.object.isRequired
 };
 
 /**
