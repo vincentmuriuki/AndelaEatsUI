@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { MealOptions, Menus } from '../../../components/Order/Menus';
+import { mockMenu, match } from '../../helpers/mockOrders';
 
 /* 
 global jest 
@@ -28,36 +29,9 @@ describe('MealOptions Component', () => {
 });
 
 describe('Menus Component', () => {
-  const match = {
-    url: 'http:abc.css',
-    params: {
-      id: 1
-    }
-  };
-  const data = [
-    {
-      id: 1,
-      courseType: "Main Meal",
-      meal: {
-        main: [
-          {
-            id: 1,
-            courseType: "Main Meal",
-            meal: "Beans",
-            mealPicture: ""
-          },
-          {
-            id: 2,
-            courseType: "Main Meal",
-            meal: "Wheat",
-            mealPicture: ""
-          }
-        ]
-      }
-    }
-  ];
+  const toggleModal = jest.fn();
+  const wrapper = shallow(<Menus match={match} data={mockMenu} toggleModal={toggleModal} />);
 
-  const wrapper = shallow(<Menus match={match} data={data} />);
   it('should mount successfully', () => {
     expect(wrapper).toBeDefined();
   });

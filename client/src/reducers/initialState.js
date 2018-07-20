@@ -4,6 +4,13 @@ export default {
   menus: []
 };
 
+export const initialMenus = {
+  menus: [],
+  acc1: '',
+  acc2: '',
+  mainMeal: ''
+};
+
 export const orders = {
   isLoading: false,
   error: "",

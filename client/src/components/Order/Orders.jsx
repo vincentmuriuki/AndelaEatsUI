@@ -5,9 +5,11 @@ import { Redirect, Route, NavLink } from 'react-router-dom';
 import PropType from 'prop-types';
 
 import Menus from './Menus';
-import { getUpComingMenus } from '../../actions/menuAction';
+import { getUpComingMenus, selectMeal, orderMeal } from '../../actions/menuAction';
 import canOrderMeal from '../../helpers/canOrderMeal';
+import ConfirmOrder from './ConfirmOrder';
 
+/* eslint-disable */
 
 const validateDate = (menu, endDate) => new Date(menu.date).getDate() <= endDate
   && new Date(menu.date).getDate() >= new Date().getDate();
@@ -27,7 +29,8 @@ export class Orders extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      endDate: new Date().getDate() + 7
+      endDate: new Date().getDate() + 7,
+      isModalOpen: false
     };
   }
 
@@ -36,6 +39,16 @@ export class Orders extends Component {
       .then(() => {
         this.selectDefaultMenu();
       });
+  }
+
+  toggleModal = (event) => {
+    event.preventDefault();
+    const { acc1, acc2, mainMeal } = this.props.mealSelected;
+    if (acc1 !== '' && acc2 !== '' && mainMeal !== '') {
+      this.setState(state => ({
+        isModalOpen: !state.isModalOpen,
+      }));
+    }
   }
 
   selectDefaultMenu() {
@@ -82,7 +95,7 @@ export class Orders extends Component {
 
 
   render() {
-    const { match: { url }, menus } = this.props;
+    const { match: { url }, menus, selectMeal, mealSelected, orderMeal } = this.props;
     return (
       <div className="wrapper">
         <div className="orders-wrapper">
@@ -100,7 +113,25 @@ export class Orders extends Component {
             <div className="menu-wrapper">
               <Route
                 path={`${url}/:id`}
-                render={(props) => <Menus data={menus} {...props} />}
+                render={(props) => (
+                  <div>
+                    <Menus 
+                      data={menus} 
+                      toggleModal={this.toggleModal}
+                      selectMeal={selectMeal}
+                      {...props} 
+                    />
+                    <ConfirmOrder 
+                      toggleModal={this.toggleModal}
+                      isModalOpen={this.state.isModalOpen}
+                      menus={menus}
+                      mealSelected={mealSelected}
+                      orderMeal={orderMeal}
+                      {...props} 
+                    />
+                  </div>
+                )
+              }
               />
             </div>
           </div>
@@ -126,7 +157,21 @@ Orders.contextTypes = {
  * @returns {object} menus
  */
 function mapStateToProps(state) {
-  return { menus: state.upcomingMenus };
+  const {
+    menus, acc1, acc2, mainMeal 
+  } = state.upcomingMenus;
+
+  const mealSelected = {
+    mainMeal,
+    accompaniment1: acc1,
+    accompaniment2: acc2,
+  };
+  return { menus, mealSelected };
 }
 
-export default connect(mapStateToProps, { getUpComingMenus })(Orders);
+export default connect(mapStateToProps,
+  {
+    getUpComingMenus,
+    selectMeal,
+    orderMeal
+  })(Orders);
