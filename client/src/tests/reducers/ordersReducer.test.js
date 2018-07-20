@@ -1,7 +1,14 @@
 import { orders } from "../../reducers/initialState";
 import ordersReducer from "../../reducers/ordersReducer";
 import {
-  FETCH_ORDERS_LOADING, FETCH_ORDERS_SUCCESS, FETCH_ORDERS_FAILURE, FETCH_FILTERED_ORDERS
+  FETCH_ORDERS_LOADING, 
+  FETCH_ORDERS_SUCCESS, 
+  FETCH_ORDERS_FAILURE, 
+  FETCH_FILTERED_ORDERS, 
+  DELETE_ORDER_SUCCESS, 
+  DELETE_ORDER_FAILURE,
+  EDIT_ORDER_SUCCESS, 
+  EDIT_ORDER_FAILURE  
 } from "../../actions/actionTypes";
 
 /* 
@@ -34,6 +41,46 @@ describe('Past Orders Reducer', () => {
     it('_FAILURE :: should set error property/properties', () => {
       const action = {
         type: FETCH_ORDERS_FAILURE,
+        error: new Error("Unable to fetch data")
+      };
+      const newState = ordersReducer(orders, action);
+      expect(newState.error).toEqual(action.error);
+    });
+  });
+
+  describe('EDIT', () => {
+    it('_SUCCESS :: should edit successfully', () => {
+      const action = {
+        type: EDIT_ORDER_SUCCESS,
+        id: 123
+      };
+      const newState = ordersReducer(orders, action);
+      expect(newState.currentPage).toEqual(1);
+    });
+
+    it('_FAILURE :: should set error property/properties', () => {
+      const action = {
+        type: EDIT_ORDER_FAILURE,
+        error: new Error("Unable to fetch data")
+      };
+      const newState = ordersReducer(orders, action);
+      expect(newState.error).toEqual(action.error);
+    });
+  });
+
+  describe('DELETE', () => {
+    it('_SUCCESS :: should delete successfully', () => {
+      const action = {
+        type: DELETE_ORDER_SUCCESS,
+        id: 123
+      };
+      const newState = ordersReducer(orders, action);
+      expect(newState.currentPage).toEqual(1);
+    });
+
+    it('_FAILURE :: should set error property/properties', () => {
+      const action = {
+        type: DELETE_ORDER_FAILURE,
         error: new Error("Unable to fetch data")
       };
       const newState = ordersReducer(orders, action);

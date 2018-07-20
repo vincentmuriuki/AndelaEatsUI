@@ -5,6 +5,7 @@ import SideNav from './common/Sidenav/Sidenav';
 import Login from './Login/Login';
 import Orders from './Order/Orders';
 import OrderHistory from './OrderHistory/OrderHistory';
+import EditOrder from './EditOrder/EditOrder';
 
 const Root = () => (
   <Router>
@@ -14,7 +15,7 @@ const Root = () => (
         <Switch>
           <Route path="/ordermeal" component={Orders} />
           <Route exact path="/orders" component={OrderHistory} />
-          <Route exact path="/orders/edit/:id" component={() => <h1>Edit meal</h1>} />
+          <Route exact path="/orders/edit/:id" component={EditOrder} />
           <Route component={() => <h1>Page Not Found</h1>} />
         </Switch>
       </SideNav>
