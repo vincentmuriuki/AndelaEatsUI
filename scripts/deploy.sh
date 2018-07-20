@@ -27,6 +27,9 @@ require 'GCLOUD_SERVICE_KEY' $GCLOUD_SERVICE_KEY
 BRANCH_NAME=$CIRCLE_BRANCH
 # set the deployment environment.
 setEnvironment $BRANCH_NAME
+
+export NODE_ENV=$ENVIRONMENT
+
 # ensure its an allowed deployment environment
 isAllowedDeployEnvironment $ENVIRONMENT
 # get K8s deployment name
@@ -37,7 +40,14 @@ getDeploymentName DEPLOYMENT_NAME
 IMAGE_TAG=$(getImageTag $(getCommitHash))
 IMAGE_NAME=$(getImageName)
 
+buildApplicationArtifacts() {
+    cd client
+    npm run build:production 
+    cd $OLDPWD
+}
+
 main() {
+    buildApplicationArtifacts
     installGoogleCloudSdk
     authWithServiceAccount
     configureGoogleCloudSdk
