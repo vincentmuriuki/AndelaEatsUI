@@ -63,6 +63,11 @@
     flex: 0 0 40px;
     display: flex;
   }
+  .meal-title {
+    margin-bottom: 5px;
+    font-size: 15px;
+    color: $color-dark-gray;
+  }
   .btn {
     text-transform: uppercase;
     text-align: center;

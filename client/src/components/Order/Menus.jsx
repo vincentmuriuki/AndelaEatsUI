@@ -21,10 +21,12 @@ export class MealOptions extends Component {
         <ul>
         {mealOptions.map(meal =>
           <Meal
-          meal={meal}
-          key={meal.id}
-          onChange={this.onChange}
-          selectedMealId={selectedMealId} />
+            meal={meal}
+            key={meal.id}
+            onChange={this.onChange}
+            selectedMealId={selectedMealId}
+            shouldHaveCheckBox={true} 
+          />
         )}
         </ul>
       </div>
@@ -39,12 +41,13 @@ export class Menus extends Component {
   }
 
   updateSelection = (mealCategory, mealId) => {
+    this.props.selectMeal({ prop: mealCategory, value: mealId });
     this.setState({ [mealCategory]: mealId });
   }
   
 
   render () {
-    const { match, data } = this.props;
+    const { match, data, toggleModal } = this.props;
   
     const menus = data.find(meals => meals.id === Number(match.params.id));
     let mainMeal = [];
@@ -86,7 +89,7 @@ export class Menus extends Component {
             <div className="float-left"></div>
             <div className="float-right">
               <div className="btn reset-order">reset order</div>
-              <div className="btn submit-order">submit order</div>
+              <div className="btn submit-order" onClick={toggleModal.bind(this)}>submit order</div>
             </div>
             </div>
            </div> : <div>No meals have been posted yet</div>}

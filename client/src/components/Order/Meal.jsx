@@ -5,7 +5,7 @@ import classname from 'classnames';
 
 class Meal extends Component {
   render() {
-    const { meal, onChange, selectedMealId } = this.props
+    const { meal, onChange, selectedMealId, shouldHaveCheckBox } = this.props
     return (
       <li className={classname({ selected: meal.id === selectedMealId })}>
         <div className="image">
@@ -14,6 +14,7 @@ class Meal extends Component {
         <div className="meal-name">
           {meal.meal}
         </div>
+        {(shouldHaveCheckBox) ?
         <div className="menu-checkbox">
           <input 
             id={meal.id} 
@@ -26,6 +27,7 @@ class Meal extends Component {
           />
           <label className="radio-custom-label" htmlFor={meal.id}></label>
         </div>
+        : '' }
       </li>
     );
   }
