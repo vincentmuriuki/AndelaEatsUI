@@ -6,9 +6,11 @@ import dateFormatter from '../../helpers/dateFormatter';
 
 const MealCard = ({
   url,
+  meal,
   meal: {
     id, name: { main, protein }, imageUrl, orderDate, isCollected, rating
-  }
+  },
+  showModal
 }) => (
   <div className="card-container">
     <div className="card-image" style={{ backgroundImage: `url(${imageUrl})` }}>
@@ -36,7 +38,9 @@ const MealCard = ({
           : (
             <NotCollectedAction 
               id={id} 
-              baseUrl={url} 
+              baseUrl={url}
+              meal={meal}
+              showModal={showModal}
             />
           )}
       </div>
@@ -56,7 +60,8 @@ MealCard.propTypes = {
     imageUrl: PropTypes.string,
     orderDate: PropTypes.string.isRequired,
     rating: PropTypes.number
-  }).isRequired
+  }).isRequired,
+  showModal: PropTypes.func
 };
 
 export default MealCard;

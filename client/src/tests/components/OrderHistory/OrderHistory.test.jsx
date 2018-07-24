@@ -36,7 +36,8 @@ let props = {
     totalRecords: 0,
   },
   fetchOrders: () => Promise.resolve(),
-  filterOrders: () => Promise.resolve()
+  filterOrders: () => Promise.resolve(),
+  deleteOrder: () => Promise.resolve()
 };
 
 /**
@@ -84,7 +85,9 @@ describe('Component: Orders', () => {
         isOpen: true,
         searchParam: 'Beans yam',
         start: 'today',
-        end: 'tomorrow'
+        end: 'tomorrow',
+        showModal: false,
+        modalContent: null
       });
       getComponent().instance().clearForm();
       expect(spy).toHaveBeenCalled();
@@ -93,7 +96,9 @@ describe('Component: Orders', () => {
         isOpen: true,
         searchParam: '',
         start: '',
-        end: ''
+        end: '',
+        showModal: false,
+        modalContent: null
       });
     });
 
@@ -163,6 +168,32 @@ describe('Component: Orders', () => {
       endDatePicker.simulate('change');
       expect(wrapper.instance().state.end).toEqual(undefined);
     });
+  });
+
+  describe('Modal Interaction', () => {
+    it('show Modal', () => {
+      const { meals } = props.orders;
+      const spy = jest.spyOn(Orders.prototype, 'showModal');
+      getComponent().instance().showModal(meals[0]);
+      expect(spy).toHaveBeenCalled();
+      expect(getComponent().instance().state.modalContent).toBe(meals[0]);
+      expect(getComponent().instance().state.showModal).toBe(true);
+    });
+
+    it('delete Modal', () => {
+      const { meals } = props.orders;
+      const spy = jest.spyOn(Orders.prototype, 'deleteOrder');
+      getComponent().instance().deleteOrder(meals[0].id);
+      expect(spy).toHaveBeenCalled();
+      expect(getComponent().instance().state.showModal).toBe(false);
+    });
+
+    it('hide Modal', () => {
+      const spy = jest.spyOn(Orders.prototype, 'hideModal');
+      getComponent().instance().hideModal();
+      expect(spy).toHaveBeenCalled();
+      expect(getComponent().instance().state.showModal).toBe(false);
+    });    
   });
 });
 

@@ -10,5 +10,12 @@ export const orders = {
   totalRecords: 0,
   currentPage: 1,
   meals: [],
-  isFiltered: false
+  isFiltered: false,
+  menu: {
+    meal: {
+      main: [],
+      firstAccompaniment: [],
+      secondAccompaniment: []
+    }
+  }
 };

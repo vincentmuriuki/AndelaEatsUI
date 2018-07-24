@@ -30,6 +30,7 @@ class Meal extends Component {
     );
   }
 }
+
 Meal.propTypes = {
   meals: PropType.object
 }

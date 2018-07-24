@@ -5,9 +5,10 @@ import { connect } from 'react-redux';
 import DatePicker from 'react-date-picker';
 
 import MealCard from '../MealCard/MealCard';
+import Modal from '../MealCard/Modal';
 
 import 'rc-pagination/assets/index.css';
-import { fetchOrders, filterOrders } from '../../actions/ordersAction';
+import { fetchOrders, filterOrders, deleteOrder } from '../../actions/ordersAction';
 import Loader from '../common/Loader/Loader';
 
 /**
@@ -25,12 +26,17 @@ export class Orders extends Component {
       searchParam: '',
       start: '',
       end: new Date(),
+      showModal: false,
+      modalContent: null
     };
 
     this.onChange = this.onChange.bind(this);
     this.clearForm = this.clearForm.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
     this.handleFilter = this.handleFilter.bind(this);
+    this.showModal = this.showModal.bind(this);
+    this.hideModal = this.hideModal.bind(this);
+    this.deleteOrder = this.deleteOrder.bind(this);
   }
 
   /**
@@ -113,6 +119,49 @@ export class Orders extends Component {
    */
   showTotal(total, range) { //eslint-disable-line
     return `Showing ${range[0]} - ${range[1]} of ${total} items`;
+  }
+
+  /**
+   * Display a modal to delete a meal
+   *
+   * @param {object} meal
+   * @memberof Orders
+   * 
+   * @returns {void}
+   */
+  showModal(meal) {
+    this.setState({
+      modalContent: meal,
+      showModal: true
+    });
+  }
+
+  /**
+   * Delete an order
+   *
+   * @param {string} id
+   * @memberof Orders
+   * 
+   * @returns {void}
+   */
+  deleteOrder(id) {
+    this.props.deleteOrder(id);
+    this.setState({
+      showModal: false
+    });
+  }
+
+  /**
+   * Hide modal
+   *
+   * @memberof Orders
+   * 
+   * @returns {void}
+   */
+  hideModal() {
+    this.setState({
+      showModal: false
+    });
   }
 
   /**
@@ -203,6 +252,12 @@ export class Orders extends Component {
                 {orders.error.response || "Unable to connect to the internet"}
               </div>)
           }
+          <Modal 
+            displayModal={this.state.showModal}
+            closeModal={this.hideModal}
+            deleteOrder={this.deleteOrder}
+            modalContent={this.state.modalContent}
+          />
           <div className="container">
             {
               orders.meals.map((meal) => (
@@ -210,6 +265,7 @@ export class Orders extends Component {
                   key={meal.id}
                   meal={meal}
                   url={url}
+                  showModal={this.showModal}
                 />
               ))
             }
@@ -242,7 +298,8 @@ Orders.propTypes = {
     meals: PropTypes.array
   }),
   filterOrders: PropTypes.func.isRequired,
-  fetchOrders: PropTypes.func.isRequired
+  fetchOrders: PropTypes.func.isRequired,
+  deleteOrder: PropTypes.func
 };
 
 Orders.defaultProps = {
@@ -260,7 +317,7 @@ const mapStateToProps = state => ({
 });
 
 const actionCreators = {
-  fetchOrders, filterOrders
+  fetchOrders, filterOrders, deleteOrder
 };
 
 export default connect(mapStateToProps, actionCreators)(Orders);

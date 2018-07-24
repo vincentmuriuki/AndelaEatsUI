@@ -3,7 +3,11 @@ import {
   FETCH_ORDERS_LOADING,
   FETCH_ORDERS_SUCCESS,
   FETCH_ORDERS_FAILURE,
-  FETCH_FILTERED_ORDERS
+  FETCH_FILTERED_ORDERS,
+  DELETE_ORDER_SUCCESS, 
+  DELETE_ORDER_FAILURE, 
+  EDIT_ORDER_SUCCESS, 
+  EDIT_ORDER_FAILURE 
 } from './actionTypes';
 import { config } from '../config';
 
@@ -29,6 +33,16 @@ export const setFilteredOrders = (orders, currentPage) => ({
   orders: { ...orders, currentPage }
 });
 
+export const deleteOrdersSuccess = (id) => ({
+  type: DELETE_ORDER_SUCCESS,
+  id
+});
+
+export const deleteOrdersFailure = (error) => ({
+  type: DELETE_ORDER_FAILURE,
+  error
+});
+
 export const fetchOrders = (page = 1, limit = 9) => (dispatch) => {
   dispatch(setOrdersLoading(true));
   return axios.get(`${base}?page=${page}&limit=${limit}`)
@@ -52,6 +66,38 @@ export const filterOrders = (order) => (dispatch) => {
       dispatch(setOrdersLoading(false));
     }).catch((error) => {
       dispatch(setOrdersFailure(error));
+      dispatch(setOrdersLoading(false));
+    });
+};
+
+
+export const deleteOrder = (id) => (dispatch) => {
+  dispatch(setOrdersLoading(true));
+  return axios.delete(`${base}/${id}`)
+    .then((response) => {
+      dispatch(deleteOrdersSuccess(id));
+      dispatch(setOrdersLoading(false));
+    }).catch((error) => {
+      dispatch(deleteOrdersFailure(error));
+      dispatch(setOrdersLoading(false));
+    });
+};
+
+
+export const editOrder = (id) => dispatch => {
+  dispatch(setOrdersLoading(true));
+  return axios.get(`${base}/edit/${id}`)
+    .then((response) => {
+      dispatch({
+        type: EDIT_ORDER_SUCCESS,
+        payload: { ...response.data }
+      });
+      dispatch(setOrdersLoading(false));
+    }).catch((error) => {
+      dispatch({
+        type: EDIT_ORDER_FAILURE,
+        payload: error
+      });
       dispatch(setOrdersLoading(false));
     });
 };
