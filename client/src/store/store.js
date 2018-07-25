@@ -8,8 +8,8 @@ import { tokenValidator } from '../helpers/tokenValidation';
 
 const initialState = {};
 const middlewares = process.env.NODE_ENV === 'production' 
-  ? [thunk] 
-  : [thunk, reduxImmutableStateInvariant()];
+  ? [tokenValidator, thunk] 
+  : [tokenValidator, thunk, reduxImmutableStateInvariant()];
 /**
  * @export
  * @param {any} {}

@@ -3,9 +3,8 @@ import { isAuthorized } from './authorization';
 
 const isValid = () => {
   const { cookie } = document;
-  const token = cookie.split('jwt-token=');
-  if (token.length === 2) {
-    const jwtToken = token[1];
+  const jwtToken = cookie.split('jwt-token=')[1];
+  if (jwtToken) {
     const decodedToken = jwtDecode(jwtToken);
     const { exp } = decodedToken;
     if (exp > Math.floor(new Date().getTime() / 1000)) {      
@@ -13,7 +12,7 @@ const isValid = () => {
     } 
     return false;
   }
-  return true;
+  return false;
 };
 
 /**

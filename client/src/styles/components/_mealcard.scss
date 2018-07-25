@@ -1,10 +1,17 @@
 .card-container {
   max-height: 320px;
-  min-width: 340px;	
-  border-radius: 2px;	
+  border-radius: 2px;
   background-color: $color-white;
-  margin: 32px 25px;
+  margin: 32px 20px;
   border: 1px solid $color-light-grey;
+
+  @media (min-width: $small_screen) {
+    min-width: 40%;	
+  }
+
+  @media (min-width: $large_screen) {
+    min-width: 28%;
+  }
 
   &:hover {
     box-shadow: 3px 3px 5px $color-light-grey;
@@ -43,7 +50,7 @@
   }
 
   .card-details {
-    margin: 16px 20px;
+    margin: 16px 15px;
 
     .main{
       border-bottom: 1px solid $color-light-grey;
