@@ -14,7 +14,7 @@ class Meal extends Component {
         <div className="meal-name">
           {meal.meal}
         </div>
-        {(shouldHaveCheckBox) ?
+        {(shouldHaveCheckBox) &&
         <div className="menu-checkbox">
           <input 
             id={meal.id} 
@@ -27,7 +27,7 @@ class Meal extends Component {
           />
           <label className="radio-custom-label" htmlFor={meal.id}></label>
         </div>
-        : '' }
+        }
       </li>
     );
   }

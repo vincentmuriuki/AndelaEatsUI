@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropType from 'prop-types';
 import Meal from './Meal';
+import Loader from '../common/Loader/Loader';
+
 /* eslint-disable */
 
 
@@ -37,7 +39,9 @@ export class MealOptions extends Component {
 export class Menus extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      isLoading: true
+    };
   }
 
   updateSelection = (mealCategory, mealId) => {
@@ -53,13 +57,12 @@ export class Menus extends Component {
     let mainMeal = [];
     let firstAccompaniment;
     let secondAccompaniment;
-    if (menus) {
+    if (menus){
       mainMeal = menus.meal.main;
       firstAccompaniment = menus.meal.firstAccompaniment;
       secondAccompaniment = menus.meal.secondAccompaniment;
     }
 
-    
     return (
       <div>
         <div className="menus-container">
@@ -92,7 +95,8 @@ export class Menus extends Component {
               <div className="btn submit-order" onClick={toggleModal.bind(this)}>submit order</div>
             </div>
             </div>
-           </div> : <div>No meals have been posted yet</div>}
+           </div> : <div>No Available options yet</div>
+          }
         </div>
       </div>
     )

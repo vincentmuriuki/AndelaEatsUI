@@ -32,6 +32,7 @@ describe('Orders Component', () => {
   });
 
   it('should have an orders-wrapper div', () => {
+    wrapper.setState({ isLoading: false })
     expect(wrapper.find('.orders-wrapper').length).toBeGreaterThan(0);
   });
 });
