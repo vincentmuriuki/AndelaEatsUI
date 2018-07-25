@@ -4,9 +4,8 @@ import {
   FETCH_ORDERS_LOADING,
   FETCH_FILTERED_ORDERS,
   DELETE_ORDER_SUCCESS,
-  DELETE_ORDER_FAILURE,
-  EDIT_ORDER_SUCCESS, 
-  EDIT_ORDER_FAILURE 
+  EDIT_ORDER_SUCCESS,
+  UPDATE_ORDER_SUCCESS,
 } from '../actions/actionTypes';
 
 import { orders } from './initialState';
@@ -31,15 +30,16 @@ export default (state = orders, action) => {
         totalRecords: state.totalRecords - 1,
         meals: state.meals.filter(meal => meal.id !== action.id)
       };
-    case DELETE_ORDER_FAILURE:
-      return { ...state, error: action.error };
     case EDIT_ORDER_SUCCESS: 
       return {
         ...state,
         menu: action.payload
       };
-    case EDIT_ORDER_FAILURE:
-      return { ...state, error: action.error };
+    case UPDATE_ORDER_SUCCESS: 
+      return {
+        ...state,
+        order: action.payload
+      };
     default:
       return state;
   }

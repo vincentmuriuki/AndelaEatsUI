@@ -1,13 +1,13 @@
+import { toast } from 'react-toastify';
 import axios from 'axios';
 import {
   FETCH_ORDERS_LOADING,
   FETCH_ORDERS_SUCCESS,
   FETCH_ORDERS_FAILURE,
   FETCH_FILTERED_ORDERS,
-  DELETE_ORDER_SUCCESS, 
-  DELETE_ORDER_FAILURE, 
+  DELETE_ORDER_SUCCESS,
   EDIT_ORDER_SUCCESS, 
-  EDIT_ORDER_FAILURE 
+  UPDATE_ORDER_SUCCESS
 } from './actionTypes';
 import { config } from '../config';
 
@@ -38,9 +38,14 @@ export const deleteOrdersSuccess = (id) => ({
   id
 });
 
-export const deleteOrdersFailure = (error) => ({
-  type: DELETE_ORDER_FAILURE,
-  error
+export const editOrderSuccess = (response) => ({
+  type: EDIT_ORDER_SUCCESS,
+  payload: response.data
+});
+
+export const updateOrderSuccess = (response) => ({
+  type: UPDATE_ORDER_SUCCESS,
+  payload: response
 });
 
 export const fetchOrders = (page = 1, limit = 9) => (dispatch) => {
@@ -78,7 +83,7 @@ export const deleteOrder = (id) => (dispatch) => {
       dispatch(deleteOrdersSuccess(id));
       dispatch(setOrdersLoading(false));
     }).catch((error) => {
-      dispatch(deleteOrdersFailure(error));
+      toast.error(error.message)
       dispatch(setOrdersLoading(false));
     });
 };
@@ -86,18 +91,25 @@ export const deleteOrder = (id) => (dispatch) => {
 
 export const editOrder = (id) => dispatch => {
   dispatch(setOrdersLoading(true));
-  return axios.get(`${base}/edit/${id}`)
+  return axios.get(`${base}/${id}`)
     .then((response) => {
-      dispatch({
-        type: EDIT_ORDER_SUCCESS,
-        payload: { ...response.data }
-      });
+      dispatch(editOrderSuccess(response));
       dispatch(setOrdersLoading(false));
     }).catch((error) => {
-      dispatch({
-        type: EDIT_ORDER_FAILURE,
-        payload: error
-      });
+      toast.error(error.message);
+      dispatch(setOrdersLoading(false));
+    });
+};
+
+export const updateOrder = (data, id) => dispatch => {
+  dispatch(setOrdersLoading(true));
+  return axios.put(`${base}/${id}`, data)
+    .then((response) => {
+      dispatch(updateOrderSuccess(response));
+      toast.success(response.data.response);
+      dispatch(setOrdersLoading(false));
+    }).catch((error) => {
+      toast.error(error.message)
       dispatch(setOrdersLoading(false));
     });
 };

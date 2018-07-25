@@ -5,6 +5,12 @@ import NotCollectedAction from '../../../components/MealCard/NotCollectedAction'
 const props = {
   id: '0023',
   baseUrl: '/orders',
+  meal: {
+    name: {
+      main: "Beans",
+      protein: "Cake"
+    }
+  }
 };
 /* 
 global jest 
