@@ -8,6 +8,7 @@ import Menus from './Menus';
 import { getUpComingMenus, selectMeal, orderMeal } from '../../actions/menuAction';
 import canOrderMeal from '../../helpers/canOrderMeal';
 import ConfirmOrder from './ConfirmOrder';
+import Loader from '../common/Loader/Loader';
 
 /* eslint-disable */
 
@@ -30,13 +31,15 @@ export class Orders extends Component {
     super(props);
     this.state = {
       endDate: new Date().getDate() + 7,
-      isModalOpen: false
+      isModalOpen: false,
+      isLoading: true
     };
   }
 
   componentDidMount() {
     this.props.getUpComingMenus()
       .then(() => {
+        this.setState({isLoading: false})
         this.selectDefaultMenu();
       });
   }
@@ -98,7 +101,8 @@ export class Orders extends Component {
     const { match: { url }, menus, selectMeal, mealSelected, orderMeal } = this.props;
     return (
       <div className="wrapper">
-        <div className="orders-wrapper">
+      { this.state.isLoading? <Loader/> 
+      :<div className="orders-wrapper">
           <h3>Make Orders</h3>
 
           <div className="orders-container">
@@ -136,6 +140,7 @@ export class Orders extends Component {
             </div>
           </div>
         </div>
+      }
       </div>
     );
   }
