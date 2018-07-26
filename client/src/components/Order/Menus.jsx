@@ -44,9 +44,27 @@ export class Menus extends Component {
     };
   }
 
+  /**
+   * sets selected menu to state
+   *
+   * @memberof Menus
+   */
   updateSelection = (mealCategory, mealId) => {
     this.props.selectMeal({ prop: mealCategory, value: mealId });
     this.setState({ [mealCategory]: mealId });
+  }
+  /**
+   * Resets Menus to default.
+   *
+   * @memberof Menus
+   */
+  resetMenus = () => {
+    this.props.resetMenu();
+    this.setState({
+      mainMeal: '',
+      acc1: '',
+      acc2:''
+    });
   }
   
 
@@ -91,7 +109,7 @@ export class Menus extends Component {
             <div className="cta">
             <div className="float-left"></div>
             <div className="float-right">
-              <div className="btn reset-order">reset order</div>
+              <div className="btn reset-order" onClick={this.resetMenus}>reset order</div>
               <div className="btn submit-order" onClick={toggleModal.bind(this)}>submit order</div>
             </div>
             </div>

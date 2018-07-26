@@ -1,6 +1,8 @@
 import menuReducer from '../../reducers/menuReducer';
 import { initialMenus } from '../../reducers/initialState';
-import { SET_MENUS, SELECT_MEAL } from '../../actions/actionTypes';
+import { 
+  SET_MENUS, SELECT_MEAL, MAKE_ORDER_SUCCESS, MAKE_ORDER_FAILURE, RESET_MENU
+} from '../../actions/actionTypes';
 
 /* 
 global jest 
@@ -32,5 +34,43 @@ describe('Menu Reducers', () => {
     };
     const newState = menuReducer(initialMenus, action);
     expect(newState.mainMeal).toEqual(action.payload.value);
+  });
+  it('MAKE_ORDER_SUCCESS: should set message to state', () => {
+    const payload = {
+      message: 'Your order has been placed'
+    };
+    const action = {
+      type: MAKE_ORDER_SUCCESS,
+      payload 
+    };
+    const newState = menuReducer(initialMenus, action);
+    expect(newState.message).toEqual(action.payload.message);
+  });
+  it('MAKE_ORDER_FAILURE: should set message to state', () => {
+    const payload = {
+      message: 'An error has occured'
+    };
+    const action = {
+      type: MAKE_ORDER_FAILURE,
+      payload 
+    };
+    const newState = menuReducer(initialMenus, action);
+    expect(newState.message).toEqual(action.payload.message);
+  });
+  it('RESET_MENU: should reset state', () => {
+    const payload = {
+      message: '',
+      acc1: '',
+      acc2: '',
+      mainMeal: ''
+    };
+    const action = {
+      type: RESET_MENU,
+      payload 
+    };
+    const newState = menuReducer(initialMenus, action);
+    expect(newState.message).toEqual(action.payload.message);
+    expect(newState.acc1).toEqual(action.payload.acc1);
+    expect(newState.acc2).toEqual(action.payload.acc2);
   });
 });

@@ -1,3 +1,5 @@
+
+
 .modal {
   display: none;
   position: fixed;
@@ -11,20 +13,20 @@
   background-color: rgba(0, 0, 0, 0.4);
 }
 
+/* Modal Content/Box */
+
 .modal-content {
   position: relative;
   background-color: $color-white;
   top: 25%;
-  width: 50%;
+  width: 70%;
   border: none;
   padding: 40px;
   margin: auto;
 }
-
 .modal-header {
   display: flex;
   flex-direction: column;
-
   .header-title{
     height: 28px;	
     color: $color-blue;	
@@ -34,24 +36,34 @@
     line-height: 28px;
     margin-bottom: 30px;
   }
+  .header-date {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
+    .order-date {
+      margin-left: 5px;
+    }
+  }
+  .label {
+    color: $color-dark-gray;
+  }
+  .order-details {
+    margin-bottom: 15px;
+  }
+ 
 }
 
+/* Modal Body */
+.modal-body {
+  padding: 2px 35px;
+}
+
+/* Modal Footer */
 .modal-footer {
   padding: 2px 16px;
   color: white;
 
-  .cta {
-    display: flex;
-    padding-top: 40px;
-  }
-  .float-left {
-    flex: 1 1 auto;
-  }
-  .float-right {
-    flex: 0 0 40px;
-    display: flex;
-  }
-  .btn {
+  .btn-delete {
     text-transform: uppercase;
     text-align: center;
     padding: 12px;
@@ -64,7 +76,17 @@
     line-height: 21px;
     cursor: pointer;
   }
-
+  .cta {
+    display: flex;
+    padding-top: 40px;
+  }
+  .float-left {
+    flex: 1 1 auto;
+  }
+  .float-right {
+    flex: 0 0 40px;
+    display: flex;
+  }
   .close-modal {
     color: $color-medium-gray;
     &:hover {
@@ -76,5 +98,4 @@
     color: $color-white;
     background-color: $color-blue;
   }
-
 }

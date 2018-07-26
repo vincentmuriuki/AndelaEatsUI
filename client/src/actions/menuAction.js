@@ -4,7 +4,8 @@ import {
   SET_MENUS,
   MAKE_ORDER_FAILURE,
   MAKE_ORDER_SUCCESS,
-  SELECT_MEAL
+  SELECT_MEAL,
+  RESET_MENU
 } from './actionTypes';
 import { config } from '../config';
 
@@ -23,6 +24,7 @@ export function setMenus(menus) {
     payload: menus
   };
 }
+
 /**
  *
  * @export
@@ -33,6 +35,16 @@ export function selectMeal({ prop, value }) {
   return {
     type: SELECT_MEAL,
     payload: { prop, value }
+  };
+}
+/**
+ *
+ * @export
+ * @returns {void} 
+ */
+export function resetMenu() {
+  return {
+    type: RESET_MENU,
   };
 }
 

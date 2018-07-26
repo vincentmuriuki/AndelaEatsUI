@@ -20,10 +20,10 @@ const Modal = ({
             <div className="cta">
               <div className="float-left" />
               <div className="float-right">
-                <div className="btn close-modal" onClick={closeModal}>
+                <div className="btn-delete close-modal" onClick={closeModal}>
                   Cancel
                 </div>
-                <div className="btn delete-order" onClick={() => deleteOrder(modalContent.id)}>
+                <div className="btn-delete delete-order" onClick={() => deleteOrder(modalContent.id)}>
                   delete
                 </div>
               </div>

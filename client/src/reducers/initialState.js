@@ -8,7 +8,8 @@ export const initialMenus = {
   menus: [],
   acc1: '',
   acc2: '',
-  mainMeal: ''
+  mainMeal: '',
+  message: ''
 };
 
 export const orders = {
