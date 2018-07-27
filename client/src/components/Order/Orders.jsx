@@ -5,7 +5,12 @@ import { Redirect, Route, NavLink } from 'react-router-dom';
 import PropType from 'prop-types';
 
 import Menus from './Menus';
-import { getUpComingMenus, selectMeal, orderMeal } from '../../actions/menuAction';
+import { 
+  getUpComingMenus, 
+  selectMeal, 
+  orderMeal, 
+  resetMenu 
+} from '../../actions/menuAction';
 import canOrderMeal from '../../helpers/canOrderMeal';
 import ConfirmOrder from './ConfirmOrder';
 import Loader from '../common/Loader/Loader';
@@ -44,8 +49,7 @@ export class Orders extends Component {
       });
   }
 
-  toggleModal = (event) => {
-    event.preventDefault();
+  toggleModal = () => {
     const { acc1, acc2, mainMeal } = this.props.mealSelected;
     if (acc1 !== '' && acc2 !== '' && mainMeal !== '') {
       this.setState(state => ({
@@ -98,7 +102,7 @@ export class Orders extends Component {
 
 
   render() {
-    const { match: { url }, menus, selectMeal, mealSelected, orderMeal } = this.props;
+    const { match: { url }, menus, selectMeal, mealSelected, orderMeal, message, resetMenu } = this.props;
     return (
       <div className="wrapper">
       { this.state.isLoading? <Loader/> 
@@ -123,6 +127,7 @@ export class Orders extends Component {
                       data={menus} 
                       toggleModal={this.toggleModal}
                       selectMeal={selectMeal}
+                      resetMenu={resetMenu}
                       {...props} 
                     />
                     <ConfirmOrder 
@@ -131,6 +136,7 @@ export class Orders extends Component {
                       menus={menus}
                       mealSelected={mealSelected}
                       orderMeal={orderMeal}
+                      message={message}
                       {...props} 
                     />
                   </div>
@@ -163,20 +169,21 @@ Orders.contextTypes = {
  */
 function mapStateToProps(state) {
   const {
-    menus, acc1, acc2, mainMeal 
+    menus, acc1, acc2, mainMeal, message 
   } = state.upcomingMenus;
 
   const mealSelected = {
     mainMeal,
-    accompaniment1: acc1,
-    accompaniment2: acc2,
+    firstAccompaniment: acc1,
+    secondAccompaniment: acc2,
   };
-  return { menus, mealSelected };
+  return { menus, mealSelected, message };
 }
 
 export default connect(mapStateToProps,
   {
     getUpComingMenus,
     selectMeal,
-    orderMeal
+    orderMeal,
+    resetMenu
   })(Orders);

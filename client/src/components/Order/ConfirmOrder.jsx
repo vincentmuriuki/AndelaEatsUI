@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { format } from 'date-fns';
+
 import Meal from './Meal';
+import { toast, ToastContainer } from '../../../../node_modules/react-toastify';
 
 /* eslint-disable */
 
@@ -13,8 +15,19 @@ import Meal from './Meal';
 class ConfirmOrder extends Component {
 
   confirmOrder = () => {
-    this.props.orderMeal(this.props.mealSelected);
+    this.props.orderMeal(this.props.mealSelected)
+      .then(() => {
+        toast.success(this.props.message, {
+          position: toast.POSITION.TOP_CENTER
+        });
+      })
+      .catch(() => {
+        toast.error(this.props.message, {
+          position: toast.POSITION.TOP_CENTER
+        })
+      });
   }
+
   render () {
     const { isModalOpen, toggleModal, menus, match, mealSelected } = this.props;
     let mainMeal;
@@ -24,13 +37,14 @@ class ConfirmOrder extends Component {
     const menu = menus.find(meals => meals.id === Number(match.params.id))
     if (menu) {
       mainMeal = menu.meal.main.find(meal => meal.id === mealSelected.mainMeal);
-      firstAccompaniment= menu.meal.firstAccompaniment.find(meal => meal.id === mealSelected.accompaniment1);
-      secondAccompaniment= menu.meal.secondAccompaniment.find(meal => meal.id === mealSelected.accompaniment2);
+      firstAccompaniment= menu.meal.firstAccompaniment.find(meal => meal.id === mealSelected.firstAccompaniment);
+      secondAccompaniment= menu.meal.secondAccompaniment.find(meal => meal.id === mealSelected.secondAccompaniment);
       date = menu.date;
     }
     return (
       <div id="myModal" className="modal" style={(isModalOpen) ? { display: 'block' } : { display: 'none' }}>
       <div className="modal-content">
+          <ToastContainer />
         <div className="modal-header">
           <div className="header-title">CONFIRM ORDER</div>
           <div className="header-date">
