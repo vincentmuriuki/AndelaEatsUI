@@ -1,9 +1,12 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { format } from "date-fns";
 import PropType from "prop-types";
-import { editOrder } from "../../actions/ordersAction";
+import { ToastContainer } from 'react-toastify';
+
+import { editOrder, updateOrder } from "../../actions/ordersAction";
 import MealOptions from "./MealOptions";
+import Loader from '../common/Loader/Loader';
 
 /**
  *
@@ -13,14 +16,36 @@ import MealOptions from "./MealOptions";
  */
 export class EditOrder extends Component {
   state = {
-    main: "Beans",
-    firstAccompaniment: "Stew",
+    main: "",
+    firstAccompaniment: "",
     secondAccompaniment: "Cake"
   };
 
   componentDidMount() {
     const { id } = this.props.match.params;
     this.props.editOrder(id);
+
+    if (this.props.location.query) {
+      const { mainMeal, protein } = this.props.location.query;
+
+      this.setState({
+        main: mainMeal,
+        firstAccompaniment: protein
+      })
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.order) {
+      const orderData = JSON.parse(nextProps.order.config.data);
+
+      const { main, firstAccompaniment, secondAccompaniment } = orderData;
+      this.setState({
+        main,
+        firstAccompaniment,
+        secondAccompaniment
+      });
+    }
   }
 
   handleOptionChange = event => {
@@ -31,26 +56,51 @@ export class EditOrder extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
+
+    const { main, firstAccompaniment, secondAccompaniment } = this.state;
+
+    const orderData = {
+      main,
+      firstAccompaniment,
+      secondAccompaniment
+    }
+
+    this.props.updateOrder(orderData)
   };
+  
+  isDisabled = () => {
+    if (this.props.location.query) {
+      const { mainMeal, protein } = this.props.location.query;
+      const { main, firstAccompaniment } = this.state;
+      return mainMeal === main && protein === firstAccompaniment;
+    }
+  }
 
   render() {
-    const { main, firstAccompaniment, secondAccompaniment } = this.props.menu.meal;
+    const {
+      main,
+      firstAccompaniment,
+      secondAccompaniment,
+    } = this.props.menu.meal;
+    
+    const { isLoading } = this.props;
 
     return (
-      <div className="wrapper">
-        <div className="orders-wrapper">
-          <h3>Edit Order</h3>
-
-          <div className="orders-container">
-            <div className="date-wrapper">
-              <h3>{format(Date.now(), "MMMM YYYY")}</h3>
-              <ul>
-                <li className="active">
-                  {format(this.props.menu.date, "dddd Do")}
-                </li>
-              </ul>
-            </div>
-            <form onSubmit={this.handleFormSubmit}>
+      <Fragment>
+        { isLoading && <Loader />}
+        <div className={`wrapper ${isLoading && 'blurred'}`}>
+          <div className="orders-wrapper">
+            <h3>Edit Order</h3>
+            <ToastContainer />
+            <div className="orders-container">
+              <div className="date-wrapper">
+                <h3>{format(Date.now(), "MMMM YYYY")}</h3>
+                <ul>
+                  <li className="active">
+                    {format(this.props.menu.date, "dddd Do")}
+                  </li>
+                </ul>
+              </div>
               <div className="menu-wrapper">
                 <div className="menus-container">
                   <div className="main-meal">
@@ -92,19 +142,29 @@ export class EditOrder extends Component {
                     </ul>
                   </div>
                   <div className="cta">
+                    <div className="float-left" />
                     <div className="float-right">
-                      <div className="btn reset-order">cancel</div>
-                      <button className="btn submit-order" type="submit">
+                      <div
+                        className="btn reset-order"
+                        onClick={() => this.props.history.push("/orders")}
+                      >
+                        cancel
+                      </div>
+                      <button
+                        className={!this.isDisabled() ? "btn submit-order" : 'btn isDisabled'}
+                        type="submit"
+                        onClick={this.handleFormSubmit}
+                      >
                         save changes
                       </button>
                     </div>
                   </div>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }
@@ -112,7 +172,11 @@ export class EditOrder extends Component {
 EditOrder.propTypes = {
   match: PropType.object,
   menu: PropType.object,
-  editOrder: PropType.func
+  order: PropType.object,
+  isLoading: PropType.bool,
+  location: PropType.object,
+  editOrder: PropType.func.isRequired,
+  updateOrder: PropType.func.isRequired
 };
 
 /**
@@ -121,10 +185,14 @@ EditOrder.propTypes = {
  * @returns {object} menus
  */
 function mapStateToProps(state) {
-  return { menu: state.orders.menu };
+  return { 
+    menu: state.orders.menu, 
+    order: state.orders.order,
+    isLoading: state.orders.isLoading
+  };
 }
 
 export default connect(
   mapStateToProps,
-  { editOrder }
+  { editOrder, updateOrder }
 )(EditOrder);

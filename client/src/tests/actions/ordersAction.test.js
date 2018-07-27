@@ -2,7 +2,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import moxios from 'moxios';
 import {
-  base, fetchOrders, filterOrders, deleteOrder, editOrder 
+  base, fetchOrders, filterOrders, deleteOrder, editOrder, updateOrder 
 } from '../../actions/ordersAction';
 
 import {
@@ -11,9 +11,8 @@ import {
   FETCH_ORDERS_LOADING,
   FETCH_FILTERED_ORDERS,
   DELETE_ORDER_SUCCESS,
-  DELETE_ORDER_FAILURE,
-  EDIT_ORDER_SUCCESS, 
-  EDIT_ORDER_FAILURE 
+  EDIT_ORDER_SUCCESS,
+  UPDATE_ORDER_SUCCESS
 } from '../../actions/actionTypes';
 
 const middlewares = [thunk];
@@ -80,7 +79,7 @@ describe('Order actions', () => {
   });
 
   it('edit order success', async (done) => {
-    moxios.stubRequest(`${base}/edit/${id}`, {
+    moxios.stubRequest(`${base}/${id}`, {
       status: 200,
       response: {}
     });
@@ -104,29 +103,6 @@ describe('Order actions', () => {
     done();
   });
 
-  it('edit order failure', async (done) => {
-    moxios.stubRequest(`${base}/edit/${id}`, {
-      status: 401
-    });
-    const expectedActions = [
-      {
-        type: FETCH_ORDERS_LOADING,
-        isLoading: true
-      },
-      {
-        type: EDIT_ORDER_FAILURE,
-        payload: new Error("Request failed with status code 401")
-      }, {
-        type: FETCH_ORDERS_LOADING,
-        isLoading: false
-      }];
-    const store = mockStore({});
-    await store.dispatch(editOrder(id))
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions);
-      });
-    done();
-  });
 
   it('delete orders success', async (done) => {
     moxios.stubRequest(`${base}/${id}`, {
@@ -141,31 +117,6 @@ describe('Order actions', () => {
       {
         type: DELETE_ORDER_SUCCESS,
         id
-      }, {
-        type: FETCH_ORDERS_LOADING,
-        isLoading: false
-      }];
-    const store = mockStore({});
-    await store.dispatch(deleteOrder(id))
-      .then(() => {
-        expect(store.getActions()).toEqual(expectedActions);
-      });
-    done();
-  });
-
-  it('delete orders failure', async (done) => {
-    moxios.stubRequest(`${base}/${id}`, {
-      status: 401
-    });
-    
-    const expectedActions = [
-      {
-        type: FETCH_ORDERS_LOADING,
-        isLoading: true
-      },
-      {
-        type: DELETE_ORDER_FAILURE,
-        error: new Error("Request failed with status code 401")
       }, {
         type: FETCH_ORDERS_LOADING,
         isLoading: false

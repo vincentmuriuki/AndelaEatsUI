@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Pagination from 'rc-pagination/lib';
 import { connect } from 'react-redux';
 import DatePicker from 'react-date-picker';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import MealCard from '../MealCard/MealCard';
 import Modal from '../MealCard/Modal';
@@ -146,6 +148,11 @@ export class Orders extends Component {
    */
   deleteOrder(id) {
     this.props.deleteOrder(id);
+
+    toast.success('Your order has been deleted', {
+      position: toast.POSITION.TOP_CENTER
+    });
+
     this.setState({
       showModal: false
     });
@@ -182,6 +189,7 @@ export class Orders extends Component {
         <div className={`order-history ${orders.isLoading && 'blurred'}`}>
           <div className="title">
             <span>Order History</span>
+            <ToastContainer />
             {orders.isFiltered && <span>&nbsp;(filtered)</span>}
             <div className="filter">
               <button

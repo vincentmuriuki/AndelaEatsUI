@@ -17,16 +17,36 @@ const props = {
     params: { id: 1 },
     url: '/orders/edit/000023"'
   },
+  location: {
+    query: {
+      main: "Beans",
+      protein: "Cake"
+    }
+  },
   menu: {
     date: "2018-07-19",
     id: 2001,
     meal: {
-      main: [],
-      firstAccompaniment: [],
-      secondAccompaniment: []
+      main: [{
+        id: 1,
+        meal: {}
+      }],
+      firstAccompaniment: [{
+        id: 1,
+        meal: {}
+      }],
+      secondAccompaniment: [{
+        id: 1,
+        meal: {}
+      }]
     }
   },
+  history: { 
+    push: () => jest.fn()
+  },
   editOrder: () => Promise.resolve(),
+  updateOrder: () => Promise.resolve(),
+  
 };
 
 /**
@@ -57,21 +77,67 @@ describe('Component: Orders', () => {
       expect(spy).toHaveBeenCalled();
     });
 
-    it('handleOptionChange()', () => {
-      const event = {
-        target: {
-          name: "searchParam",
-          value: "Rice Beans"
-        },
-        preventDefault: () => jest.fn()
+    it('componentWillReceiveProps()', () => {
+      const newState = {
+        main: "1",
+        firstAccompaniment: "2", 
+        secondAccompaniment: "3"
       };
+      const nextProps = {
+        order: {
+          config: {
+            data: JSON.stringify(newState)
+          }
+        }
+      }
+      const spy = jest.spyOn(EditOrder.prototype, 'componentWillReceiveProps');
+      const wrapper = getComponent().instance();
+      wrapper.componentWillReceiveProps(nextProps);
 
+      expect(spy).toHaveBeenCalled();
+      expect(wrapper.state).toEqual(newState);
+    });
+
+    const event = {
+      target: {
+        name: "searchParam",
+        value: "Rice Beans"
+      },
+      preventDefault: () => jest.fn()
+    };
+
+    it('handleOptionChange()', () => {
       const wrapper = getComponent().instance();
 
       const spy = jest.spyOn(wrapper, 'handleOptionChange');
       wrapper.handleOptionChange(event);
       expect(spy).toHaveBeenCalled();
       expect(wrapper.state.searchParam).toBe(event.target.value);
+    });
+
+    it('handleFormSubmit', () => {
+      const wrapper = getComponent().instance();
+
+      const spy = jest.spyOn(wrapper, 'handleFormSubmit');
+      wrapper.handleFormSubmit(event);
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('isDisabled', () => {
+      const wrapper = getComponent().instance();
+
+      const spy = jest.spyOn(wrapper, 'isDisabled');
+      wrapper.isDisabled();
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('should handle redirect', () => {
+      const historySpy = jest.spyOn(props.history, 'push');
+      // const history = { push: jest.fn() }
+
+      getComponent().find('.reset-order').simulate('click');
+
+      expect(historySpy).toHaveBeenCalled();
     });
   });
 });

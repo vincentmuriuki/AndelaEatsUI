@@ -71,11 +71,11 @@
   .btn {
     text-transform: uppercase;
     text-align: center;
-    padding: 12px;
+    padding: 10px;
     height: 41px;
     width: 154px;
     border-radius: 2px;
-    background-color:transparent;
+    background-color: transparent;
     font-size: 16px;
     font-weight: 500;
     line-height: 21px;
@@ -84,6 +84,12 @@
   .submit-order {
     color: $color-white;
     background-color: $color-blue;
+  }
+
+  .isDisabled {
+    color: $color-white;
+    background-color: $color-gray;
+    cursor: not-allowed;
   }
 
   .reset-order {
