@@ -6,6 +6,7 @@ export default {
 
 export const initialMenus = {
   menus: [],
+  isLoading: false,
   acc1: '',
   acc2: '',
   mainMeal: '',

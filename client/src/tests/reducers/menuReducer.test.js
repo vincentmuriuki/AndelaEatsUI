@@ -1,7 +1,7 @@
 import menuReducer from '../../reducers/menuReducer';
 import { initialMenus } from '../../reducers/initialState';
 import { 
-  SET_MENUS, SELECT_MEAL, MAKE_ORDER_SUCCESS, MAKE_ORDER_FAILURE, RESET_MENU
+  SET_MENUS, SELECT_MEAL, MAKE_ORDER_SUCCESS, MAKE_ORDER_FAILURE, RESET_MENU, MENU_IS_LOADING
 } from '../../actions/actionTypes';
 
 /* 
@@ -56,6 +56,14 @@ describe('Menu Reducers', () => {
     };
     const newState = menuReducer(initialMenus, action);
     expect(newState.message).toEqual(action.payload.message);
+  });
+  it('MENU_IS_LOADING: should set isLoding state', () => {
+    const action = {
+      type: MENU_IS_LOADING,
+      payload: true
+    };
+    const newState = menuReducer(initialMenus, action);
+    expect(newState.isLoading).toEqual(action.payload);
   });
   it('RESET_MENU: should reset state', () => {
     const payload = {

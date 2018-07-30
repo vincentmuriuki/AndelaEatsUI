@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { format } from 'date-fns';
+import classname from 'classnames';
 
 import Meal from './Meal';
-import { toast, ToastContainer } from 'react-toastify';
 
 /* eslint-disable */
 
@@ -15,16 +15,15 @@ import { toast, ToastContainer } from 'react-toastify';
 class ConfirmOrder extends Component {
 
   confirmOrder = () => {
-    this.props.orderMeal(this.props.mealSelected)
+    const { orderMeal, showToast, toggleModal } = this.props;
+    orderMeal(this.props.mealSelected)
       .then(() => {
-        toast.success(this.props.message, {
-          position: toast.POSITION.TOP_CENTER
-        });
+        showToast()
+        toggleModal();
       })
       .catch(() => {
-        toast.error(this.props.message, {
-          position: toast.POSITION.TOP_CENTER
-        })
+        showToast()
+        toggleModal();
       });
   }
 
@@ -44,7 +43,6 @@ class ConfirmOrder extends Component {
     return (
       <div id="myModal" className="modal" style={(isModalOpen) ? { display: 'block' } : { display: 'none' }}>
       <div className="modal-content">
-          <ToastContainer />
         <div className="modal-header">
           <div className="header-title">CONFIRM ORDER</div>
           <div className="header-date">
@@ -81,7 +79,7 @@ class ConfirmOrder extends Component {
             <div className="float-left"></div>
             <div className="float-right">
               <div className="btn reset-order" onClick={toggleModal.bind(this)}>Cancel</div>
-              <div className="btn submit-order" onClick={this.confirmOrder}>Confirm order</div>
+              <div className={classname("btn submit-order", { 'isDisabled': this.props.isLoading })} onClick={this.confirmOrder}>Confirm order</div>
             </div>
             </div>        
             </div>

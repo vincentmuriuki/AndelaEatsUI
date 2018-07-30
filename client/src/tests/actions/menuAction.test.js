@@ -5,7 +5,8 @@ import { baseUrl, getUpComingMenus, orderMeal } from '../../actions/menuAction';
 import { 
   SET_MENUS,
   MAKE_ORDER_SUCCESS,
-  MAKE_ORDER_FAILURE 
+  MAKE_ORDER_FAILURE,
+  MENU_IS_LOADING 
 } from '../../actions/actionTypes';
 
 const middlewares = [thunk];
@@ -44,9 +45,17 @@ describe('Menu actions', () => {
       response: {}
     });
     const expectedActions = [
+      { 
+        type: MENU_IS_LOADING,
+        payload: true
+      },
       {
         type: MAKE_ORDER_SUCCESS,
         payload: {}
+      },
+      { 
+        type: MENU_IS_LOADING,
+        payload: false
       }
     ];
     const order = {
@@ -66,6 +75,10 @@ describe('Menu actions', () => {
       status: 400,
     });
     const expectedActions = [
+      { 
+        type: MENU_IS_LOADING,
+        payload: true
+      },
       {
         type: MAKE_ORDER_FAILURE,
         payload: new Error("Request failed with status code 400")
