@@ -11,14 +11,11 @@ import {
   orderMeal, 
   resetMenu 
 } from '../../actions/menuAction';
-import canOrderMeal from '../../helpers/canOrderMeal';
+import { canOrderMeal, validateDate, endDate } from '../../helpers/mealsHelper';
 import ConfirmOrder from './ConfirmOrder';
 import Loader from '../common/Loader/Loader';
 
-/* eslint-disable */
 
-const validateDate = (menu, endDate) => new Date(menu.date).getDate() <= endDate
-  && new Date(menu.date).getDate() >= new Date().getDate();
 
 /**
  *
@@ -35,7 +32,6 @@ export class Orders extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      endDate: new Date().getDate() + 7,
       isModalOpen: false,
       isLoading: true
     };
@@ -60,7 +56,7 @@ export class Orders extends Component {
 
   selectDefaultMenu() {
     const selectedMeal = this.props.menus.find(menu => canOrderMeal(menu)
-      && validateDate(menu, this.state.endDate)
+      && validateDate(menu, endDate())
     );
 
     this.context.router.history
@@ -76,7 +72,7 @@ export class Orders extends Component {
   renderDates() {
     if (this.props.menus) {
       return this.props.menus.map((menuDate) => {
-        if (validateDate(menuDate, this.state.endDate)) {
+        if (validateDate(menuDate, endDate())) {
           return (
             <li
               key={menuDate.id}
