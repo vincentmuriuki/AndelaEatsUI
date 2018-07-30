@@ -6,6 +6,7 @@ import DatePicker from 'react-date-picker';
 
 import MealCard from '../MealCard/MealCard';
 import Modal from '../MealCard/Modal';
+import RatingModal from '../MealCard/RatingModal';
 
 import 'rc-pagination/assets/index.css';
 import { fetchOrders, filterOrders, deleteOrder } from '../../actions/ordersAction';
@@ -27,6 +28,7 @@ export class Orders extends Component {
       start: '',
       end: new Date(),
       showModal: false,
+      showRatingModal: false,
       modalContent: null
     };
 
@@ -36,7 +38,10 @@ export class Orders extends Component {
     this.handleFilter = this.handleFilter.bind(this);
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
+    this.showRatingModal = this.showRatingModal.bind(this);
+    this.hideRatingModal = this.hideRatingModal.bind(this);
     this.deleteOrder = this.deleteOrder.bind(this);
+    this.ratingChanged = this.ratingChanged.bind(this);
   }
 
   /**
@@ -92,6 +97,18 @@ export class Orders extends Component {
     } else {
       this.props.fetchOrders(newPage);
     }
+  }
+
+  /**
+   * Handles ratings for food
+   *
+   * @memberof RatingModal
+   * @param {string} newRating
+   * 
+   * @returns {void}
+   */
+  ratingChanged(newRating) {
+    console.log(newRating);
   }
 
 
@@ -150,7 +167,7 @@ export class Orders extends Component {
       showModal: false
     });
   }
-
+  
   /**
    * Hide modal
    *
@@ -163,7 +180,34 @@ export class Orders extends Component {
       showModal: false
     });
   }
+  
+  /**
+   * Display a modal to delete a meal
+   *
+   * @param {object} meal
+   * @memberof Orders
+   * 
+   * @returns {void}
+   */
+  showRatingModal() {
+    this.setState({
+      showRatingModal: true
+    });
+  }
 
+  /**
+   * Hide modal
+   *
+   * @memberof Orders
+   * 
+   * @returns {void}
+   */
+  hideRatingModal() {
+    this.setState({
+      showRatingModal: false
+    });
+  }
+  
   /**
    * 
    * This is React render method that render the UI on the dom
@@ -258,6 +302,11 @@ export class Orders extends Component {
             deleteOrder={this.deleteOrder}
             modalContent={this.state.modalContent}
           />
+          <RatingModal 
+            displayModal={this.state.showRatingModal}
+            closeModal={this.hideRatingModal}
+            ratingChanged={this.ratingChanged}
+          />
           <div className="container">
             {
               orders.meals.map((meal) => (
@@ -266,6 +315,7 @@ export class Orders extends Component {
                   meal={meal}
                   url={url}
                   showModal={this.showModal}
+                  showRatingModal={this.showRatingModal}
                 />
               ))
             }

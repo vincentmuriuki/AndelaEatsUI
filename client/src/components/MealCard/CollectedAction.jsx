@@ -2,7 +2,7 @@ import Ratings from 'react-stars';
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
-const CollectedAction = ({ id, rating }) => (
+const CollectedAction = ({ id, rating, showRatingModal }) => (
   <div className="card-action collected">
     <div className="item">
       <p className="sub-head">Status</p>
@@ -24,6 +24,7 @@ const CollectedAction = ({ id, rating }) => (
           className="button"
           tabIndex="0"
           role="button"
+          onClick={() => showRatingModal()}
         >Rate
         </a>
       </div>
@@ -33,7 +34,8 @@ const CollectedAction = ({ id, rating }) => (
 
 CollectedAction.propTypes = {
   id: PropTypes.string.isRequired,
-  rating: PropTypes.number
+  rating: PropTypes.number,
+  showRatingModal: PropTypes.func.isRequired
 };
 
 CollectedAction.defaultProps = {

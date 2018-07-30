@@ -10,7 +10,8 @@ const MealCard = ({
   meal: {
     id, name: { main, protein }, imageUrl, orderDate, isCollected, rating
   },
-  showModal
+  showModal,
+  showRatingModal,
 }) => (
   <div className="card-container">
     <div className="card-image" style={{ backgroundImage: `url(${imageUrl})` }}>
@@ -32,7 +33,8 @@ const MealCard = ({
           ? (
             <CollectedAction 
               id={id} 
-              rating={+rating} 
+              rating={+rating}
+              showRatingModal={showRatingModal} 
             />
           )
           : (
@@ -61,7 +63,9 @@ MealCard.propTypes = {
     orderDate: PropTypes.string.isRequired,
     rating: PropTypes.number
   }).isRequired,
-  showModal: PropTypes.func
+  showModal: PropTypes.func,
+  showRatingModal: PropTypes.func,
+
 };
 
 export default MealCard;
