@@ -1,5 +1,5 @@
 import {
-  SET_MENUS, SELECT_MEAL, MAKE_ORDER_SUCCESS, RESET_MENU, MAKE_ORDER_FAILURE
+  SET_MENUS, SELECT_MEAL, MAKE_ORDER_SUCCESS, RESET_MENU, MAKE_ORDER_FAILURE, MENU_IS_LOADING
 } from '../actions/actionTypes';
 import { initialMenus } from './initialState';
 
@@ -17,6 +17,8 @@ const menuReducer = (state = initialMenus, action) => {
       return {
         ...state, acc1: '', acc2: '', mainMeal: '', message: ''
       };
+    case MENU_IS_LOADING:
+      return { ...state, isLoading: action.payload };
     default:
       return state;
   }

@@ -1,11 +1,12 @@
 
 import axios from 'axios';
-import { 
+import {
   SET_MENUS,
   MAKE_ORDER_FAILURE,
   MAKE_ORDER_SUCCESS,
   SELECT_MEAL,
-  RESET_MENU
+  RESET_MENU,
+  MENU_IS_LOADING
 } from './actionTypes';
 import { config } from '../config';
 
@@ -50,6 +51,19 @@ export function resetMenu() {
 
 /**
  *
+ * @export
+ * @param {boolean} isLoading  
+ * @returns {object} object
+ */
+export function setMenuLoading(isLoading) {
+  return {
+    type: MENU_IS_LOADING,
+    payload: isLoading
+  };
+}
+
+/**
+ *
  *
  * @export
  * @param {*} response
@@ -81,11 +95,15 @@ export const getUpComingMenus = () => (dispatch) => axios.get(`${baseUrl}/menu`)
   .then((response) => {
     dispatch(setMenus(response.data));
   });
-  // eslint-disable-next-line
-export const orderMeal = (orders) => (dispatch) => axios.post(`${baseUrl}/menu`, orders)
-  .then((response) => {
-    dispatch(handleOrderSuccess(response.data));
-  })
-  .catch((error) => {
-    dispatch(handleOrderFailure(error));
-  });
+// eslint-disable-next-line
+export const orderMeal = (orders) => (dispatch) => {
+  dispatch(setMenuLoading(true));
+  return axios.post(`${baseUrl}/menu`, orders)
+    .then((response) => {
+      dispatch(handleOrderSuccess(response.data));
+      dispatch(setMenuLoading(false));
+    })
+    .catch((error) => {
+      dispatch(handleOrderFailure(error));
+    });
+};

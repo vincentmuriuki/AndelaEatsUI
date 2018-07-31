@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { format } from 'date-fns';
+import { toast, ToastContainer } from 'react-toastify';
 import { Redirect, Route, NavLink } from 'react-router-dom';
 import PropType from 'prop-types';
 
@@ -43,6 +44,11 @@ export class Orders extends Component {
         this.setState({isLoading: false})
         this.selectDefaultMenu();
       });
+  }
+  showToast = () => {
+    toast.success(this.props.message, {
+      position: toast.POSITION.TOP_CENTER
+    });
   }
 
   toggleModal = () => {
@@ -98,11 +104,16 @@ export class Orders extends Component {
 
 
   render() {
-    const { match: { url }, menus, selectMeal, mealSelected, orderMeal, message, resetMenu } = this.props;
+    const { match: { url }, menus, selectMeal, mealSelected, orderMeal, resetMenu, isLoading } = this.props;
     return (
       <div className="wrapper">
       { this.state.isLoading? <Loader/> 
       :<div className="orders-wrapper">
+          <ToastContainer
+            autoClose={2000}
+            pauseOnHover={false}
+            hideProgressBar
+          />
           <h3>Make Orders</h3>
 
           <div className="orders-container">
@@ -132,7 +143,8 @@ export class Orders extends Component {
                       menus={menus}
                       mealSelected={mealSelected}
                       orderMeal={orderMeal}
-                      message={message}
+                      showToast={this.showToast}
+                      isLoading={isLoading}
                       {...props} 
                     />
                   </div>
@@ -165,7 +177,7 @@ Orders.contextTypes = {
  */
 function mapStateToProps(state) {
   const {
-    menus, acc1, acc2, mainMeal, message 
+    menus, acc1, acc2, mainMeal, message, isLoading 
   } = state.upcomingMenus;
 
   const mealSelected = {
@@ -173,7 +185,7 @@ function mapStateToProps(state) {
     firstAccompaniment: acc1,
     secondAccompaniment: acc2,
   };
-  return { menus, mealSelected, message };
+  return { menus, mealSelected, message, isLoading };
 }
 
 export default connect(mapStateToProps,
