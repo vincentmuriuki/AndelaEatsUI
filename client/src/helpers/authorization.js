@@ -1,5 +1,6 @@
 // User info
 import decodeToken from './jwtDecode';
+import configAxios from './configAxios';
 
 /**
  * This function validates the user information
@@ -8,6 +9,7 @@ import decodeToken from './jwtDecode';
  */
 export const isAuthorized = () => {
   if (decodeToken() !== 'unauthorised') {
+    configAxios(document.cookie.split('jwt-token=')[1]);
     const userEmailAddress = (decodeToken().email);
     const andelaEmailRegex = /@andela.com$/;
     if (!andelaEmailRegex.test(userEmailAddress)) {

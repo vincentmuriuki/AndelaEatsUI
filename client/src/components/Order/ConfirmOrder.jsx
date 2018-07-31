@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { format } from 'date-fns';
 
 import Meal from './Meal';
-import { toast, ToastContainer } from '../../../../node_modules/react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 
 /* eslint-disable */
 

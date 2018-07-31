@@ -60,7 +60,7 @@ export class Orders extends Component {
     );
 
     this.context.router.history
-      .push(`${this.props.match.url}/${selectedMeal.id}`);
+      .push(`${this.props.match.url}/${selectedMeal && selectedMeal.id}`);
   }
 
   /**
