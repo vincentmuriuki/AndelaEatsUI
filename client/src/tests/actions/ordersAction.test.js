@@ -2,7 +2,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import moxios from 'moxios';
 import {
-  base, fetchOrders, filterOrders, deleteOrder, editOrder, updateOrder 
+  base, fetchOrders, filterOrders, deleteOrder, editOrder, updateOrder, updateOrderSuccess
 } from '../../actions/ordersAction';
 
 import {
@@ -103,6 +103,27 @@ describe('Order actions', () => {
     done();
   });
 
+  it('edit order failure', async (done) => {
+    moxios.stubRequest(`${base}/${id}`, {
+      status: 401,
+      response: {}
+    });
+    const expectedActions = [
+      {
+        type: FETCH_ORDERS_LOADING,
+        isLoading: true
+      },
+      {
+        type: FETCH_ORDERS_LOADING,
+        isLoading: false
+      }];
+    const store = mockStore({});
+    await store.dispatch(editOrder(id))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    done();
+  });
 
   it('delete orders success', async (done) => {
     moxios.stubRequest(`${base}/${id}`, {
@@ -118,6 +139,28 @@ describe('Order actions', () => {
         type: DELETE_ORDER_SUCCESS,
         id
       }, {
+        type: FETCH_ORDERS_LOADING,
+        isLoading: false
+      }];
+    const store = mockStore({});
+    await store.dispatch(deleteOrder(id))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    done();
+  });
+
+  it('delete orders failure', async (done) => {
+    moxios.stubRequest(`${base}/${id}`, {
+      status: 404,
+      response: {}
+    });
+    const expectedActions = [
+      {
+        type: FETCH_ORDERS_LOADING,
+        isLoading: true
+      },
+      {
         type: FETCH_ORDERS_LOADING,
         isLoading: false
       }];
@@ -185,6 +228,53 @@ describe('Order actions', () => {
       }];
     const store = mockStore({});
     await store.dispatch(filterOrders(order))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    done();
+  });
+
+  it('update order success', async (done) => {
+    moxios.stubRequest(`${base}/${id}`, {
+      status: 200,
+      response: {}
+    });
+    const expectedActions = [
+      {
+        type: FETCH_ORDERS_LOADING,
+        isLoading: true
+      },
+      {
+        type: UPDATE_ORDER_SUCCESS,
+        payload: {}
+      }, {
+        type: FETCH_ORDERS_LOADING,
+        isLoading: false
+      }];
+    const store = mockStore({});
+    await store.dispatch(updateOrder({}, id))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    done();
+  });
+
+  it('update order failure', async (done) => {
+    moxios.stubRequest(`${base}/${id}`, {
+      status: 401,
+      response: {}
+    });
+    const expectedActions = [
+      {
+        type: FETCH_ORDERS_LOADING,
+        isLoading: true
+      },
+      {
+        type: FETCH_ORDERS_LOADING,
+        isLoading: false
+      }];
+    const store = mockStore({});
+    await store.dispatch(updateOrder({}, id))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });

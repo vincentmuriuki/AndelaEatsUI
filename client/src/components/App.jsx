@@ -7,6 +7,10 @@ import Orders from './Order/Orders';
 import OrderHistory from './OrderHistory/OrderHistory';
 import EditOrder from './EditOrder/EditOrder';
 
+export const NotFound = () => (
+  <h1>Page Not Found</h1>
+);
+
 const Root = () => (
   <Router>
     <Switch>
@@ -16,7 +20,7 @@ const Root = () => (
           <Route path="/ordermeal" component={Orders} />
           <Route exact path="/orders" component={OrderHistory} />
           <Route exact path="/orders/edit/:id" component={EditOrder} />
-          <Route component={() => <h1>Page Not Found</h1>} />
+          <Route component={NotFound} />
         </Switch>
       </SideNav>
     </Switch>

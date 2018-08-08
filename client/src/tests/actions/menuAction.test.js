@@ -1,12 +1,16 @@
 import moxios from 'moxios';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
-import { baseUrl, getUpComingMenus, orderMeal } from '../../actions/menuAction';
-import { 
+import {
+  baseUrl, getUpComingMenus, orderMeal, selectMeal, resetMenu 
+} from '../../actions/menuAction';
+import {
   SET_MENUS,
   MAKE_ORDER_SUCCESS,
   MAKE_ORDER_FAILURE,
-  MENU_IS_LOADING 
+  MENU_IS_LOADING,
+  SELECT_MEAL,
+  RESET_MENU
 } from '../../actions/actionTypes';
 
 const middlewares = [thunk];
@@ -45,7 +49,7 @@ describe('Menu actions', () => {
       response: {}
     });
     const expectedActions = [
-      { 
+      {
         type: MENU_IS_LOADING,
         payload: true
       },
@@ -53,7 +57,7 @@ describe('Menu actions', () => {
         type: MAKE_ORDER_SUCCESS,
         payload: {}
       },
-      { 
+      {
         type: MENU_IS_LOADING,
         payload: false
       }
@@ -75,7 +79,7 @@ describe('Menu actions', () => {
       status: 400,
     });
     const expectedActions = [
-      { 
+      {
         type: MENU_IS_LOADING,
         payload: true
       },
@@ -94,6 +98,26 @@ describe('Menu actions', () => {
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
+    done();
+  });
+  it('should select meal', async (done) => {
+    const payload = { prop: '', value: '' };
+    const expectedActions = [{
+      type: SELECT_MEAL,
+      payload
+    }];
+    const store = mockStore({});
+    store.dispatch(selectMeal(payload));
+    expect(store.getActions()).toEqual(expectedActions);
+    done();
+  });
+  it('should reset menu', async (done) => {
+    const expectedActions = [{
+      type: RESET_MENU
+    }];
+    const store = mockStore({});
+    store.dispatch(resetMenu());
+    expect(store.getActions()).toEqual(expectedActions);
     done();
   });
 });

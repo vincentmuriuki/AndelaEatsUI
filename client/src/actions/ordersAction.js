@@ -105,7 +105,7 @@ export const updateOrder = (data, id) => dispatch => {
   dispatch(setOrdersLoading(true));
   return axios.put(`${base}/${id}`, data)
     .then((response) => {
-      dispatch(updateOrderSuccess(response));
+      dispatch(updateOrderSuccess(response.data));
       toast.success(response.data.response);
       dispatch(setOrdersLoading(false));
     }).catch((error) => {

@@ -1,7 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Login from '../../components/Login/Login';
+import Login from '../../../components/Login/Login';
 
+jest.mock("../../../helpers/checkLogin");
 /* 
 global jest 
 expect 

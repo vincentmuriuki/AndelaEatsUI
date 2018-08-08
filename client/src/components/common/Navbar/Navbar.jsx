@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 
 import logo from '../../../assets/images/andela-logo.png';
-import 
-backgroundImg 
-  from '../../../assets/images/google-logo-icon-PNG-Transparent-Background.png';
 
 // Actions
 import loadActiveUser from '../../../actions/activeUserAction';
@@ -18,7 +14,7 @@ import logoutActiveUser from '../../../helpers/logoutUser';
 /**
  * Application nav bar
  */
-class Navbar extends Component { 
+export class Navbar extends Component { 
 /**
  * Creates an instance of login form
  * @param {any} props -
@@ -114,7 +110,7 @@ Navbar.propTypes = {
   logoutActiveUser: PropTypes.func.isRequired,
   activeUser: PropTypes.object.isRequired,
   history: PropTypes.shape({
-    push: PropTypes.string.isRequired,
+    push: PropTypes.func.isRequired,
   }),
 };
 
