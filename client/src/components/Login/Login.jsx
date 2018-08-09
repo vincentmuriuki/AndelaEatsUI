@@ -47,10 +47,7 @@ class Login extends Component {
       hideProgressBar: true,
     };
 
-    const getUrlError = location.href.split('error=');
-    const storeLoginError = localStorage.setItem('error', getUrlError[1]);
     const loginError = localStorage.getItem('error');
-    const token = document.cookie.split('jwt-token=');
     const message = 'Unauthorised Access, Please Log in with an Andela Email';
 
     // Display Login Error

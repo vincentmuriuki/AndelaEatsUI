@@ -2,24 +2,37 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Meal from '../../../components/Order/Meal';
 
+const props = {
+  onChange: () => jest.fn(),
+  shouldHaveCheckBox: true,
+  meal: {
+    id: 1,
+    courseType: "Main Meal",
+    meal: "Rice",
+    mealPicture: ''
+  }
+};
+
+let wrapper;
 /* 
 global jest 
 expect 
 */
 describe('Meal Component', () => {
-  const onChange = jest.fn();
-  const meal = {
-    id: 1,
-    courseType: "Main Meal",
-    meal: "Rice",
-    mealPicture: ''
-  };
-  const wrapper = shallow(<Meal meal={meal} onChange={onChange} />);
-
   it('should mount successfully', () => {
+    wrapper = shallow(<Meal {...props} />);
     expect(wrapper).toBeDefined();
   });
   it('should render meal details', () => {
-    expect(wrapper.find('.meal-name').contains(meal.meal)).toBeTruthy();
+    wrapper = shallow(<Meal {...props} />);
+    expect(wrapper.find('.meal-name').contains(props.meal.meal)).toBeTruthy();
+  });
+
+  it('should call onChange on radio input', () => {
+    const event = { target: { checked: true } };
+    const onChangeSpy = jest.spyOn(props, 'onChange');
+    wrapper = shallow(<Meal {...props} />);
+    wrapper.find('.radio-custom').simulate('change', event);
+    expect(onChangeSpy).toHaveBeenCalled();
   });
 });

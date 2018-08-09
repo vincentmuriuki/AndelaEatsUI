@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import Modal from '../../../components/MealCard/Modal'; //eslint-disable-line
 
 const props = {
-  displayModal: jest.fn(),
+  displayModal: true,
   closeModal: jest.fn(),
   deleteOrder: jest.fn(),
   modalContent: {
@@ -11,7 +11,8 @@ const props = {
     name: {
       main: "Wheat",
       protein: "Ace"
-    }
+    },
+    orderDate: '2/52018'
   }
 };
 /* 
@@ -27,6 +28,6 @@ describe('Modal Component', () => {
   });
 
   it('should open modal and delete order', () => {
-    wrapper.find('.delete-order').simulate('onClick');
+    wrapper.find('.delete-order').simulate('click');
   });
 });

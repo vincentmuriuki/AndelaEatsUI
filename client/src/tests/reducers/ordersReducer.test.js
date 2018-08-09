@@ -76,10 +76,12 @@ describe('Past Orders Reducer', () => {
         type: DELETE_ORDER_SUCCESS,
         id: 123
       };
-      const newState = ordersReducer(orders, action);
+      const newState = ordersReducer({
+        ...orders, meals: [{ id: 123 }]
+      }, action);
       expect(newState.currentPage).toEqual(1);
       expect(newState.totalRecords).toEqual(-1);
-      expect(newState.meals).toEqual([])
+      expect(newState.meals).toEqual([]);
     });
   });
 

@@ -1,6 +1,6 @@
 export const mockMenu = [
   {
-    id: 1,
+    id: 23,
     courseType: "Main Meal",
     meal: {
       main: [
@@ -19,13 +19,13 @@ export const mockMenu = [
       ],
       firstAccompaniment: [
         {
-          id: 1,
+          id: 3,
           courseType: "Main Meal",
           meal: "Beans",
           mealPicture: ""
         },
         {
-          id: 2,
+          id: 4,
           courseType: "Main Meal",
           meal: "Wheat",
           mealPicture: ""
@@ -33,13 +33,13 @@ export const mockMenu = [
       ],
       secondAccompaniment: [
         {
-          id: 1,
+          id: 5,
           courseType: "Main Meal",
           meal: "Beans",
           mealPicture: ""
         },
         {
-          id: 2,
+          id: 6,
           courseType: "Main Meal",
           meal: "Wheat",
           mealPicture: ""

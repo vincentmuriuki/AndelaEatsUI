@@ -14,7 +14,7 @@ const NotCollectedAction = ({
       <p className="sub-head">Order options</p>
       <div className="button-group">
         <Link
-          to = {{
+          to={{
             pathname: `${baseUrl}/edit/${id}`,
             query: { mainMeal: meal.name.main, protein: meal.name.protein }
           }}

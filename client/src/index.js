@@ -11,12 +11,14 @@ import { config } from './config';
 const store = configureStore();
 
 
-// eslint-disable-next-line
-Raven.config(config.SENTRY_URL).install();
+if (window.Raven) {
+  // eslint-disable-next-line
+  Raven.config(config.SENTRY_URL).install();
+}
 
-ReactDOM.render(
+export default ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>, 
-  document.getElementById('app')
+  document.getElementById('app') || document.createElement('div')
 );
