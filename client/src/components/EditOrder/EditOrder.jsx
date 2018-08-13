@@ -37,9 +37,7 @@ export class EditOrder extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.order) {
-      const orderData = JSON.parse(nextProps.order.config.data);
-
-      const { main, firstAccompaniment, secondAccompaniment } = orderData;
+      const { main, firstAccompaniment, secondAccompaniment } = nextProps.order.orderData;
       this.setState({
         main,
         firstAccompaniment,

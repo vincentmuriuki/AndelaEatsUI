@@ -85,8 +85,10 @@ describe('Component: Orders', () => {
       };
       const nextProps = {
         order: {
-          config: {
-            data: JSON.stringify(newState)
+          orderData: {
+            main: "1",
+            firstAccompaniment: "2", 
+            secondAccompaniment: "3"
           }
         }
       }
