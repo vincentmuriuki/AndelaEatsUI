@@ -134,6 +134,7 @@ export class Orders extends Component {
                           toggleModal={this.toggleModal}
                           selectMeal={selectMeal}
                           resetMenu={resetMenu}
+                          mealSelected={mealSelected}
                           {...props}
                         />
                         <ConfirmOrder

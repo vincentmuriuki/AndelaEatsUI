@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropType from 'prop-types';
+import classname from 'classnames';
 import Meal from './Meal';
 import Loader from '../common/Loader/Loader';
 
@@ -69,7 +70,7 @@ export class Menus extends Component {
   
 
   render () {
-    const { match, data, toggleModal } = this.props;
+    const { match, data, toggleModal, mealSelected } = this.props;
   
     const menus = data.find(meals => meals.id === Number(match.params.id));
     let mainMeal = [];
@@ -110,7 +111,7 @@ export class Menus extends Component {
             <div className="float-left"></div>
             <div className="float-right">
               <div className="btn reset-order" onClick={this.resetMenus}>reset order</div>
-              <div className="btn submit-order" onClick={toggleModal.bind(this)}>submit order</div>
+              <div className={classname("btn submit-order", { 'isDisabled': (mealSelected.mainMeal === '') })}  onClick={toggleModal.bind(this)}>submit order</div>
             </div>
             </div>
            </div> : <div>No Available options yet</div>
@@ -120,7 +121,6 @@ export class Menus extends Component {
     )
   }
 }
-
 
 Menus.propTypes = {
   match: PropType.object,
