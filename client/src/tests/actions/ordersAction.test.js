@@ -2,7 +2,7 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import moxios from 'moxios';
 import {
-  base, fetchOrders, filterOrders, deleteOrder, editOrder, updateOrder, updateOrderSuccess
+  base, fetchOrders, filterOrders, deleteOrder, editOrder, updateOrder, updateOrderSuccess, getOrderByDate
 } from '../../actions/ordersAction';
 
 import {
@@ -12,7 +12,9 @@ import {
   FETCH_FILTERED_ORDERS,
   DELETE_ORDER_SUCCESS,
   EDIT_ORDER_SUCCESS,
-  UPDATE_ORDER_SUCCESS
+  UPDATE_ORDER_SUCCESS,
+  GET_ORDER_SUCCESS,
+  MENU_IS_LOADING
 } from '../../actions/actionTypes';
 
 const middlewares = [thunk];
@@ -20,6 +22,7 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 const id = '123';
+const date = new Date();
 
 /* 
 global jest 
@@ -245,11 +248,19 @@ describe('Order actions', () => {
         isLoading: true
       },
       {
+        type: MENU_IS_LOADING,
+        payload: true, 
+      },
+      {
         type: UPDATE_ORDER_SUCCESS,
         payload: {}
       }, {
         type: FETCH_ORDERS_LOADING,
         isLoading: false
+      },
+      {
+        type: MENU_IS_LOADING,
+        payload: false, 
       }];
     const store = mockStore({});
     await store.dispatch(updateOrder({}, id))
@@ -270,11 +281,66 @@ describe('Order actions', () => {
         isLoading: true
       },
       {
+        type: MENU_IS_LOADING,
+        payload: true, 
+      },
+      {
+        type: FETCH_ORDERS_LOADING,
+        isLoading: false
+      },
+      {
+        type: MENU_IS_LOADING,
+        payload: false, 
+      }];
+    const store = mockStore({});
+    await store.dispatch(updateOrder({}, id))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    done();
+  });
+
+  it('get order success', async (done) => {
+    moxios.stubRequest(`${base}/search?date=${date}`, {
+      status: 200,
+      response: {}
+    });
+    const expectedActions = [
+      {
+        type: FETCH_ORDERS_LOADING,
+        isLoading: true
+      },
+      {
+        type: GET_ORDER_SUCCESS,
+        order: {}
+      }, {
         type: FETCH_ORDERS_LOADING,
         isLoading: false
       }];
     const store = mockStore({});
-    await store.dispatch(updateOrder({}, id))
+    await store.dispatch(getOrderByDate(date))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    done();
+  });
+
+  it('get order failure', async (done) => {
+    moxios.stubRequest(`${base}/search?date=${date}`, {
+      status: 419,
+      response: {}
+    });
+    const expectedActions = [
+      {
+        type: FETCH_ORDERS_LOADING,
+        isLoading: true
+      },
+      {
+        type: FETCH_ORDERS_LOADING,
+        isLoading: false
+      }];
+    const store = mockStore({});
+    await store.dispatch(getOrderByDate(date))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });

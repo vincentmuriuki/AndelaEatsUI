@@ -35,3 +35,7 @@ body {
 .blurred {
   filter: blur(5px);
 }
+
+.disabled {
+  cursor: not-allowed !important;
+}

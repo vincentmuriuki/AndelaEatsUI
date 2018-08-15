@@ -1,15 +1,18 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import ConfirmOrder from '../../../components/Order/ConfirmOrder';
-import { mockMenu, match } from '../../helpers/mockOrders';
+import { mockMenu } from '../../helpers/mockOrders';
 
 const props = {
   toggleModal: () => Promise.resolve(),
   orderMeal: () => Promise.resolve(),
+  updateOrder: () => Promise.resolve(),
   showToast: () => Promise.resolve(),
   isModalOpen: true,
   menus: mockMenu,
-  match,
+  match: {
+    params: { id: 23 }
+  },
   mealSelected: {
     mainMeal: 1,
     accompaniment1: 1,
@@ -44,6 +47,16 @@ describe('ConfirmOrder Component', () => {
       const confirmOrderSpy = jest.spyOn(wrapper.instance(), 'confirmOrder');
       wrapper.instance().confirmOrder();
       expect(orderMealSpy).toHaveBeenCalled();
+      expect(confirmOrderSpy).toHaveBeenCalled();
+    });
+
+    it('update meal successfully', () => {
+      props.menuId = 22;
+      const updateOrderSpy = jest.spyOn(props, 'updateOrder');
+      wrapper = shallow(<ConfirmOrder {...props} />);
+      const confirmOrderSpy = jest.spyOn(wrapper.instance(), 'confirmOrder');
+      wrapper.instance().confirmOrder();
+      expect(updateOrderSpy).toHaveBeenCalled();
       expect(confirmOrderSpy).toHaveBeenCalled();
     });
   });

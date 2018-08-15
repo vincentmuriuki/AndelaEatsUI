@@ -8,7 +8,8 @@ export const mockMenu = [
           id: 1,
           courseType: "Main Meal",
           meal: "Beans",
-          mealPicture: ""
+          mealPicture: "",
+          selected: true
         },
         {
           id: 2,
@@ -28,7 +29,8 @@ export const mockMenu = [
           id: 4,
           courseType: "Main Meal",
           meal: "Wheat",
-          mealPicture: ""
+          mealPicture: "",
+          selected: true
         }
       ],
       secondAccompaniment: [
@@ -36,7 +38,8 @@ export const mockMenu = [
           id: 5,
           courseType: "Main Meal",
           meal: "Beans",
-          mealPicture: ""
+          mealPicture: "",
+          selected: true
         },
         {
           id: 6,
