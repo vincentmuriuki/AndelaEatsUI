@@ -6,6 +6,7 @@ import {
   DELETE_ORDER_SUCCESS,
   EDIT_ORDER_SUCCESS,
   UPDATE_ORDER_SUCCESS,
+  GET_ORDER_SUCCESS,
 } from '../actions/actionTypes';
 
 import { orders } from './initialState';
@@ -30,15 +31,20 @@ export default (state = orders, action) => {
         totalRecords: state.totalRecords - 1,
         meals: state.meals.filter(meal => meal.id !== action.id)
       };
-    case EDIT_ORDER_SUCCESS: 
+    case EDIT_ORDER_SUCCESS:
       return {
         ...state,
         menu: action.payload
       };
-    case UPDATE_ORDER_SUCCESS: 
+    case UPDATE_ORDER_SUCCESS:
       return {
         ...state,
         order: action.payload
+      };
+    case GET_ORDER_SUCCESS:
+      return {
+        ...state,
+        menu: action.order
       };
     default:
       return state;

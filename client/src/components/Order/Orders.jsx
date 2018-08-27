@@ -15,6 +15,7 @@ import {
 import { canOrderMeal, validateDate, endDate } from '../../helpers/mealsHelper';
 import ConfirmOrder from './ConfirmOrder';
 import Loader from '../common/Loader/Loader';
+import { updateOrder } from '../../actions/ordersAction';
 
 
 /**
@@ -51,11 +52,12 @@ export class Orders extends Component {
     });
   }
 
-  toggleModal = () => {
+  toggleModal = (menuId) => {
     const { acc1, acc2, mainMeal } = this.props.mealSelected;
-    if (acc1 !== '' && acc2 !== '' && mainMeal !== '') {
+    if (acc1 !== '' || acc2 !== '' || mainMeal !== '') {
       this.setState(state => ({
         isModalOpen: !state.isModalOpen,
+        menuId
       }));
     }
   }
@@ -101,7 +103,7 @@ export class Orders extends Component {
   render() {
     const {
       match: { url },
-      menus, selectMeal, mealSelected, orderMeal, resetMenu, isLoading //eslint-disable-line
+      menus, selectMeal, mealSelected, orderMeal, resetMenu, isLoading, updateOrder //eslint-disable-line
     } = this.props;
     return (
       <div className="wrapper">
@@ -138,11 +140,13 @@ export class Orders extends Component {
                           {...props}
                         />
                         <ConfirmOrder
+                          menuId={this.state.menuId}
                           toggleModal={this.toggleModal}
                           isModalOpen={this.state.isModalOpen}
                           menus={menus}
                           mealSelected={mealSelected}
                           orderMeal={orderMeal}
+                          updateOrder={updateOrder}
                           showToast={this.showToast}
                           isLoading={isLoading}
                           {...props}
@@ -197,10 +201,12 @@ function mapStateToProps({ upcomingMenus }) {
   };
 }
 
-export default connect(mapStateToProps,
-  {
-    getUpComingMenus,
-    selectMeal,
-    orderMeal,
-    resetMenu
-  })(Orders);
+const actionCreators = {
+  getUpComingMenus,
+  selectMeal,
+  orderMeal,
+  resetMenu,
+  updateOrder
+};
+
+export default connect(mapStateToProps, actionCreators)(Orders);

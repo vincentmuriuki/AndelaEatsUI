@@ -7,9 +7,11 @@ import {
   FETCH_FILTERED_ORDERS,
   DELETE_ORDER_SUCCESS,
   EDIT_ORDER_SUCCESS, 
-  UPDATE_ORDER_SUCCESS
+  UPDATE_ORDER_SUCCESS,
+  GET_ORDER_SUCCESS
 } from './actionTypes';
 import { config } from '../config';
+import { setMenuLoading } from './menuAction';
 
 export const base = `${config.API_BASE_URL}/orders`;
 
@@ -46,6 +48,11 @@ export const editOrderSuccess = (response) => ({
 export const updateOrderSuccess = (response) => ({
   type: UPDATE_ORDER_SUCCESS,
   payload: response
+});
+
+export const getOrderSuccess = (order) => ({
+  type: GET_ORDER_SUCCESS,
+  order
 });
 
 export const fetchOrders = (page = 1, limit = 9) => (dispatch) => {
@@ -103,13 +110,28 @@ export const editOrder = (id) => dispatch => {
 
 export const updateOrder = (data, id) => dispatch => {
   dispatch(setOrdersLoading(true));
+  dispatch(setMenuLoading(true));
   return axios.put(`${base}/${id}`, data)
     .then((response) => {
       dispatch(updateOrderSuccess(response.data));
       toast.success(response.data.response);
       dispatch(setOrdersLoading(false));
+      dispatch(setMenuLoading(false));
     }).catch((error) => {
-      toast.error(error.message)
+      toast.error(error.message);
+      dispatch(setOrdersLoading(false));
+      dispatch(setMenuLoading(false));
+    });
+};
+
+export const getOrderByDate = (date) => dispatch => {
+  dispatch(setOrdersLoading(true));
+  return axios.get(`${base}/search?date=${date}`)
+    .then((response) => {
+      dispatch(getOrderSuccess(response.data));
+      dispatch(setOrdersLoading(false));
+    }).catch((error) => {
+      toast.error(error.message);
       dispatch(setOrdersLoading(false));
     });
 };

@@ -1,13 +1,14 @@
 import { orders } from "../../reducers/initialState";
 import ordersReducer from "../../reducers/ordersReducer";
 import {
-  FETCH_ORDERS_LOADING, 
-  FETCH_ORDERS_SUCCESS, 
-  FETCH_ORDERS_FAILURE, 
-  FETCH_FILTERED_ORDERS, 
+  FETCH_ORDERS_LOADING,
+  FETCH_ORDERS_SUCCESS,
+  FETCH_ORDERS_FAILURE,
+  FETCH_FILTERED_ORDERS,
   DELETE_ORDER_SUCCESS,
   EDIT_ORDER_SUCCESS,
-  UPDATE_ORDER_SUCCESS
+  UPDATE_ORDER_SUCCESS,
+  GET_ORDER_SUCCESS
 } from "../../actions/actionTypes";
 
 /* 
@@ -69,7 +70,7 @@ describe('Past Orders Reducer', () => {
     });
   });
 
-  
+
   describe('DELETE', () => {
     it('_SUCCESS :: should delete successfully', () => {
       const action = {
@@ -99,6 +100,19 @@ describe('Past Orders Reducer', () => {
       expect(newState.currentPage).toEqual(1);
       expect(newState.meals).toEqual(action.orders.meals);
       expect(newState.isFiltered).toEqual(true);
+    });
+  });
+
+  describe('GET_ORDER_SUCCESS action', () => {
+    it('should set menu/order when successful', () => {
+      const action = {
+        type: GET_ORDER_SUCCESS,
+        order: {
+          id: 201
+        }
+      };
+      const newState = ordersReducer(orders, action);
+      expect(newState.menu.id).toEqual(201);
     });
   });
 

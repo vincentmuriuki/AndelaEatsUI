@@ -16,9 +16,9 @@ const SideNav = ({ children, location: { pathname } }) => {
       <div className="push-down">
         <div className="side-nav">
           <ul className="side-nav-item-wrapper">
-            <Link to="/ordermeal">
+            <Link to={`${!homeActive && '/ordermeal'}`}>
               <li className={
-                `side-nav-item home ${homeActive && "active"}`
+                `side-nav-item home ${homeActive && "active disabled"}`
               }
               >
                 <span>Home</span>
@@ -26,7 +26,7 @@ const SideNav = ({ children, location: { pathname } }) => {
             </Link>
             <Link to="/orders">
               <li className={
-                `side-nav-item order ${!homeActive && "active"}`
+                `side-nav-item order ${!homeActive && "active disabled"}`
               }
               >
                 <span>Orders</span>

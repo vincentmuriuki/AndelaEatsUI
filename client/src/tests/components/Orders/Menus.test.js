@@ -1,7 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { MealOptions, Menus } from '../../../components/Order/Menus';
-import { mockMenu, match } from '../../helpers/mockOrders';
+import thunk from 'redux-thunk';
+import configureMockStore from 'redux-mock-store';
+import ConnectedMenus,
+{ MealOptions, Menus } from '../../../components/Order/Menus';
+import { mockMenu } from '../../helpers/mockOrders';
 
 const props = {
   data: mockMenu,
@@ -10,10 +13,17 @@ const props = {
   selectedMealId: 1,
   toggleModal: jest.fn(),
   selectMeal: jest.fn(),
-  match,
+  match: {
+    params: { id: 23 }
+  },
   resetMenu: jest.fn(),
-  updateSelection: jest.fn()
+  updateSelection: jest.fn(),
+  menu: mockMenu[0],
+  getOrderByDate: () => Promise.resolve()
 };
+
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
 let wrapper;
 /* 
@@ -51,6 +61,15 @@ describe('Menus Component', () => {
   });
 
   describe('class methods test', () => {
+    it('componentWillReceiveProps', () => {
+      const nextProps = { ...props, match: { params: { id: 15 } } }
+      wrapper = shallow(<Menus {...props} />).instance();
+      const methodSpy = jest.spyOn(wrapper, 'componentWillReceiveProps');
+      wrapper.componentWillReceiveProps(nextProps);
+      expect(methodSpy).toHaveBeenCalled();
+      expect(wrapper.state.updated).toBe(false);
+    });
+
     it('updateSelection method', () => {
       const mealCategory = 'main';
       const mealId = 1;
@@ -70,8 +89,43 @@ describe('Menus Component', () => {
 
       expect(resetMenuSpy).toHaveBeenCalled();
       expect(wrapper.state).toEqual({
-        mainMeal: '', acc1: '', acc2: '', isLoading: true,
+        mainMeal: '', acc1: '', acc2: '', isLoading: true, updated: false
       });
     });
+
+    it('queryEdit method', () => {
+      const id = 23;
+      wrapper = shallow(<Menus {...props} />).instance();
+      const methodSpy = jest.spyOn(wrapper, 'queryEdit');
+      wrapper.queryEdit(id, mockMenu);
+
+      expect(methodSpy).toHaveBeenCalled();
+      expect(wrapper.state).toEqual({
+        isLoading: true, updated: false
+      });
+    });
+  });
+
+  describe('interaction test', () => {
+    it('calls toggleModal on button click', () => {
+      const toggleModalSpy = jest.spyOn(props, 'toggleModal');
+      wrapper = shallow(<Menus {...props} />);
+      wrapper.find('.btn.submit-order').simulate('click');
+      expect(toggleModalSpy).toHaveBeenCalled();
+    });
+  });
+});
+
+
+describe('ConnectedMenus Test', () => {
+  it('renders without problems', () => {
+    const store = mockStore({
+      orders: {
+        isLoading: false,
+        menu: mockMenu
+      }
+    });
+    wrapper = shallow(<ConnectedMenus store={store} />);
+    expect(wrapper.length).toBe(1);
   });
 });
