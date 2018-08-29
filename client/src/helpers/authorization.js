@@ -21,3 +21,11 @@ export const isAuthorized = () => {
     return true;
   }
 };
+
+
+/**
+ * This function checks if the user 
+ * 
+ * @return {boolean} boolean
+ */
+export const isAdmin = () => (!!decodeToken().roles.Fellow);

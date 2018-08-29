@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 
 import logo from '../../../assets/images/andela-logo.png';
@@ -10,6 +10,7 @@ import loadActiveUser from '../../../actions/activeUserAction';
 
 // helper
 import logoutActiveUser from '../../../helpers/logoutUser';
+
 
 /**
  * Application nav bar
@@ -65,6 +66,8 @@ export class Navbar extends Component {
    */
   render() {
     const { activeUser } = this.state;
+    const { isAdmin, adminDashboard } = this.props;
+
     return (
       <header className="nav-bar">
         <div className="logo-wrapper">
@@ -73,7 +76,12 @@ export class Navbar extends Component {
           </div>
           <div className="logo-name-global">AndelaEats</div>
         </div>
+
         <div className="nav-spacer" />
+        <div className="admin-button">
+          { isAdmin && !adminDashboard && <Link to="/admin">Admin Dashboard</Link> }
+          { adminDashboard && <Link to="/">User Dashboard</Link> }
+        </div>
         <div className="profile-items">
           <div>
             <i className="far fa-bell bell" />
@@ -112,6 +120,8 @@ Navbar.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }),
+  isAdmin: PropTypes.bool.isRequired,
+  adminDashboard: PropTypes.bool.isRequired
 };
 
 export default connect(mapStateToProps, 
