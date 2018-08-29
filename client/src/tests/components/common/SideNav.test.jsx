@@ -10,9 +10,6 @@ const props = {
 };
 
 jest.mock('../../../helpers/authorization', () => ({ isAuthorized: jest.fn(() => true) }));
-jest.mock('../../../helpers/authorization', () => ({ isAdmin: jest.fn(() => true) }));
-jest.mock('../../../helpers/authorization', () => ({ isAuthorized: jest.fn(() => false) }));
-
 
 let wrapper;
 
@@ -25,9 +22,4 @@ describe('NotCollectedAction Component', () => {
     wrapper = shallow(<SideNav {...props} />);
     expect(wrapper).toMatchSnapshot();
   });
-
-  it('should check for admin routes', () => {
-    wrapper = shallow(<SideNav {...props} />);
-    wrapper.instance().checkAdmin();
-  })
 });
