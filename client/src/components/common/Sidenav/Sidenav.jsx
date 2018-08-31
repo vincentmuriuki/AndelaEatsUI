@@ -16,7 +16,8 @@ class SideNav extends Component {
   render() {
     const { children, location: { pathname } } = this.props;
 
-    const homeActive = !pathname.includes("/orders");
+    const homeActive = (section) => pathname.includes(`/${section}`);
+
     if (!isAuthorized()) {
       return <Redirect to="/" />;
     }
@@ -27,12 +28,12 @@ class SideNav extends Component {
       sideBarComponent = (
         <ul className="side-nav-item-wrapper">
           <Link to="/ordermeal">
-            <li className={`side-nav-item home ${homeActive && "active"}`}>
+            <li className={`side-nav-item home ${homeActive('ordermeal') && "active"}`}>
               <span>Home</span>
             </li>
           </Link>
           <Link to="/orders">
-            <li className={`side-nav-item order ${!homeActive && "active"}`}>
+            <li className={`side-nav-item home ${homeActive('orders') && "active"}`}>
               <span>Orders</span>
             </li>
           </Link>
@@ -42,8 +43,13 @@ class SideNav extends Component {
       sideBarComponent = (
         <ul className="side-nav-item-wrapper">
           <Link to="/admin">
-            <li className={`side-nav-item home ${homeActive && "active"}`}>
+            <li  className={`side-nav-item home ${homeActive('admin/admin') && "active"}`}>
               <span>Admin</span>
+            </li>
+          </Link>
+          <Link to="/admin/vendors">
+            <li className={`side-nav-item vendors ${homeActive('admin/vendors') && "active"}`}>
+              <span>Vendors</span>
             </li>
           </Link>
         </ul>

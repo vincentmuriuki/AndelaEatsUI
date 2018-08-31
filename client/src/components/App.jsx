@@ -7,6 +7,7 @@ import Orders from './Order/Orders';
 import OrderHistory from './OrderHistory/OrderHistory';
 import EditOrder from './EditOrder/EditOrder';
 import Admin from './Admin/Admin/Admin';
+import Vendors from './Admin/Vendors/Vendors';
 
 
 export const NotFound = () => (
@@ -23,6 +24,7 @@ const Root = () => (
           <Route exact path="/orders" component={OrderHistory} />
           <Route exact path="/orders/edit/:id" component={EditOrder} />
           <Route exact path="/admin" component={Admin} />
+          <Route exact path="/admin/vendors" component={Vendors} />
           <Route component={NotFound} />
         </Switch>
       </SideNav>

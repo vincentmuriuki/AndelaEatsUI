@@ -1,0 +1,131 @@
+.vendors-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.vendors-header {
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+}
+
+.vendor-menu {
+  flex: 1 1 auto;
+  height: 27px;	
+  width: 53px;	
+  color: #333E44;	
+  font-family: "DIN Pro";	
+  font-size: 21px;	
+  font-weight: 500;	
+  line-height: 27px;
+}
+
+.vendor-button {
+  flex: 0 0 auto;
+  box-sizing: border-box;	
+  height: 39px;	
+  width: 131px;	
+  border: 1px solid #3359DF;	
+  border-radius: 2px;	
+  background-color: #FFFFFF;
+  color: #3359DF;	
+  font-family: "DIN Pro";	
+  font-size: 18px;	
+  line-height: 18px;
+}
+
+.table-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-body {
+  background-color: #fff;
+  height: 62px;	
+  border-radius: 2px;
+  font-size: 13px;
+  color: #333E44;
+  margin-bottom: 5px;
+
+  .table-row {
+    margin-left: 10px;
+    padding: 15px;
+  }
+
+}
+
+.row-content {
+  display: flex;
+  flex-direction: column;
+
+  span {
+    font-size: 13px;
+    color: #ccc;
+    margin-top: 5px;
+  }
+}
+
+.table-header {
+  display: flex;
+  padding: 10px;
+  justify-content: space-between;
+  align-items: center;
+  color: #747474;
+  width: 100%;
+  font-size: 13px;
+  margin-bottom: 10px;
+  margin-left: 14px;
+}
+
+.options-wrapper {
+  display: flex;
+  span {
+    margin-left: 12px;
+    color: #3359DF;
+  }
+}
+
+$num-col-spans: 12;
+
+.custom-row {
+  display: flex;
+
+  @for $span from 1 through $num-col-spans {
+    .custom-col-#{$span} {
+      width: ($span / $num-col-spans) * 100%;
+    }
+  }
+}
+
+.body-content {
+  background-color: #f9f9f9;
+  display: flex;
+  padding: 15px;
+  margin: 3px 0;
+  border: solid 1px #dddddd;
+  justify-content: space-between;
+  color: #747474;
+  font-size: 13px;
+  box-shadow: 0 20px 80px 4px rgba(0, 0, 0, 0.02);
+  padding: 15px;
+  transition: 0.3s;
+  cursor: pointer;
+  flex-shrink: 0;
+
+  div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 15px;
+  }
+
+  &:active {
+    border-color: rgba(51, 89, 223, 0.2);
+  }
+
+  &:hover {
+    border: 1px solid rgba(51, 89, 223, 0.2);
+    box-shadow: 0 10px 30px 7px rgba(77, 14, 33, 0.08);
+    z-index: 2;
+  }
+}

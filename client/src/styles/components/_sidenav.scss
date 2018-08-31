@@ -88,6 +88,20 @@
   }
 }
 
+.vendors {
+  background-image: url('../assets/images/vendor.svg');
+  background-repeat: no-repeat;
+  background-size: 30px;
+  background-position: center; 
+  &.active {
+    background-image: url('../assets/images/vendor.svg');
+  }
+  &:hover {
+    background-image: url('../assets/images/vendor.svg');
+  }
+}
+
+
 .main-container {
   margin-left: 150px;
   width: calc(100% - 150px);
