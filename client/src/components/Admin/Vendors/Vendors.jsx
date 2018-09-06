@@ -1,127 +1,89 @@
 import React, { Component } from "react";
-import ReactStars from "react-stars";
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { VendorCard } from './VendorCard';
+import Loader from '../../common/Loader/Loader';
+import { fetchVendors } from '../../../actions/vendorsAction';
 
-/* eslint-disable */
 /**
  *
  *
  * @class Vendors
  * @extends {Component}
  */
-class Vendors extends Component {
+export class Vendors extends Component {
+  componentDidMount() {
+    this.props.fetchVendors();
+  }
+
+  
+  /**
+   * @method renderVendor
+   *
+   * @memberof Vendors
+   *
+   * @param {onject} vendor
+   *
+   * @returns {JSX}
+   */
+  renderVendor = (vendor) => {
+    const rating = Math.ceil(Math.random() * 5);
+    return <VendorCard key={vendor.id} vendor={vendor} rating={rating} />;
+  }
+
   render() {
+    const { isLoading, vendors } = this.props;
+
     return (
-      <div className="table-wrapper">
-        <div className="vendors-header">
-          <h3 className="vendor-menu">Menu</h3>
-          <button className="vendor-button">Add Vendor</button>
-        </div>
-        
-        <div className="table-header custom-row">
-          <div className="custom-col-4">Name</div>
-          <div className="custom-col-2">Contacts</div>
-          <div className="custom-col-2">Start Date</div>
-          <div className="custom-col-2">End Date</div>
-          <div className="custom-col-3">Rating</div>
-          <div className="custom-col-3">Options</div>
-        </div>
-
-        <div className="table-body">
-          <div className="table-row">
-            <div className="custom-row">
-              <div className="custom-col-4 row-content">Jikoni RestaurantJikoni Restaurant <span>84 Keegan Course</span></div>
-              <div className="custom-col-2">0713089453</div>
-              <div className="custom-col-2">17 Sep 2018</div>
-              <div className="custom-col-2">02 Sep 2018</div>
-              <div className="custom-col-3">
-                <ReactStars value={3} color2="green" name="ratings" size={12} />
-              </div>
-              <div className="custom-col-3 options-wrapper"> <span>Edit</span><span>Delete</span></div>
+      <div>
+        { isLoading && <Loader /> }
+        { (!isLoading && vendors.length) ? (
+          <div className="table-wrapper">
+            <div className="vendors-header">
+              <h3 className="vendor-menu">Menu</h3>
+              <button type="button" className="vendor-button">
+                Add Vendor
+              </button>
             </div>
-          </div>
-        </div>
 
-         <div className="table-body">
-          <div className="table-row">
-            <div className="custom-row">
-              <div className="custom-col-4 row-content">Jikoni RestaurantJikoni Restaurant <span>84 Keegan Course</span></div>
-              <div className="custom-col-2">0713089453</div>
-              <div className="custom-col-2">17 Sep 2018</div>
-              <div className="custom-col-2">02 Sep 2018</div>
-              <div className="custom-col-3">
-                <ReactStars value={3} color2="green" name="ratings" size={12} />
-              </div>
-              <div className="custom-col-3 options-wrapper"> <span>Edit</span><span>Delete</span></div>
+            <div className="table-header custom-row">
+              <div className="custom-col-4">Name</div>
+              <div className="custom-col-2">Contacts</div>
+              <div className="custom-col-2">Start Date</div>
+              <div className="custom-col-2">End Date</div>
+              <div className="custom-col-3">Rating</div>
+              <div className="custom-col-3">Options</div>
             </div>
-          </div>
-        </div><div className="table-body">
-          <div className="table-row">
-            <div className="custom-row">
-              <div className="custom-col-4 row-content">Jikoni RestaurantJikoni Restaurant <span>84 Keegan Course</span></div>
-              <div className="custom-col-2">0713089453</div>
-              <div className="custom-col-2">17 Sep 2018</div>
-              <div className="custom-col-2">02 Sep 2018</div>
-              <div className="custom-col-3">
-                <ReactStars value={3} color2="green" name="ratings" size={12} />
-              </div>
-              <div className="custom-col-3 options-wrapper"> <span>Edit</span><span>Delete</span></div>
+
+            { vendors.map((vendor) => (
+              this.renderVendor(vendor))
+            )}
+          </div>) : null
+        }
+        {
+          !isLoading && !vendors.length && (
+            <div className="no-content">
+              No vendor has been added yet :-(
             </div>
-          </div>
-        </div>
-
-         <div className="table-body">
-          <div className="table-row">
-            <div className="custom-row">
-              <div className="custom-col-4 row-content">Jikoni RestaurantJikoni Restaurant <span>84 Keegan Course</span></div>
-              <div className="custom-col-2">0713089453</div>
-              <div className="custom-col-2">17 Sep 2018</div>
-              <div className="custom-col-2">02 Sep 2018</div>
-              <div className="custom-col-3">
-                <ReactStars value={3} color2="green" name="ratings" size={12} />
-              </div>
-              <div className="custom-col-3 options-wrapper"> <span>Edit</span><span>Delete</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div className="table-body">
-          <div className="table-row">
-            <div className="custom-row">
-              <div className="custom-col-4 row-content">Jikoni RestaurantJikoni Restaurant <span>84 Keegan Course</span></div>
-              <div className="custom-col-2">0713089453</div>
-              <div className="custom-col-2">17 Sep 2018</div>
-              <div className="custom-col-2">02 Sep 2018</div>
-              <div className="custom-col-3">
-                <ReactStars value={3} color2="green" name="ratings" size={12} />
-              </div>
-              <div className="custom-col-3 options-wrapper"> <span>Edit</span><span>Delete</span></div>
-            </div>
-          </div>
-        </div>
-
-         <div className="table-body">
-          <div className="table-row">
-            <div className="custom-row">
-              <div className="custom-col-4 row-content">Jikoni RestaurantJikoni Restaurant <span>84 Keegan Course</span></div>
-              <div className="custom-col-2">0713089453</div>
-              <div className="custom-col-2">17 Sep 2018</div>
-              <div className="custom-col-2">02 Sep 2018</div>
-              <div className="custom-col-3">
-                <ReactStars value={3} color2="green" name="ratings" size={12} />
-              </div>
-              <div className="custom-col-3 options-wrapper"> <span>Edit</span><span>Delete</span></div>
-            </div>
-          </div>
-        </div>
-
-
-
-
-
+          )
+        }
       </div>
-      
     );
   }
 }
 
-export default Vendors;
+const mapStateToProps = ({ allVendors }) => {
+  const { isLoading, vendors } = allVendors;
+  return { isLoading, vendors };
+};
+
+Vendors.propTypes = {
+  isLoading: PropTypes.bool,
+  vendors: PropTypes.arrayOf(PropTypes.shape({})),
+  fetchVendors: PropTypes.func.isRequired,
+};
+
+export default connect(
+  mapStateToProps,
+  { fetchVendors }
+)(Vendors);

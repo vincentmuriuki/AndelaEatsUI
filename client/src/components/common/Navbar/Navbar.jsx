@@ -78,10 +78,6 @@ export class Navbar extends Component {
         </div>
 
         <div className="nav-spacer" />
-        <div className="admin-button">
-          { isAdmin && !adminDashboard && <Link to="/admin">Admin Dashboard</Link> }
-          { adminDashboard && <Link to="/">User Dashboard</Link> }
-        </div>
         <div className="profile-items">
           <div>
             <i className="far fa-bell bell" />
@@ -94,6 +90,9 @@ export class Navbar extends Component {
             <div className="arrow-down" />
             <div className="dropdown-content">
               <a href="" onClick={logoutActiveUser}>Signout</a>
+              { isAdmin && adminDashboard ? <Link to="/">User Dashboard</Link>
+                : <Link to="/admin">Admin Dashboard</Link>
+              }
             </div>
           </div>
         </div>

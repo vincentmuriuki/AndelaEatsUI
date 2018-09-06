@@ -51,7 +51,7 @@ class Login extends Component {
     const message = 'Unauthorised Access, Please Log in with an Andela Email';
 
     // Display Login Error
-    if (loginError !== 'undefined') {
+    if (loginError) {
       toast.error(message, options);
       localStorage.clear();
       return <Redirect to="/" />;

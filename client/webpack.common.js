@@ -18,8 +18,8 @@ module.exports = {
   ],
   target: 'web',
   output: {
-    path: path.join(__dirname, '/dist/'),
-    filename: 'bundle.js',
+    path: path.join(__dirname, '/dist'),
+    filename: 'js/bundle.js',
     publicPath: '/'
   },
   resolve: {
@@ -45,7 +45,10 @@ module.exports = {
         use: [
           {
             loader: 'file-loader',
-            options: {}
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'assets/images/',
+            }
           }
         ]
       },
@@ -70,6 +73,6 @@ module.exports = {
         ...NODE_ENV
       }
     }),
-    new ExtractTextPlugin("bundle.css")
+    new ExtractTextPlugin("css/bundle.css")
   ],
 };

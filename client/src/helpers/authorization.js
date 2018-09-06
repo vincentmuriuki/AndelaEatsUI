@@ -28,4 +28,4 @@ export const isAuthorized = () => {
  * 
  * @return {boolean} boolean
  */
-export const isAdmin = () => (!!decodeToken().roles.Fellow);
+export const isAdmin = () => (!!decodeToken().roles.Andelan);

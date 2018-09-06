@@ -15,6 +15,6 @@ describe('Login Component', () => {
   });
 
   it('renders a div', () => {
-    expect(wrapper.find('Redirect').length).toBeGreaterThan(0);
+    expect(wrapper.find('Redirect').length).toBe(0);
   });
 });

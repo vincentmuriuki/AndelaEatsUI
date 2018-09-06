@@ -39,3 +39,10 @@ body {
 .disabled {
   cursor: not-allowed !important;
 }
+
+.no-content {
+  height: 100%;
+  text-align: center;
+  font-family: "DINPro";
+  color: $color-medium-grey;
+}

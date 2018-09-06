@@ -1,8 +1,14 @@
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+/* eslint-disable no-undef */
 import moxios from 'moxios';
 import {
-  base, fetchOrders, filterOrders, deleteOrder, editOrder, updateOrder, updateOrderSuccess, getOrderByDate
+  base,
+  fetchOrders,
+  filterOrders,
+  deleteOrder,
+  editOrder,
+  updateOrder,
+  updateOrderSuccess,
+  getOrderByDate
 } from '../../actions/ordersAction';
 
 import {
@@ -16,10 +22,6 @@ import {
   GET_ORDER_SUCCESS,
   MENU_IS_LOADING
 } from '../../actions/actionTypes';
-
-const middlewares = [thunk];
-
-const mockStore = configureMockStore(middlewares);
 
 const id = '123';
 const date = new Date();

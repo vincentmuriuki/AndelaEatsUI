@@ -28,3 +28,8 @@ export const orders = {
     }
   }
 };
+
+export const initialVendors = {
+  isLoading: false,
+  vendors: [],
+};
