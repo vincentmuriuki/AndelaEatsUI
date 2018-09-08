@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { VendorCard } from './VendorCard';
 import Loader from '../../common/Loader/Loader';
 import { fetchVendors } from '../../../actions/vendorsAction';
+import AddVendorModal from "./AddVendorModal";
 
 /**
  *
@@ -12,8 +13,35 @@ import { fetchVendors } from '../../../actions/vendorsAction';
  * @extends {Component}
  */
 export class Vendors extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      displayModal: false
+    };
+    this.toggleModal = this.toggleModal.bind(this);
+  }
+  
   componentDidMount() {
     this.props.fetchVendors();
+  }
+  
+
+  /**
+   * Handles input fields text changes
+   * 
+   * @method toggleModal
+   *
+   * @param {object} event
+   * 
+   * @memberof Vendors
+   * 
+   * @returns {void}
+   */
+  toggleModal(event) {
+    event.preventDefault();
+    this.setState(preState => ({
+      displayModal: !preState.displayModal
+    }));
   }
 
   
@@ -33,7 +61,7 @@ export class Vendors extends Component {
 
   render() {
     const { isLoading, vendors } = this.props;
-
+    const { displayModal } = this.state;
     return (
       <div>
         { isLoading && <Loader /> }
@@ -41,7 +69,11 @@ export class Vendors extends Component {
           <div className="table-wrapper">
             <div className="vendors-header">
               <h3 className="vendor-menu">Menu</h3>
-              <button type="button" className="vendor-button">
+              <button 
+                type="button" 
+                className="vendor-button"
+                onClick={this.toggleModal}
+              >
                 Add Vendor
               </button>
             </div>
@@ -67,6 +99,10 @@ export class Vendors extends Component {
             </div>
           )
         }
+        <AddVendorModal
+          toggleModal={this.toggleModal}
+          displayModal={displayModal}
+        />
       </div>
     );
   }

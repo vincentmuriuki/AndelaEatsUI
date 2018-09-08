@@ -31,4 +31,11 @@ describe('Vendors Component', () => {
     expect(renderVendorSpy).toHaveBeenCalled();
     expect(renderVendorSpy).toHaveBeenCalledWith(vendors[0]);
   });
+
+  it('should call toggleModal method', () => {
+    const toggleModalSpy = jest.spyOn(wrapper.instance(), 'toggleModal');
+    const event = { preventDefault: jest.fn() };
+    wrapper.instance().toggleModal(event);
+    expect(toggleModalSpy).toHaveBeenCalled();
+  });
 });
