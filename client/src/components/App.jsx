@@ -6,7 +6,7 @@ import Login from './Login/Login';
 import Orders from './Order/Orders';
 import OrderHistory from './OrderHistory/OrderHistory';
 import EditOrder from './EditOrder/EditOrder';
-import Admin from './Admin/Admin/Admin';
+import AdminOrders from './Admin/Orders/Orders';
 import Vendors from './Admin/Vendors/Vendors';
 
 
@@ -23,7 +23,7 @@ const Root = () => (
           <Route path="/ordermeal" component={Orders} />
           <Route exact path="/orders" component={OrderHistory} />
           <Route exact path="/orders/edit/:id" component={EditOrder} />
-          <Route exact path="/admin" component={Admin} />
+          <Route exact path="/admin/orders" component={AdminOrders} />
           <Route exact path="/admin/vendors" component={Vendors} />
           <Route component={NotFound} />
         </Switch>

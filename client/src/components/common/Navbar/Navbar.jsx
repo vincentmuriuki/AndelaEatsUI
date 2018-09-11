@@ -91,7 +91,7 @@ export class Navbar extends Component {
             <div className="dropdown-content">
               <a href="" onClick={logoutActiveUser}>Signout</a>
               { isAdmin && adminDashboard ? <Link to="/">User Dashboard</Link>
-                : <Link to="/admin">Admin Dashboard</Link>
+                : <Link to="/admin/orders">Admin Dashboard</Link>
               }
             </div>
           </div>

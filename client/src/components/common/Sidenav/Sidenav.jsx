@@ -28,12 +28,16 @@ class SideNav extends Component {
       sideBarComponent = (
         <ul className="side-nav-item-wrapper">
           <Link to="/ordermeal">
-            <li className={`side-nav-item home ${homeActive('ordermeal') && "active"}`}>
+            <li className={`side-nav-item home
+            ${homeActive('ordermeal') && "active"}`}
+            >
               <span>Home</span>
             </li>
           </Link>
           <Link to="/orders">
-            <li className={`side-nav-item home ${homeActive('orders') && "active"}`}>
+            <li className={`side-nav-item home
+              ${homeActive('orders') && "active"}`}
+            >
               <span>Orders</span>
             </li>
           </Link>
@@ -42,15 +46,17 @@ class SideNav extends Component {
     } else {
       sideBarComponent = (
         <ul className="side-nav-item-wrapper">
-          <Link to="/admin">
-            <li className={`side-nav-item home 
-            ${!homeActive('vendors') && "active"}`}
+          <Link to="/admin/orders">
+            <li className={`side-nav-item order
+            ${homeActive('admin/orders') && "active"}`}
             >
-              <span>Admin</span>
+              <span>Orders</span>
             </li>
           </Link>
           <Link to="/admin/vendors">
-            <li className={`side-nav-item vendors ${homeActive('admin/vendors') && "active"}`}>
+            <li className={`side-nav-item vendors
+              ${homeActive('admin/vendors') && "active"}`}
+            >
               <span>Vendors</span>
             </li>
           </Link>

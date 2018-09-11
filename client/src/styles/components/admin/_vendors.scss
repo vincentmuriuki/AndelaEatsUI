@@ -73,7 +73,6 @@
   color: #747474;
   width: 100%;
   font-size: 13px;
-  margin-bottom: 10px;
   margin-left: 14px;
 }
 
@@ -85,16 +84,8 @@
   }
 }
 
-$num-col-spans: 12;
-
 .custom-row {
   display: flex;
-
-  @for $span from 1 through $num-col-spans {
-    .custom-col-#{$span} {
-      width: ($span / $num-col-spans) * 100%;
-    }
-  }
 }
 
 .body-content {

@@ -1,0 +1,24 @@
+// Buttons mixin
+@mixin buttons($bg-color, $text-color, $btn-padding, $font-size, $border) {
+  background-color: $bg-color;
+  color: $text-color;
+  padding: $btn-padding;
+  font-size: $font-size;
+  border: $border;
+  font-family: $font-family-pro;
+  border-radius: px-to-rem(2px);
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+}
+
+@mixin status($border-color) {
+  border-left: 6px solid $border-color;
+}
+
+@mixin dropdown($border-size, $margin, $border-color) {
+  border-left: $border-size solid transparent;
+  border-right: $border-size solid transparent;
+  border-top: $border-size solid $border-color;
+  margin: $margin;
+}

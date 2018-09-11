@@ -46,3 +46,10 @@ body {
   font-family: "DINPro";
   color: $color-medium-grey;
 }
+
+.fa-filter {
+  color: #fff;
+  -webkit-text-stroke: 1.2px;
+  -webkit-text-stroke-color: $background-blue;
+  transform: rotateY(180deg);
+}

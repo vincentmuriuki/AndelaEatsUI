@@ -1,3 +1,4 @@
+// Colors
 $color-white: #ffffff;
 $color-blue: #365edc;
 $color-light-blue: #3359DB;;
@@ -12,10 +13,20 @@ $color-medium-gray: #999999;
 $color-light-grey: #DCDCDC;
 $color-green: #51A803;
 $color-red: red;
-$font-family-pro: "DIN Pro";
+$background-white: #fff;
+$background-blue: #3359db;
+$pending-yellow: #ffac00;
+$collected-green: #1aac00;
 
+// Fonts size
+$base-font-size: 16px;
 
+// Fonts Family
+$font-family-pro: "DINPro";
 $font-family-regular: "DINPro-Regular";
 
+// Screen Break Points
 $small_screen: 20em;
 $large_screen: 64em;
+
+$num-col-spans: 12;

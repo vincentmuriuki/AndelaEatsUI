@@ -1,5 +1,7 @@
 @import './variables';
+@import './mixins';
 @import './globals';
+@import './functions';
 
 @import './components/order';
 @import './components/login';
@@ -9,4 +11,5 @@
 @import './components/orderhistory';
 @import './components/modal';
 @import './components/loader';
-@import './components/_vendors';
+@import './components/admin/vendors';
+@import './components/admin/orders';
