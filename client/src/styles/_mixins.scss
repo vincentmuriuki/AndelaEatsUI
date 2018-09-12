@@ -22,3 +22,12 @@
   border-top: $border-size solid $border-color;
   margin: $margin;
 }
+
+@mixin title-text($margin) {
+  font-weight: 700;
+  color: $color-dark-gray;	
+  font-size: px-to-rem(21px);
+  line-height: px-to-rem(27px);
+  margin: $margin;
+  display: inline-block;
+}

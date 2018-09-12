@@ -1,3 +1,5 @@
+/* eslint-disable import/no-named-as-default */
+
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -48,9 +50,15 @@ class SideNav extends Component {
         <ul className="side-nav-item-wrapper">
           <Link to="/admin/orders">
             <li className={`side-nav-item order
-            ${homeActive('admin/orders') && "active"}`}
+              ${homeActive('admin/orders') && "active"}`}
             >
               <span>Orders</span>
+            </li>
+          </Link>
+          
+          <Link to="/admin/meals">
+            <li className={`side-nav-item meals ${homeActive('admin/meals') && "active"}`}>
+              <span>Meals</span>
             </li>
           </Link>
           <Link to="/admin/vendors">

@@ -94,13 +94,25 @@
   background-size: 30px;
   background-position: center; 
   &.active {
-    background-image: url('../assets/images/vendor.svg');
+    background-image: url('../assets/images/active-vendor.svg');
   }
   &:hover {
-    background-image: url('../assets/images/vendor.svg');
+    background-image: url('../assets/images/active-vendor.svg');
   }
 }
 
+.meals {
+  background-image: url('../assets/images/meals.svg');
+  background-repeat: no-repeat;
+  background-size: 40px;
+  background-position: center; 
+  &.active {
+    background-image: url('../assets/images/active-meals.svg');
+  }
+  &:hover {
+    background-image: url('../assets/images/active-meals.svg');
+  }
+}
 
 .main-container {
   margin-left: 150px;

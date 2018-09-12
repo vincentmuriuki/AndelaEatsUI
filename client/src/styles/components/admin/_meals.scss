@@ -1,0 +1,137 @@
+#admin-meals {
+  display: block;
+  overflow: hidden;
+
+  header {
+    all: unset;
+
+    div {
+      display: block;
+      overflow: hidden;
+      width: 96.3%;
+      margin: 0 0 px-to-rem(30px) 1.7%;
+
+      .title {
+        @include title-text(
+          px-to-rem(6px) 0 0
+        );
+      }
+
+      button {
+        @include buttons(
+          $color-white,
+          $color-blue,
+          px-to-rem(7px) px-to-rem(18px),
+          px-to-rem(17px),
+          1px solid $color-blue
+        );
+
+        font-family: 'Open Sans', $font-family-pro;
+        font-weight: 300;
+      }
+    }
+  }
+
+  main {
+    div {
+      display: block;
+
+      .meal-card {
+        display: inline-block;
+        overflow: hidden;
+        font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+        width: 90%;
+        margin: 0 2% px-to-rem(30px);
+        height: px-to-rem(275px);
+        border-radius: px-to-rem(2px);
+        transition: box-shadow .2s;
+        background: white;
+
+        &:hover {
+          box-shadow: px-to-rem(3px) px-to-rem(3px) px-to-rem(5px) $color-light-grey;
+        }
+
+        .image {
+          display: block;
+          width: 100%;
+          height: px-to-rem(130px);
+          background-repeat: no-repeat; 
+          background-size: cover; 
+        }
+
+        .label-container{
+          display: block;
+          position: relative;
+
+          span {
+            display: inline-block;
+            position: absolute;
+            right: 5%;
+            top: px-to-rem(-12px);
+            font-size: px-to-rem(11px);
+            background: #48aaaf;
+            color: white;
+            padding: px-to-rem(3px) px-to-rem(15px) px-to-rem(4px);
+            font-weight: 100;
+            border-radius: px-to-rem(50px);
+          }
+        }
+
+        .details {
+          display: block;
+          width: 85%;
+          margin: px-to-rem(20px) auto 0;
+
+          div:nth-child(1) {
+            font-size: px-to-rem(16px);
+            color: #272727;
+            font-weight: 100;
+            margin-bottom: px-to-rem(15px);
+          }
+
+          div:nth-child(2) {
+            font-size: px-to-rem(15px);
+            color: gray;
+            font-weight: 100;
+            margin-bottom: px-to-rem(15px);
+            border-bottom: px-to-rem(1px) solid #e8e8e8;
+            padding-bottom: px-to-rem(10px);
+
+            a {
+              text-decoration: underline;
+            }
+          }
+
+          .controls {
+            button {
+              display: inline-block;
+              font-size: px-to-rem(11px);
+              padding: px-to-rem(3px) px-to-rem(15px);
+              font-weight: 100;
+              color: #656565;
+              background: none;
+              cursor: pointer;
+              outline: none !important;
+              border: 1px solid #e8e8e8;
+              border-radius: px-to-rem(3px);
+              margin-right: px-to-rem(10px);
+            }
+          }
+        }
+
+        @media all and (min-width: px-to-rem(567px)) and (max-width: px-to-rem(991px)) {
+          width: 45%;
+        }
+
+        @media all and (min-width: px-to-rem(992px)) and (max-width: px-to-rem(1190px)) {
+          width: 28%;
+          margin: 0 2.6% px-to-rem(30px);
+        }
+
+        @media all and (min-width: px-to-rem(1200px)) {
+          width: 21%;
+        }
+      }
+    }
+  }
+}

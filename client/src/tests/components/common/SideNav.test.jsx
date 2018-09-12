@@ -29,5 +29,5 @@ describe('NotCollectedAction Component', () => {
   it('should check for admin routes', () => {
     wrapper = shallow(<SideNav {...props} />);
     wrapper.instance().checkAdmin();
-  })
+  });
 });
