@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
+import { connect } from 'react-redux';
+import Loader from '../../common/Loader/Loader';
+import inputValidation from '../../../helpers/inputValidation';
 
 /**
  *
@@ -9,19 +11,24 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
  * @extends {Component}
  */
 export class AddVendorModal extends Component {
+  static initialState = () => ({
+    vendorName: '',
+    vendorAddress: '',
+    contactPerson: '',
+    phoneNumber: '',
+    errors: {}
+  });
+
   constructor(props) {
     super(props);
-    this.state = {
-      name: '',
-      address: '',
-      contact: '',
-      startDate: '',
-      endDate: '',
-    };
+    this.state = AddVendorModal.initialState();
 
     this.onChange = this.onChange.bind(this);
+    this.formValidation = this.formValidation.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.clearErrors = this.clearErrors.bind(this);
   }
-
+  
   /**
    * Handles input fields text changes
    *
@@ -34,16 +41,63 @@ export class AddVendorModal extends Component {
   onChange(event) {
     event.preventDefault();
     this.setState({
-      [event.target.name]: event.target.value 
+      [event.target.name]: event.target.value
     });
   }
 
+  /**
+   *  Handles
+   * 
+   * @param {void}
+   * 
+   * @memberof AddVendorModal
+   * 
+   * @returns {void}
+   */
+
+  closeModal() {
+    this.setState(AddVendorModal.initialState());
+    this.props.toggleModal();
+  }
+
+  /**
+   *  Handles
+   * 
+   * @param {void} void
+   * 
+   * @memberof AddVendorModal
+   * 
+   * @returns {void}
+   */
+  clearErrors() {
+    this.setState({ errors: {} });
+  }
+
+
+  /**
+   * Handles form submission
+   * 
+   * @param {object} event
+   * 
+   * @memberof AddVendorModal
+   * 
+   * @returns {void}
+   */
+  formValidation(event) {
+    event.preventDefault();
+    const err = inputValidation(this.state);
+    if (err.isEmpty) {
+      this.props.handleSubmit(this.state);
+    } else {
+      this.setState({ errors: err.errors });
+    }
+  }
 
   render() {
     const {
-      name, address, contact, startDate, endDate 
+      vendorName, vendorAddress, phoneNumber, contactPerson, errors
     } = this.state;
-    const { displayModal, toggleModal } = this.props;
+    const { displayModal, isCreating } = this.props;
     return (
       <div 
         className="modal" 
@@ -56,83 +110,92 @@ export class AddVendorModal extends Component {
               tabIndex={0}
               role="button"
               className="close-icon"
-              onClick={toggleModal}
+              onClick={this.closeModal}
             >
               X&nbsp;&nbsp;Close
             </span>
           </div>
-          <form>
+          <form onSubmit={this.formValidation}>
             <div>
               <div className="form-row">
-                <label className="label-text" htmlFor="name ">Name
+                <label className="label-text" htmlFor="vendorName">Name
                   <input
-                    id="name"
+                    id="vendorName"
                     className="input"
-                    name="name"
+                    name="vendorName"
                     onChange={this.onChange}
-                    value={name}
+                    onFocus={this.clearErrors}
+                    value={vendorName}
                   />
                 </label>
+                <span className="form-error">
+                  {errors.vendorName ? errors.vendorName : ""}
+                </span>
               </div>
               <div className="form-row">
-                <label className="label-text" htmlFor="address">Address
+                <label className="label-text" htmlFor="vendorAddress">Address
                   <input
-                    id="address"
+                    id="vendorAddress"
                     className="input"
-                    name="address"
+                    name="vendorAddress"
                     onChange={this.onChange}
-                    value={address}
+                    onFocus={this.clearErrors}
+                    value={vendorAddress}
                   />
                 </label>
+                <span className="form-error">
+                  {errors.vendorAddress ? errors.vendorAddress : ""}
+                </span>
               </div>
               <div className="form-row">
-                <label htmlFor="contact" className="label-text">Contact
+                <label htmlFor="phoneNumbert" className="label-text">Phone
                   <input
-                    id="contact"
+                    id="phoneNumber"
                     className="input"
-                    name="contact"
+                    name="phoneNumber"
                     onChange={this.onChange}
-                    value={contact}
+                    onFocus={this.clearErrors}
+                    value={phoneNumber}
                   />
                 </label>
+                <span className="form-error">
+                  {errors.phoneNumber}
+                </span>
               </div>
               <div className="form-row">
-                <div className="date-container">
-                  <div className="start-date">
-                    <label className="label-text" htmlFor="start">
-                      Start Date
-                      <DayPickerInput
-                        id="start"
-                        name="start"
-                        onDayChange={(day) => this.setState({ startDate: day })}
-                      />
-                    </label>
-                  </div>
-                  <div className="end-date">
-                    <label className="label-text" htmlFor="end">End Date
-                      <DayPickerInput
-                        onDayChange={(day) => this.setState({ endDate: day })}
-                      />
-                    </label>
-                  </div>
-                </div>
+                <label htmlFor="contactPerson" className="label-text">Contact Person
+                  <input
+                    id="contactPerson"
+                    className="input"
+                    name="contactPerson"
+                    onChange={this.onChange}
+                    onFocus={this.clearErrors}
+                    value={contactPerson}
+                  />
+                </label>
+                <span className="form-error">
+                  {errors.contactPerson ? errors.contactPerson : ""}
+                </span>
               </div>
               <div className="form-row">
-                <div className="button-container">
-                  <button 
-                    type="submit" 
-                    className="cancel-button" 
-                    onClick={toggleModal}
-                  >
-                    Cancel
-                  </button>
-                  <button 
-                    type="submit" 
-                    className="add-button"
-                  >
-                    Add Vendor
-                  </button>
-                </div>
+                { isCreating ? <div className="modal-loader"><Loader /></div>
+                  : (
+                    <div className="button-container">
+                      <button
+                        type="button"
+                        className="cancel-button" 
+                        onClick={this.closeModal}
+                      >
+                        Cancel
+                      </button>
+                      <button 
+                        type="submit" 
+                        className="add-button"
+                      >
+                        Add Vendor
+                      </button>
+                    </div>
+                  )}
               </div>
             </div>
           </form>
@@ -144,7 +207,10 @@ export class AddVendorModal extends Component {
 
 AddVendorModal.propTypes = {
   toggleModal: PropTypes.func.isRequired,
+  isCreating: PropTypes.bool,
+  handleSubmit: PropTypes.func,
   displayModal: PropTypes.bool.isRequired
 };
+ 
 
 export default AddVendorModal;

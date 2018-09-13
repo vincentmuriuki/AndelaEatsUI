@@ -9,6 +9,7 @@ const setup = (isLoading) => {
     vendors,
     isLoading,
     fetchVendors: jest.fn(),
+    createVendor: jest.fn().mockImplementation(() => Promise.resolve())
   };
 
   return mount(<Vendors {...props} />);
@@ -37,5 +38,12 @@ describe('Vendors Component', () => {
     const event = { preventDefault: jest.fn() };
     wrapper.instance().toggleModal(event);
     expect(toggleModalSpy).toHaveBeenCalled();
+  });
+
+  it('should call handleSubmit method', () => {
+    const handleSubmitSpy = jest.spyOn(wrapper.instance(), 'handleSubmit');
+    const event = { preventDefault: jest.fn() };
+    wrapper.instance().handleSubmit(event);
+    expect(handleSubmitSpy).toHaveBeenCalled();
   });
 });

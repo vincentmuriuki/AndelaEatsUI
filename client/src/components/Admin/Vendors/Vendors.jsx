@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { ToastContainer } from 'react-toastify';
 import { VendorCard } from './VendorCard';
 import Loader from '../../common/Loader/Loader';
-import { fetchVendors } from '../../../actions/vendorsAction';
+import { fetchVendors, createVendor } from '../../../actions/vendorsAction';
 import AddVendorModal from "./AddVendorModal";
 
 /**
@@ -16,15 +17,29 @@ export class Vendors extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      displayModal: false
+      displayModal: false,
     };
     this.toggleModal = this.toggleModal.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
   
   componentDidMount() {
     this.props.fetchVendors();
   }
   
+  /**
+   * Handles form submission
+   * 
+   * @param {object} vendorDetails
+   * 
+   * @memberof Vendor
+   * 
+   * @returns {void}
+   */
+  handleSubmit(vendorDetails) {
+    this.props.createVendor(vendorDetails)
+      .then(() => this.toggleModal());
+  }
 
   /**
    * Handles input fields text changes
@@ -38,7 +53,6 @@ export class Vendors extends Component {
    * @returns {void}
    */
   toggleModal(event) {
-    event.preventDefault();
     this.setState(preState => ({
       displayModal: !preState.displayModal
     }));
@@ -60,7 +74,7 @@ export class Vendors extends Component {
   }
 
   render() {
-    const { isLoading, vendors } = this.props;
+    const { isLoading, vendors, isCreating } = this.props;
     const { displayModal } = this.state;
     return (
       <div>
@@ -99,9 +113,12 @@ export class Vendors extends Component {
             </div>
           )
         }
+        <ToastContainer />
         <AddVendorModal
           toggleModal={this.toggleModal}
           displayModal={displayModal}
+          isCreating={isCreating}
+          handleSubmit={this.handleSubmit}
         />
       </div>
     );
@@ -109,17 +126,19 @@ export class Vendors extends Component {
 }
 
 const mapStateToProps = ({ allVendors }) => {
-  const { isLoading, vendors } = allVendors;
-  return { isLoading, vendors };
+  const { isLoading, isCreating, vendors } = allVendors;
+  return { isLoading, vendors, isCreating };
 };
 
 Vendors.propTypes = {
   isLoading: PropTypes.bool,
+  isCreating: PropTypes.bool,
+  createVendor: PropTypes.func.isRequired,
   vendors: PropTypes.arrayOf(PropTypes.shape({})),
   fetchVendors: PropTypes.func.isRequired,
 };
 
 export default connect(
   mapStateToProps,
-  { fetchVendors }
+  { fetchVendors, createVendor }
 )(Vendors);
