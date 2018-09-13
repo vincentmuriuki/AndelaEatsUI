@@ -50,7 +50,7 @@ export class Vendors extends Component {
    *
    * @memberof Vendors
    *
-   * @param {onject} vendor
+   * @param {object} vendor
    *
    * @returns {JSX}
    */

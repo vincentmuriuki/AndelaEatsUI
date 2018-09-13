@@ -33,3 +33,8 @@ export const initialVendors = {
   isLoading: false,
   vendors: [],
 };
+
+export const mealOrders = {
+  isLoading: false,
+  orders: []
+};

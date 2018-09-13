@@ -55,37 +55,39 @@ $filter-btn-style: (
     }
   }
 
-  > .table-header {
-    padding-left: px-to-rem(40px);
-    font-size: px-to-rem(13.5px);
-    margin-left: unset;
-  }
-
-  > .not-collected {
-    @include status($pending-yellow);
-  }
-  
-  > .collected {
-    @include status($collected-green);
-  }
-
-  > .table-body {
-    border-radius: 3px;
-    font-size: px-to-rem(15px);
-    height: unset;
-
-    .table-row {
-      padding: 16px;
-      padding-left: px-to-rem(33px);
+  div {
+    > .table-header {
+      padding-left: px-to-rem(40px);
+      font-size: px-to-rem(13.5px);
       margin-left: unset;
     }
 
-    .options-wrapper span {
-      font-size: px-to-rem(13.5px);
-      margin-left: unset;
+    > .not-collected {
+      @include status($pending-yellow);
+    }
 
-      > .arrow-down {
-        @include dropdown(4px, -6px 10px 0, $color-medium-gray)
+    > .collected {
+      @include status($collected-green);
+    }
+
+    > .table-body {
+      border-radius: 3px;
+      font-size: px-to-rem(15px);
+      height: unset;
+  
+      .table-row {
+        padding: 16px;
+        padding-left: px-to-rem(33px);
+        margin-left: unset;
+      }
+  
+      .options-wrapper span {
+        font-size: px-to-rem(13.5px);
+        margin-left: unset;
+  
+        > .arrow-down {
+          @include dropdown(4px, -6px 10px 0, $color-medium-gray)
+        }
       }
     }
   }

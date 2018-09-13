@@ -4,7 +4,7 @@ import {
   FETCH_VENDORS_SUCCESS,
   FETCH_VENDORS_FAILURE
 } from '../../actions/actionTypes';
-import initialState, { initialVendors } from '../../reducers/initialState';
+import { initialVendors } from '../../reducers/initialState';
 import vendorsReducer from '../../reducers/vendorsReducer';
 import vendors from '../__mocks__/mockVendors';
 
