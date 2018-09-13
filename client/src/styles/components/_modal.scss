@@ -28,6 +28,17 @@
 .modal-header {
   display: flex;
   flex-direction: column;
+  
+  .close-icon {
+    font-size: 18px;
+    color: $color-light-blue;
+    font-weight: normal;
+    cursor: pointer;
+    flex: 1;
+    order: 2;
+    
+  }
+
   .header-title{
     height: 28px;	
     color: $color-blue;	

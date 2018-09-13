@@ -3,10 +3,10 @@
 
 import React from 'react';
 import { shallow } from 'enzyme';
-import Meals from '../../../../components/Admin/Meals/Index';
+import AddMealModal from '../../../../components/Admin/Meals/AddMealModal';
 
 describe('AddMealModal Component', () => {
-  const wrapper = shallow(<Meals />);
+  const wrapper = shallow(<AddMealModal show />);
 
   it('should render correctly', () => {
     expect(wrapper).toMatchSnapshot();

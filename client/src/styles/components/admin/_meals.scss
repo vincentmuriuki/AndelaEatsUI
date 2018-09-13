@@ -1,3 +1,144 @@
+.modal {
+  .modal-content{
+    border-radius: px-to-rem(4px);
+    width: 95%;
+    max-width: px-to-rem(486px);
+    top: 14%;
+    margin-bottom: 40px;
+    font-family: 'Open Sans', $font-family-pro;
+
+    .modal-header {
+      flex-flow: row wrap;
+      margin-top: 10px;
+
+      .header-title{
+        flex: 1 0 0;
+        font-size: 20px;
+        font-weight: 600;
+      }
+      .close-icon {
+        @include plain-button();
+        flex: 1 0 0;
+        margin-top: 2px;
+        font-size: 15px;
+        font-weight: 100;
+        border-color: transparent;
+      }
+    }
+
+    main {
+      div:nth-child(1) {
+        font-size: 15px;
+        font-weight: 100;
+
+        a { text-decoration: underline;}
+      }
+
+      .image {
+        display: block;
+        margin: 5px auto 20px;
+        height: 201px;
+        font-weight: 300;
+        background: #f7f7f7;
+        border: 1px solid #ebebeb;
+        border-radius: 4px;
+
+        .control {
+          margin-top: 13%;
+          text-align: center;
+          
+          button {
+            @include plain-button(); 
+            border: none;
+            width: 50px;
+            height: 50px;
+            background: $color-light-blue;
+            padding-top: 5px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            color: white;
+            font-size: 22px;
+            border-radius: 50%;
+          }
+          span {
+            display: block;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 300;
+            color: $color-light-blue;
+          }
+        }
+      }
+
+      .form-field {
+        display: block;
+        margin-bottom: 20px;
+        
+        label {
+          display: block;
+          font-size: 15px;
+          font-weight: 100;
+        }
+
+        input {
+          display: block;
+          border: 1px solid lightgray;
+          padding: 9px 10px;
+          outline: none;
+          font-size: 18px;
+          font-weight: 100;
+          width: 100%;
+          margin-top: 8px;
+          border-radius: 2px;
+        }
+
+        select {
+          all: unset;
+          display: block;
+          border: 1px solid lightgray;
+          outline: none;
+          font-size: 15px;
+          padding: 10px 2%;
+          cursor: pointer;
+          width: 96%;
+          background: white url('../assets/images/down-arrow.png') no-repeat;
+          background-size: 20px 20px;
+          background-position: 98% 50%;
+          margin-top: 8px;
+          border-radius: 2px;
+        }
+      }
+    }
+
+    .modal-footer {
+      all: unset;
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: flex-end;
+      margin-top: 35px;
+
+      button {
+        @include buttons(
+          $color-white,
+          $color-blue,
+          px-to-rem(7px) px-to-rem(18px),
+          px-to-rem(17px),
+          1px solid $color-blue
+        );
+
+        font-family: 'Open Sans', $font-family-pro;
+        font-weight: 300;
+      }
+
+      .grayed-button {
+        border-color: #BCBCBC;
+        color: #BCBCBC;
+        margin-right: 20px;
+      }
+    }
+  }
+}
+
 #admin-meals {
   display: block;
   overflow: hidden;
@@ -42,7 +183,7 @@
         font-family: 'Open Sans', Arial, Helvetica, sans-serif;
         width: 90%;
         margin: 0 2% px-to-rem(30px);
-        height: px-to-rem(275px);
+        height: px-to-rem(265px);
         border-radius: px-to-rem(2px);
         transition: box-shadow .2s;
         background: white;
@@ -83,23 +224,12 @@
           margin: px-to-rem(20px) auto 0;
 
           div:nth-child(1) {
-            font-size: px-to-rem(16px);
+            font-size: px-to-rem(18px);
             color: #272727;
             font-weight: 100;
             margin-bottom: px-to-rem(15px);
-          }
-
-          div:nth-child(2) {
-            font-size: px-to-rem(15px);
-            color: gray;
-            font-weight: 100;
-            margin-bottom: px-to-rem(15px);
+            padding-bottom: px-to-rem(30px); 
             border-bottom: px-to-rem(1px) solid #e8e8e8;
-            padding-bottom: px-to-rem(10px);
-
-            a {
-              text-decoration: underline;
-            }
           }
 
           .controls {

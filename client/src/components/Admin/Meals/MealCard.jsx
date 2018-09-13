@@ -5,8 +5,7 @@ const MealCard = (props) => {
   const {
     name,
     image,
-    category,
-    vendor
+    category
   } = props;
 
   return (
@@ -22,10 +21,6 @@ const MealCard = (props) => {
 
       <div className="details">
         <div>{name}</div>
-        <div>
-          Vendor &nbsp;
-          <a href={vendor.url}>{vendor.name}</a>
-        </div>
 
         <div className="controls">
           <button type="button">Edit</button>
@@ -39,11 +34,7 @@ const MealCard = (props) => {
 MealCard.propTypes = {
   image: PropTypes.string,
   category: PropTypes.string,
-  name: PropTypes.string,
-  vendor: PropTypes.shape({
-    name: PropTypes.string,
-    url: PropTypes.string
-  })
+  name: PropTypes.string
 };
 
 export default MealCard;
