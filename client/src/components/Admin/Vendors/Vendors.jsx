@@ -4,8 +4,12 @@ import PropTypes from 'prop-types';
 import { ToastContainer } from 'react-toastify';
 import { VendorCard } from './VendorCard';
 import Loader from '../../common/Loader/Loader';
-import { fetchVendors, createVendor } from '../../../actions/vendorsAction';
+import {
+  fetchVendors,
+  deleteVendor
+} from '../../../actions/vendorsAction';
 import AddVendorModal from "./AddVendorModal";
+import DeleteVendorModal from "./DeleteVendorModal";
 
 /**
  *
@@ -18,9 +22,15 @@ export class Vendors extends Component {
     super(props);
     this.state = {
       displayModal: false,
+      displayDeleteModal: false,
+      modalContent: {}
     };
+
     this.toggleModal = this.toggleModal.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.showDeleteModal = this.showDeleteModal.bind(this);
+    this.closeDeleteModal = this.closeDeleteModal.bind(this);
+    this.deleteVendor = this.deleteVendor.bind(this);
   }
   
   componentDidMount() {
@@ -57,6 +67,52 @@ export class Vendors extends Component {
       displayModal: !preState.displayModal
     }));
   }
+  
+  /**
+   * 
+   * @method deleteVendor
+   * 
+   * @param {Object} vendorId
+   * 
+   * @memberof vendors
+   * 
+   * @returns {void}
+   */
+  deleteVendor(vendorId) {
+    this.props.deleteVendor(vendorId)
+      .then(() => this.closeDeleteModal());
+  }
+
+  /**
+   * 
+   * @method showDeleteModal
+   *
+   * @param {object} vendor
+   * 
+   * @memberof Vendors
+   * 
+   * @returns {void}
+   */
+  showDeleteModal(vendor) {
+    this.setState({
+      displayDeleteModal: true,
+      modalContent: vendor
+    });
+  }
+
+  /**
+   * 
+   * @method closeDeleteModal
+   *
+   * @param {object} vendor
+   * 
+   * @memberof Vendors
+   * 
+   * @returns {void}
+   */
+  closeDeleteModal(vendor) {
+    this.setState({ displayDeleteModal: false });
+  }
 
   
   /**
@@ -70,12 +126,21 @@ export class Vendors extends Component {
    */
   renderVendor = (vendor) => {
     const rating = Math.ceil(Math.random() * 5);
-    return <VendorCard key={vendor.id} vendor={vendor} rating={rating} />;
+    return (
+      <VendorCard 
+        key={vendor.id}
+        vendor={vendor}
+        rating={rating}
+        showDeleteModal={this.showDeleteModal}
+      />
+    );
   }
 
   render() {
-    const { isLoading, vendors, isCreating } = this.props;
-    const { displayModal } = this.state;
+    const {
+      isLoading, vendors, isCreating, isDeleting 
+    } = this.props;
+    const { displayModal, displayDeleteModal, modalContent } = this.state;
     return (
       <div>
         { isLoading && <Loader /> }
@@ -120,25 +185,38 @@ export class Vendors extends Component {
           isCreating={isCreating}
           handleSubmit={this.handleSubmit}
         />
+        <DeleteVendorModal
+          deleteVendor={this.deleteVendor}
+          isDeleting={isDeleting}
+          closeDeleteModal={this.closeDeleteModal}
+          modalContent={modalContent}
+          displayDeleteModal={displayDeleteModal}
+        />
       </div>
     );
   }
 }
 
 const mapStateToProps = ({ allVendors }) => {
-  const { isLoading, isCreating, vendors } = allVendors;
-  return { isLoading, vendors, isCreating };
+  const {
+    isLoading, isCreating, isDeleting, vendors 
+  } = allVendors;
+  return {
+    isLoading, isCreating, isDeleting, vendors 
+  };
 };
 
 Vendors.propTypes = {
+  deleteVendor: PropTypes.func,
   isLoading: PropTypes.bool,
   isCreating: PropTypes.bool,
   createVendor: PropTypes.func.isRequired,
+  isDeleting: PropTypes.bool,
   vendors: PropTypes.arrayOf(PropTypes.shape({})),
   fetchVendors: PropTypes.func.isRequired,
 };
 
 export default connect(
   mapStateToProps,
-  { fetchVendors, createVendor }
+  { fetchVendors, deleteVendor }
 )(Vendors);

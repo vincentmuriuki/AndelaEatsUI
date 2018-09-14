@@ -15,17 +15,24 @@ const Modal = ({
             <div className="header-title">Delete Order</div>
           </div>
           <h3>{`Permanently delete ${modalContent.name.main} and ${modalContent.name.protein} order?`}</h3>
-          <span>This cannot be undone</span>
+          <span className="warning">This cannot be undone</span>
           <div className="modal-footer">
             <div className="cta">
-              <div className="float-left" />
               <div className="float-right">
-                <div className="btn-delete close-modal" onClick={closeModal}>
+                <button
+                  type="button"
+                  className="btn-delete close-modal" 
+                  onClick={closeModal}
+                >
                   Cancel
-                </div>
-                <div className="btn-delete delete-order" onClick={() => deleteOrder(modalContent.id)}>
+                </button>
+                <button
+                  type="button"
+                  className="btn-delete delete-order" 
+                  onClick={() => deleteOrder(modalContent.id)}
+                >
                   delete
-                </div>
+                </button>
               </div>
             </div>        
           </div>

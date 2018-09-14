@@ -6,18 +6,23 @@ import {
   FETCH_VENDORS_FAILURE,
   CREATE_VENDOR_SUCCESS,
   CREATE_VENDOR_FAILURE,
-  CREATE_VENDOR_LOADING
+  CREATE_VENDOR_LOADING,
+  DELETE_VENDOR_SUCCESS,
+  DELETE_VENDOR_FAILURE,
+  DELETE_VENDOR_LOADING
 } from '../../actions/actionTypes';
 import {
   baseUrl,
   fetchVendors,
-  createVendor
+  createVendor,
+  deleteVendor
 } from '../../actions/vendorsAction';
-import vendors from '../__mocks__/mockVendors';
 import {
   newVendor,
   createdVendor
 } from '../__mocks__/mockNewVendor';
+import vendors from '../__mocks__/mockVendors';
+import { Vendors } from '../../components/Admin/Vendors/Vendors';
 
 describe('Vendors Action', () => {
   describe('Fecth Vendors', () => {
@@ -166,6 +171,77 @@ describe('Vendors Action', () => {
       const store = mockStore({});
       await store
         .dispatch(createVendor(newVendor))
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions);
+        });
+      done();
+    });
+  });
+  describe('Delete Vendor', () => {
+    beforeEach(() => moxios.install());
+    afterEach(() => moxios.uninstall());
+
+    it('delete vendor success', async (done) => {
+      moxios.stubRequest(`${baseUrl}/user/token`, {
+        status: 200,
+        response: {}
+      });
+      
+      moxios.stubRequest(`${baseUrl}/admin/vendor/${vendors[0].id}`, {
+        status: 200,
+        response: {}
+      });
+
+      const expectedActions = [
+        {
+          type: DELETE_VENDOR_LOADING,
+          payload: true,
+        },
+        {
+          type: DELETE_VENDOR_SUCCESS,
+          payload: vendors[0].id
+        },
+        {
+          type: DELETE_VENDOR_LOADING,
+          payload: false,
+        }
+      ];
+      const store = mockStore({});
+      await store
+        .dispatch(deleteVendor(vendors[0].id))
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions);
+        });
+      done();
+    });
+    it('return vendor failure', async (done) => {
+      moxios.stubRequest(`${baseUrl}/user/token`, {
+        status: 200,
+        response: {}
+      });
+
+      moxios.stubRequest(`${baseUrl}/admin/vendor/${vendors[0].id}`, {
+        status: 401,
+        response: {}
+      });
+
+      const expectedActions = [
+        {
+          type: DELETE_VENDOR_LOADING,
+          payload: true,
+        },
+        {
+          type: DELETE_VENDOR_FAILURE,
+          payload: new Error('Request failed with status code 401'),
+        },
+        {
+          type: DELETE_VENDOR_LOADING,
+          payload: false,
+        }
+      ];
+      const store = mockStore({});
+      await store
+        .dispatch(deleteVendor(vendors[0].id))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions);
         });

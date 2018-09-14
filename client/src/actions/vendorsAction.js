@@ -6,7 +6,10 @@ import {
   FETCH_VENDORS_LOADING,
   CREATE_VENDOR_SUCCESS,
   CREATE_VENDOR_FAILURE,
-  CREATE_VENDOR_LOADING
+  CREATE_VENDOR_LOADING,
+  DELETE_VENDOR_SUCCESS,
+  DELETE_VENDOR_FAILURE,
+  DELETE_VENDOR_LOADING
 } from './actionTypes';
 
 import { config } from '../config';
@@ -70,6 +73,7 @@ export const createVendorFailure = error => ({
   payload: error
 });
 
+
 export const createVendor = (vendor) => dispatch => {
   dispatch(createVendorLoading(true));
 
@@ -80,6 +84,7 @@ export const createVendor = (vendor) => dispatch => {
     .then((res) => {
       const { token } = res.data;
       axios.defaults.headers.Authorization = `Bearer ${token}`;
+      
       return axios.post(`${baseUrl}/admin/vendor`, {
         vendorName: vendor.vendorName,
         vendorAddress: vendor.vendorAddress,
@@ -107,5 +112,59 @@ export const createVendor = (vendor) => dispatch => {
       });
       dispatch(createVendorFailure(error));
       dispatch(createVendorLoading(false));
+    });
+};
+
+
+export const deleteVendorLoading = isDeleting => ({
+  type: DELETE_VENDOR_LOADING,
+  payload: isDeleting
+});
+
+
+export const deleteVendorSuccess = vendorId => ({
+  type: DELETE_VENDOR_SUCCESS,
+  payload: vendorId
+});
+
+export const deleteVendorFailure = error => ({
+  type: DELETE_VENDOR_FAILURE,
+  payload: error
+});
+
+
+export const deleteVendor = (vendorId) => dispatch => {
+  dispatch(deleteVendorLoading(true));
+
+  return axios.post(`${baseUrl}/user/token`, {
+    userEmail: "admin@andela.com",
+    userRole: "Admin"
+  })
+    .then((res) => {
+      const { token } = res.data;
+      axios.defaults.headers.Authorization = `Bearer ${token}`;
+
+      return axios.delete(`${baseUrl}/admin/vendor/${vendorId}`)
+        .then((res) => {
+          toast.success(res.data.message, {
+            position: toast.POSITION.TOP_RIGHT
+          });
+          dispatch(deleteVendorSuccess(vendorId));
+          dispatch(deleteVendorLoading(false));
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message, {
+            position: toast.POSITION.TOP_RIGHT
+          });
+          dispatch(deleteVendorFailure(error));
+          dispatch(deleteVendorLoading(false));
+        });
+    })
+    .catch((error) => {
+      toast.error(error.message, {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      dispatch(deleteVendorFailure(error));
+      dispatch(deleteVendorLoading(false));
     });
 };

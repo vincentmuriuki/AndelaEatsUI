@@ -11,7 +11,7 @@ import dateFormatter from '../../../helpers/dateFormatter';
  * 
  * @returns {JSX}
  */
-export const VendorCard = ({ vendor, rating }) => (
+export const VendorCard = ({ vendor, rating, showDeleteModal }) => (
   <div className="table-body">
     <div className="table-row">
       <div className="custom-row">
@@ -32,7 +32,16 @@ export const VendorCard = ({ vendor, rating }) => (
           />
         </div>
         <div className="custom-col-3 options-wrapper">
-          <span>Edit</span><span>Delete</span>
+          <span>
+            Edit
+          </span>
+          <span 
+            onClick={() => showDeleteModal(vendor)}
+            role="button"
+            tabIndex={0}
+          >
+            Delete
+          </span>
         </div>
       </div>
     </div>
@@ -50,4 +59,5 @@ VendorCard.propTypes = {
     updatedAt: PropTypes.string,
   }),
   rating: PropTypes.number,
+  showDeleteModal: PropTypes.func
 };

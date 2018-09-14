@@ -4,8 +4,12 @@ import {
   FETCH_VENDORS_FAILURE,
   CREATE_VENDOR_LOADING,
   CREATE_VENDOR_SUCCESS,
-  CREATE_VENDOR_FAILURE
+  CREATE_VENDOR_FAILURE,
+  DELETE_VENDOR_SUCCESS,
+  DELETE_VENDOR_FAILURE,
+  DELETE_VENDOR_LOADING
 } from '../actions/actionTypes';
+import filterDeletedVendor from '../helpers/filterDeletedVendor';
 
 import { initialVendors } from './initialState';
 
@@ -22,6 +26,15 @@ const vendorsReducer = (state = initialVendors, action) => {
     case CREATE_VENDOR_SUCCESS:
       return { ...state, vendors: [...state.vendors, action.payload] };
     case CREATE_VENDOR_FAILURE:
+      return state;
+    case DELETE_VENDOR_LOADING:
+      return { ...state, isDeleting: action.payload };
+    case DELETE_VENDOR_SUCCESS:
+      return {
+        ...state,
+        vendors: filterDeletedVendor(state.vendors, action.payload)
+      };
+    case DELETE_VENDOR_FAILURE:
       return state;
     default:
       return state;

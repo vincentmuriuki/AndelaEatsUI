@@ -5,7 +5,10 @@ import {
   FETCH_VENDORS_FAILURE,
   CREATE_VENDOR_SUCCESS,
   CREATE_VENDOR_FAILURE,
-  CREATE_VENDOR_LOADING
+  CREATE_VENDOR_LOADING,
+  DELETE_VENDOR_SUCCESS,
+  DELETE_VENDOR_FAILURE,
+  DELETE_VENDOR_LOADING
 } from '../../actions/actionTypes';
 import { initialVendors } from '../../reducers/initialState';
 import vendorsReducer from '../../reducers/vendorsReducer';
@@ -98,12 +101,54 @@ describe('Vendors Reducer', () => {
   });
 
   describe('CREATE_VENDOR_FAILURE', () => {
-    it('should return the previsions state', () => {
+    it('should return the previous state', () => {
       const action = {
         type: CREATE_VENDOR_FAILURE,
         payload: {},
       };
 
+      const newState = vendorsReducer(initialVendors, action);
+      expect(newState.vendors).toEqual([]);
+    });
+  });
+
+  describe('DELETE_VENDOR_LOADING', () => {
+    it('should set isDeleting state to true when deleting vendor', () => {
+      const action = {
+        type: DELETE_VENDOR_LOADING,
+        payload: true,
+      };
+      const newState = vendorsReducer(initialVendors, action);
+      expect(newState.isDeleting).toEqual(true);
+    });
+    it('should set isDeleting state to false when request is resolved', () => {
+      const action = {
+        type: DELETE_VENDOR_LOADING,
+        payload: false,
+      };
+      const newState = vendorsReducer(initialVendors, action);
+      expect(newState.isDeleting).toEqual(false);
+    });
+  });
+
+  describe('DELETE_VENDOR_SUCCESS', () => {
+    it('should update vendors in the store', () => {
+      const action = {
+        type: DELETE_VENDOR_SUCCESS,
+        payload: vendors[0].id,
+      };
+
+      const newState = vendorsReducer(initialVendors, action);
+      expect(newState.vendors).toEqual([]);
+    });
+  });
+  
+  describe('DELETE_VENDOR_FAILURE', () => {
+    it('should return the previous state', () => {
+      const action = {
+        type: DELETE_VENDOR_FAILURE,
+        payload: {},
+      };
       const newState = vendorsReducer(initialVendors, action);
       expect(newState.vendors).toEqual([]);
     });
