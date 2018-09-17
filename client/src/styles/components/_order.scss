@@ -1,5 +1,4 @@
 .orders-wrapper {
-  
   h3 {
     font-weight: 700;
     color: $color-dark-gray;
@@ -88,7 +87,7 @@
 
   .isDisabled {
     color: $color-white;
-    background-color: $color-gray;
+    background-color: $color-light-grey;
     cursor: not-allowed;
   }
 
@@ -227,7 +226,7 @@
         background-color: $color-white; 
       }
       &.isDisabled {
-        color: $color-gray;
+        color: $color-light-grey;
         cursor: not-allowed;
         opacity: 0.5;
         text-decoration: none;
@@ -250,7 +249,7 @@
   a {
     flex: 1 1 auto;
     border: none;
-    color: $color-gray !important;
+    color: $color-light-grey !important;
     transition: border-width 0.2s ease-in;
 
       &:hover {
@@ -265,5 +264,27 @@
     border-radius: 50%;
     margin-right: -26px;
     background-color: $color-white;
+  }
+}
+
+#confirm-order-modal{
+  .header-date {
+    flex: 2 0 0;
+    text-align: right;
+
+    span {
+      display: inline-block;
+      margin-top: 7px;
+    }
+
+    .order-date {
+      margin-left: 5px;
+    }
+  }
+  
+  .order-details-label {
+    margin-bottom: px-to-rem(30px);
+    font-weight: 600;
+    color: $color-dark-gray;
   }
 }

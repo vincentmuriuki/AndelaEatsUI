@@ -100,28 +100,31 @@ export class AddVendorModal extends Component {
     const { displayModal, isCreating } = this.props;
     return (
       <div 
-        className="modal" 
+        className="modal"
+        id="add-vendor-modal" 
         style={displayModal ? { display: 'block' } : { display: 'none' }}
       >
-        <div className="vendors-modal-content">
-          <div className="vendor-modal-header">
+        <div className="modal-content">
+          <div className="modal-header">
             <div className="header-title">ADD VENDOR</div>
-            <span
-              tabIndex={0}
-              role="button"
-              className="close-icon"
-              onClick={this.closeModal}
-            >
-              X&nbsp;&nbsp;Close
-            </span>
+            <div>
+              <button
+                type="button"
+                tabIndex={0}
+                className="close-icon btn-no-style"
+                onClick={this.closeModal}
+              >
+                X&nbsp;&nbsp;Close
+              </button>
+            </div>
           </div>
           <form onSubmit={this.formValidation}>
             <div>
-              <div className="form-row">
-                <label className="label-text" htmlFor="vendorName">Name
+
+              <div className="form-field-set">
+                <label htmlFor="vendorName">Name
                   <input
                     id="vendorName"
-                    className="input"
                     name="vendorName"
                     onChange={this.onChange}
                     onFocus={this.clearErrors}
@@ -132,11 +135,11 @@ export class AddVendorModal extends Component {
                   {errors.vendorName ? errors.vendorName : ""}
                 </span>
               </div>
-              <div className="form-row">
-                <label className="label-text" htmlFor="vendorAddress">Address
+
+              <div className="form-field-set">
+                <label htmlFor="vendorAddress">Address
                   <input
                     id="vendorAddress"
-                    className="input"
                     name="vendorAddress"
                     onChange={this.onChange}
                     onFocus={this.clearErrors}
@@ -147,11 +150,10 @@ export class AddVendorModal extends Component {
                   {errors.vendorAddress ? errors.vendorAddress : ""}
                 </span>
               </div>
-              <div className="form-row">
-                <label htmlFor="phoneNumbert" className="label-text">Phone
+              <div className="form-field-set">
+                <label htmlFor="phoneNumbert">Phone
                   <input
                     id="phoneNumber"
-                    className="input"
                     name="phoneNumber"
                     onChange={this.onChange}
                     onFocus={this.clearErrors}
@@ -162,11 +164,10 @@ export class AddVendorModal extends Component {
                   {errors.phoneNumber}
                 </span>
               </div>
-              <div className="form-row">
-                <label htmlFor="contactPerson" className="label-text">Contact Person
+              <div className="form-field-set">
+                <label htmlFor="contactPerson">Contact Person
                   <input
                     id="contactPerson"
-                    className="input"
                     name="contactPerson"
                     onChange={this.onChange}
                     onFocus={this.clearErrors}
@@ -177,23 +178,19 @@ export class AddVendorModal extends Component {
                   {errors.contactPerson ? errors.contactPerson : ""}
                 </span>
               </div>
-              <div className="form-row">
+
+              <div className="modal-footer">
                 { isCreating ? <div className="modal-loader"><Loader /></div>
                   : (
-                    <div className="button-container">
+                    <div>
                       <button
                         type="button"
-                        className="cancel-button" 
+                        className="grayed" 
                         onClick={this.closeModal}
                       >
                         Cancel
                       </button>
-                      <button 
-                        type="submit" 
-                        className="add-button"
-                      >
-                        Add Vendor
-                      </button>
+                      <button type="submit">Add Vendor</button>
                     </div>
                   )}
               </div>

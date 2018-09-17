@@ -21,17 +21,17 @@ const Modal = ({
               <div className="float-right">
                 <button
                   type="button"
-                  className="btn-delete close-modal" 
+                  className="grayed upper" 
                   onClick={closeModal}
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
-                  className="btn-delete delete-order" 
+                  className="fill upper delete-order" 
                   onClick={() => deleteOrder(modalContent.id)}
                 >
-                  delete
+                  Delete
                 </button>
               </div>
             </div>        

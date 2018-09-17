@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 import React, { Component } from 'react';
 import { mount } from 'enzyme';
 import DeleteVendorModal from '../../../../components/Admin/Vendors/DeleteVendorModal';
@@ -30,6 +32,6 @@ describe('DeleteVendorModal Component', () => {
   });
 
   it('should simulate delete button click', () => {
-    wrapper.find('.delete-order').simulate('click');
+    wrapper.find('.delete-vendor').simulate('click');
   });
 });

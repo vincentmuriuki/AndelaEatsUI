@@ -49,16 +49,18 @@ class ConfirmOrder extends Component {
       date = menu.date;
     }
     return (
-      <div id="myModal" className={`modal ${isLoading && 'blurred'}`} style={(isModalOpen) ? { display: 'block' } : { display: 'none' }}>
+      <div id="confirm-order-modal" className={`modal ${isLoading && 'blurred'}`} style={(isModalOpen) ? { display: 'block' } : { display: 'none' }}>
         <div className="modal-content">
           <div className="modal-header">
             <div className="header-title">CONFIRM ORDER</div>
             <div className="header-date">
-              <p className="label date-label">Order Date:</p>
-              <p className="order-date"> <b>{format(date, 'dddd d MMMM')}</b></p>
+              <span className="label date-label">Order Date:</span>
+              <span className="order-date"> <b>{format(date, 'dddd d MMMM')}</b></span>
             </div>
-            <div className="label order-details">Order Details</div>
           </div>
+          
+          <div className="order-details-label">Order Details</div>
+
           <div className="menus-container">
             <div className="main-meal">
               <ul>
@@ -83,13 +85,22 @@ class ConfirmOrder extends Component {
               </ul>
             </div>
             <div className="modal-footer">
-              <div className="cta">
-                <div className="float-left"></div>
-                <div className="float-right">
-                  <div className="btn reset-order" onClick={toggleModal.bind(this)}>Cancel</div>
-                  <div className={classname("btn submit-order", { 'isDisabled': isLoading })} onClick={this.confirmOrder}>Confirm order</div>
-                </div>
-              </div>
+              <button
+                type="button"
+                className="grayed"
+                onClick={toggleModal.bind(this)}
+              >
+                Cancel
+              </button>
+              <button
+                className={classname(
+                  "fill",
+                  { 'isDisabled': isLoading }
+                )}
+                onClick={this.confirmOrder}
+              >
+                Confirm order
+              </button>
             </div>
           </div>
         </div>

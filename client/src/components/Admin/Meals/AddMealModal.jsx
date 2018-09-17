@@ -23,6 +23,7 @@ export class AddMealModal extends Component {
     return (
       <div
         className="modal"
+        id="add-meal-modal"
         style={show ? { display: 'block' } : { display: 'none' }}
       >
         <div className="modal-content">
@@ -32,7 +33,7 @@ export class AddMealModal extends Component {
               <button
                 tabIndex={0}
                 type="button"
-                className="close-icon"
+                className="close-icon btn-no-style"
                 onClick={this.props.toggleAddModal}
               >
                 X&nbsp;&nbsp;Close
@@ -48,7 +49,7 @@ export class AddMealModal extends Component {
               </div>
               <div className="image">
                 <div className="control">
-                  <button type="button">
+                  <button className="btn-no-style" type="button">
                     <i className="fas fa-plus" />
                   </button>
                   
@@ -56,22 +57,28 @@ export class AddMealModal extends Component {
                 </div>
               </div>
 
-              <div className="form-field">
+              <div className="form-field-set">
                 <label htmlFor="name">Name</label>
                 <input type="text" id="name" />
               </div>
 
-              <div className="form-field">
+              <div className="form-field-set">
                 <label htmlFor="meal-type">Meal type</label>
                 <select id="meal-type">
-                  <option value="" />
+                  <option value="">-- select --</option>
                   <option value="main">Main</option>
                 </select>
               </div>
             </main>
 
             <div className="modal-footer">
-              <button type="button" className="grayed-button">Cancel</button>
+              <button
+                type="button"
+                className="grayed"
+                onClick={this.props.toggleAddModal}
+              >
+                Cancel
+              </button>
               <button type="button">Add meal</button>
             </div>
           </form>

@@ -53,3 +53,16 @@ body {
   -webkit-text-stroke-color: $background-blue;
   transform: rotateY(180deg);
 }
+
+.btn-no-style {
+  display: inline-block;
+  border: 1px solid lightgray;
+  background: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.warning {
+  color: $color-red;
+  margin: 0 auto 40px;
+}

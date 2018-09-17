@@ -32,10 +32,69 @@
   display: inline-block;
 }
 
-@mixin plain-button {
-  display: inline-block;
+@mixin field-label($display: block) {
+  display: $display;
+  font-size: 15px;
+  font-weight: 100;
+  margin-bottom: 8px;
+
+  @if $display == "block" {
+    width: 100%;
+  }
+}
+
+@mixin field-input($display: block) {
+  display: $display;
   border: 1px solid lightgray;
-  background: none;
-  cursor: pointer;
   outline: none;
+  font-size: 18px;
+  font-weight: 100;
+  border-radius: 2px;
+
+  @if $display == "block" {
+    width: 100%;
+    padding: 10px 2%;
+  }
+
+  @else {
+    padding: 10px;
+  }
+}
+
+
+@mixin field-select($display: block) {
+  all: unset;
+  display: $display;
+  border: 1px solid lightgray;
+  outline: none;
+  min-width: 200px;
+  font-weight: 100;
+  font-size: 15px;
+  cursor: pointer;
+  background: white url('../assets/images/down-arrow.png') no-repeat;
+  background-size: 20px 20px;
+  background-position: 98% 50%;
+  border-radius: 2px;
+
+  @if $display == "block" {
+    width: 96%;
+    padding: 10px 2%;
+  }
+
+  @else {
+    padding: 10px;
+  }
+}
+
+@mixin circled-btn($dimension, $bgcolor, $fgcolor, $fontsize) {
+  border: none;
+  width: $dimension;
+  height: $dimension;
+  background: $bgcolor;
+  padding-top: 5px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  color: $fgcolor;
+  font-size: $fontsize;
+  border-radius: 50%;
 }
