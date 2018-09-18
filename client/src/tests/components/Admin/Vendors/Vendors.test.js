@@ -14,19 +14,23 @@ const modalContent = {
   vendorName: "Mr Medium"
 };
 
-const setup = (isLoading) => {
+const setup = (isLoading, isCreating, isUpdating, isDeleting) => {
   const props = {
     vendors,
     isLoading,
+    isCreating,
+    isUpdating,
+    isDeleting,
     fetchVendors: jest.fn(),
     createVendor: jest.fn().mockImplementation(() => Promise.resolve()),
-    deleteVendor: jest.fn().mockImplementation(() => Promise.resolve())
+    deleteVendor: jest.fn().mockImplementation(() => Promise.resolve()),
+    updateVendor: jest.fn().mockImplementation(() => Promise.resolve()),
   };
 
   return mount(<Vendors {...props} />);
 };
 
-const wrapper = setup(false);
+const wrapper = setup(false, false, false, false);
 
 describe('Vendors Component', () => {
   it('should render correctly', () => {
@@ -44,17 +48,16 @@ describe('Vendors Component', () => {
     expect(renderVendorSpy).toHaveBeenCalledWith(vendors[0]);
   });
 
-  it('should call toggleModal method', () => {
-    const toggleModalSpy = jest.spyOn(wrapper.instance(), 'toggleModal');
-    const event = { preventDefault: jest.fn() };
-    wrapper.instance().toggleModal(event);
-    expect(toggleModalSpy).toHaveBeenCalled();
+  it('should call handleSubmit and createVendor method', () => {
+    const handleSubmitSpy = jest.spyOn(wrapper.instance(), 'handleSubmit');
+    wrapper.setState({ modalTitle: "ADD VENDOR" });
+    wrapper.instance().handleSubmit();
+    expect(handleSubmitSpy).toHaveBeenCalled();
   });
 
-  it('should call handleSubmit method', () => {
+  it('should call handleSubmit and updateVendor method', () => {
     const handleSubmitSpy = jest.spyOn(wrapper.instance(), 'handleSubmit');
-    const event = { preventDefault: jest.fn() };
-    wrapper.instance().handleSubmit(event);
+    wrapper.instance().handleSubmit();
     expect(handleSubmitSpy).toHaveBeenCalled();
   });
 
@@ -65,11 +68,11 @@ describe('Vendors Component', () => {
   });
 
   it('should call closeDeleteModal method', () => {
-    const closeDeleteModalSpy = jest
-      .spyOn(wrapper.instance(), 'closeDeleteModal');
+    const closeModalSpy = jest
+      .spyOn(wrapper.instance(), 'closeModal');
     const event = { preventDefault: jest.fn() };
-    wrapper.instance().closeDeleteModal();
-    expect(closeDeleteModalSpy).toHaveBeenCalled();
+    wrapper.instance().closeModal();
+    expect(closeModalSpy).toHaveBeenCalled();
   });
 
   it('should call closeDeleteModal method', () => {
@@ -77,5 +80,56 @@ describe('Vendors Component', () => {
       .spyOn(wrapper.instance(), 'showDeleteModal');
     wrapper.instance().showDeleteModal(modalContent);
     expect(showDeleteModalSpy).toHaveBeenCalled();
+  });
+
+  it('should call clearErrors method', () => {
+    const clearErrorsSpy = jest.spyOn(wrapper.instance(), 'clearErrors');
+    wrapper.instance().clearErrors();
+    expect(clearErrorsSpy).toHaveBeenCalled();
+  });
+
+  it('should call formValidation method', () => {
+    const formValidationSpy = jest.spyOn(wrapper.instance(), 'formValidation');
+    const event = { preventDefault: jest.fn() };
+    wrapper.instance().formValidation(event);
+    expect(formValidationSpy).toHaveBeenCalled();
+  });
+
+  it('should call onChange method', () => {
+    const onChangeSpy = jest.spyOn(wrapper.instance(), 'onChange');
+    const event = {
+      preventDefault: jest.fn(),
+      target: {
+        name: 'vendorName',
+        value: 'Chibueze'
+      }
+    };
+    wrapper.instance().onChange(event);
+    expect(onChangeSpy).toHaveBeenCalled();
+    expect(wrapper.state().vendorName).toBe('Chibueze');
+  });
+
+  it('should call closeModal method', () => {
+    const closeModalSpy = jest.spyOn(wrapper.instance(), 'closeModal');
+    wrapper.instance().closeModal();
+    expect(closeModalSpy).toHaveBeenCalled();
+  });
+
+  it('should call deleteVendor method', () => {
+    const deleteVendorSpy = jest.spyOn(wrapper.instance(), 'deleteVendor');
+    wrapper.instance().deleteVendor(modalContent.id);
+    expect(deleteVendorSpy).toHaveBeenCalled();
+  });
+
+  it('should call showAddModal method', () => {
+    const showAddModalSpy = jest.spyOn(wrapper.instance(), 'showAddModal');
+    wrapper.instance().showAddModal();
+    expect(showAddModalSpy).toHaveBeenCalled();
+  });
+
+  it('should call showEditModal method', () => {
+    const showEditModalSpy = jest.spyOn(wrapper.instance(), 'showEditModal');
+    wrapper.instance().showEditModal(modalContent);
+    expect(showEditModalSpy).toHaveBeenCalled();
   });
 });

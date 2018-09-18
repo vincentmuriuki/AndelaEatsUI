@@ -9,7 +9,10 @@ import {
   CREATE_VENDOR_LOADING,
   DELETE_VENDOR_SUCCESS,
   DELETE_VENDOR_FAILURE,
-  DELETE_VENDOR_LOADING
+  DELETE_VENDOR_LOADING,
+  UPDATE_VENDOR_SUCCESS,
+  UPDATE_VENDOR_FAILURE,
+  UPDATE_VENDOR_LOADING
 } from './actionTypes';
 
 import { config } from '../config';
@@ -166,5 +169,64 @@ export const deleteVendor = (vendorId) => dispatch => {
       });
       dispatch(deleteVendorFailure(error));
       dispatch(deleteVendorLoading(false));
+    });
+};
+
+
+export const updateVendorLoading = isUpdating => ({
+  type: UPDATE_VENDOR_LOADING,
+  payload: isUpdating
+});
+
+
+export const updateVendorSuccess = vendor => ({
+  type: UPDATE_VENDOR_SUCCESS,
+  payload: vendor
+});
+
+export const updateVendorFailure = error => ({
+  type: UPDATE_VENDOR_FAILURE,
+  payload: error
+});
+
+
+export const updateVendor = vendor => dispatch => {
+  dispatch(updateVendorLoading(true));
+
+  return axios.post(`${baseUrl}/user/token`, {
+    userEmail: "admin@andela.com",
+    userRole: "Admin"
+  })
+    .then((res) => {
+      const { token } = res.data;
+      axios.defaults.headers.Authorization = `Bearer ${token}`;
+
+      return axios.put(`${baseUrl}/admin/vendor/${vendor.id}`, {
+        vendorName: vendor.vendorName,
+        vendorAddress: vendor.vendorAddress,
+        contactPerson: vendor.contactPerson,
+        phoneNumber: vendor.phoneNumber
+      })
+        .then((res) => {
+          toast.success(res.data.message, {
+            position: toast.POSITION.TOP_RIGHT
+          });
+          dispatch(updateVendorSuccess(res.data.vendor[0]));
+          dispatch(updateVendorLoading(false));
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message, {
+            position: toast.POSITION.TOP_RIGHT
+          });
+          dispatch(updateVendorFailure(error));
+          dispatch(updateVendorLoading(false));
+        });
+    })
+    .catch((error) => {
+      toast.error(error.message, {
+        position: toast.POSITION.TOP_RIGHT
+      });
+      dispatch(updateVendorFailure(error));
+      dispatch(updateVendorLoading(false));
     });
 };

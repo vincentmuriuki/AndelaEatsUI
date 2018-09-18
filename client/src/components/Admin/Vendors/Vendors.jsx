@@ -6,10 +6,13 @@ import { VendorCard } from './VendorCard';
 import Loader from '../../common/Loader/Loader';
 import {
   fetchVendors,
-  deleteVendor
+  deleteVendor,
+  createVendor,
+  updateVendor
 } from '../../../actions/vendorsAction';
-import AddVendorModal from "./AddVendorModal";
+import Modal from "./Modal";
 import DeleteVendorModal from "./DeleteVendorModal";
+import inputValidation from '../../../helpers/inputValidation';
 
 /**
  *
@@ -18,25 +21,96 @@ import DeleteVendorModal from "./DeleteVendorModal";
  * @extends {Component}
  */
 export class Vendors extends Component {
+  static initialState = () => ({
+    id: '',
+    vendorName: '',
+    vendorAddress: '',
+    contactPerson: '',
+    phoneNumber: '',
+    errors: {},
+    displayModal: false,
+    displayDeleteModal: false,
+    modalContent: {},
+    modalTitle: '',
+    modalButtontext: ''
+  });
+
   constructor(props) {
     super(props);
-    this.state = {
-      displayModal: false,
-      displayDeleteModal: false,
-      modalContent: {}
-    };
+    this.state = Vendors.initialState();
 
-    this.toggleModal = this.toggleModal.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.showAddModal = this.showAddModal.bind(this);
+    this.showEditModal = this.showEditModal.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.showDeleteModal = this.showDeleteModal.bind(this);
-    this.closeDeleteModal = this.closeDeleteModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
     this.deleteVendor = this.deleteVendor.bind(this);
+    this.clearErrors = this.clearErrors.bind(this);
+    this.formValidation = this.formValidation.bind(this);
   }
   
   componentDidMount() {
     this.props.fetchVendors();
   }
   
+  /**
+   * Handles input fields text changes
+   *
+   * @param {object} event
+   *
+   * @memberof AddVendorModal
+   * 
+   * @returns {void}
+   */
+  onChange(event) {
+    event.preventDefault();
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  }
+
+  /**
+   * 
+   * @method showAddModal
+   *
+   * 
+   * @memberof Vendors
+   * 
+   * @returns {void}
+   */
+  showAddModal() {
+    this.setState({
+      modalTitle: "ADD VENDOR",
+      modalButtontext: "Add Vendor",
+      displayModal: true
+    });
+  }
+
+  /**
+   * 
+   * @method showEditModal
+   *
+   * @param {object} vendor
+   * 
+   * @memberof Vendors
+   * 
+   * @returns {void}
+   */
+  showEditModal(vendor) {
+    this.setState({
+      modalTitle: "EDIT VENDOR",
+      modalButtontext: "Update",
+      id: vendor.id,
+      vendorName: vendor.vendorName,
+      vendorAddress: vendor.vendorAddress,
+      contactPerson: vendor.contactPerson,
+      phoneNumber: vendor.phoneNumber,
+      displayModal: true,
+    });
+  }
+
+
   /**
    * Handles form submission
    * 
@@ -46,26 +120,48 @@ export class Vendors extends Component {
    * 
    * @returns {void}
    */
-  handleSubmit(vendorDetails) {
-    this.props.createVendor(vendorDetails)
-      .then(() => this.toggleModal());
+  handleSubmit() {
+    if (this.state.modalTitle === "ADD VENDOR") {
+      this.props.createVendor(this.state)
+        .then(() => this.closeModal());
+    } else {
+      this.props.updateVendor(this.state)
+        .then(() => this.closeModal());
+    }
   }
 
   /**
-   * Handles input fields text changes
+   * Handles form validation
    * 
-   * @method toggleModal
-   *
    * @param {object} event
    * 
-   * @memberof Vendors
+   * @memberof AddVendorModal
    * 
    * @returns {void}
    */
-  toggleModal(event) {
-    this.setState(preState => ({
-      displayModal: !preState.displayModal
-    }));
+  formValidation(event) {
+    event.preventDefault();
+    const err = inputValidation(this.state);
+    if (err.isEmpty) {
+      this.handleSubmit();
+    } else {
+      this.setState({ errors: err.errors });
+    }
+  }
+
+  /**
+   *  Clears errors Input field onFocus
+   * 
+   * @member clearErrors
+   * 
+   * @param {void} void
+   * 
+   * @memberof AddVendorModal
+   * 
+   * @returns {void}
+   */
+  clearErrors() {
+    this.setState({ errors: {} });
   }
   
   /**
@@ -80,7 +176,7 @@ export class Vendors extends Component {
    */
   deleteVendor(vendorId) {
     this.props.deleteVendor(vendorId)
-      .then(() => this.closeDeleteModal());
+      .then(() => this.closeModal());
   }
 
   /**
@@ -102,7 +198,7 @@ export class Vendors extends Component {
 
   /**
    * 
-   * @method closeDeleteModal
+   * @method closeModal
    *
    * @param {object} vendor
    * 
@@ -110,8 +206,8 @@ export class Vendors extends Component {
    * 
    * @returns {void}
    */
-  closeDeleteModal(vendor) {
-    this.setState({ displayDeleteModal: false });
+  closeModal() {
+    this.setState(Vendors.initialState());
   }
 
   
@@ -132,15 +228,31 @@ export class Vendors extends Component {
         vendor={vendor}
         rating={rating}
         showDeleteModal={this.showDeleteModal}
+        showEditModal={this.showEditModal}
       />
     );
   }
 
   render() {
     const {
-      isLoading, vendors, isCreating, isDeleting 
+      isLoading,
+      vendors,
+      isCreating, 
+      isDeleting,
+      isUpdating
     } = this.props;
-    const { displayModal, displayDeleteModal, modalContent } = this.state;
+    const {
+      displayModal,
+      displayDeleteModal,
+      modalContent,
+      vendorName, 
+      vendorAddress, 
+      phoneNumber, 
+      contactPerson,
+      errors,
+      modalTitle,
+      modalButtontext
+    } = this.state;
     return (
       <div>
         { isLoading && <Loader /> }
@@ -149,9 +261,10 @@ export class Vendors extends Component {
             <div className="vendors-header">
               <h3 className="vendor-menu">Menu</h3>
               <button 
-                type="button" 
+                type="button"
+                name="addVendor" 
                 className="vendor-button"
-                onClick={this.toggleModal}
+                onClick={this.showAddModal}
               >
                 Add Vendor
               </button>
@@ -179,16 +292,26 @@ export class Vendors extends Component {
           )
         }
         <ToastContainer />
-        <AddVendorModal
-          toggleModal={this.toggleModal}
+        <Modal
           displayModal={displayModal}
+          closeModal={this.closeModal}
           isCreating={isCreating}
+          isUpdating={isUpdating}
           handleSubmit={this.handleSubmit}
+          onChange={this.onChange}
+          vendorName={vendorName}
+          vendorAddress={vendorAddress}
+          phoneNumber={phoneNumber}
+          contactPerson={contactPerson}
+          formValidation={this.formValidation}
+          errors={errors}
+          modalTitle={modalTitle}
+          modalButtontext={modalButtontext}
         />
         <DeleteVendorModal
           deleteVendor={this.deleteVendor}
           isDeleting={isDeleting}
-          closeDeleteModal={this.closeDeleteModal}
+          closeModal={this.closeModal}
           modalContent={modalContent}
           displayDeleteModal={displayDeleteModal}
         />
@@ -199,10 +322,18 @@ export class Vendors extends Component {
 
 const mapStateToProps = ({ allVendors }) => {
   const {
-    isLoading, isCreating, isDeleting, vendors 
+    isLoading,
+    isCreating,
+    isDeleting,
+    isUpdating,
+    vendors 
   } = allVendors;
   return {
-    isLoading, isCreating, isDeleting, vendors 
+    isLoading,
+    isCreating,
+    isDeleting,
+    isUpdating,
+    vendors 
   };
 };
 
@@ -210,13 +341,20 @@ Vendors.propTypes = {
   deleteVendor: PropTypes.func,
   isLoading: PropTypes.bool,
   isCreating: PropTypes.bool,
-  createVendor: PropTypes.func.isRequired,
   isDeleting: PropTypes.bool,
+  isUpdating: PropTypes.bool,
+  createVendor: PropTypes.func,
+  updateVendor: PropTypes.func,
   vendors: PropTypes.arrayOf(PropTypes.shape({})),
   fetchVendors: PropTypes.func.isRequired,
 };
 
 export default connect(
   mapStateToProps,
-  { fetchVendors, deleteVendor }
+  {
+    fetchVendors,
+    deleteVendor,
+    createVendor,
+    updateVendor
+  }
 )(Vendors);

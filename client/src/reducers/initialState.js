@@ -33,6 +33,7 @@ export const initialVendors = {
   isLoading: false,
   isCreating: false,
   isDeleting: false,
+  isUpdating: false,
   vendors: [],
 };
 

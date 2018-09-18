@@ -9,13 +9,17 @@ import {
   CREATE_VENDOR_LOADING,
   DELETE_VENDOR_SUCCESS,
   DELETE_VENDOR_FAILURE,
-  DELETE_VENDOR_LOADING
+  DELETE_VENDOR_LOADING,
+  UPDATE_VENDOR_SUCCESS,
+  UPDATE_VENDOR_FAILURE,
+  UPDATE_VENDOR_LOADING
 } from '../../actions/actionTypes';
 import {
   baseUrl,
   fetchVendors,
   createVendor,
-  deleteVendor
+  deleteVendor,
+  updateVendor
 } from '../../actions/vendorsAction';
 import {
   newVendor,
@@ -242,6 +246,81 @@ describe('Vendors Action', () => {
       const store = mockStore({});
       await store
         .dispatch(deleteVendor(vendors[0].id))
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions);
+        });
+      done();
+    });
+  });
+
+
+  describe('Update Vendor', () => {
+    beforeEach(() => moxios.install());
+    afterEach(() => moxios.uninstall());
+
+    it('update vendor success', async (done) => {
+      moxios.stubRequest(`${baseUrl}/user/token`, {
+        status: 200,
+        response: {}
+      });
+      
+      moxios.stubRequest(`${baseUrl}/admin/vendor/${createdVendor.id}`, {
+        status: 200,
+        response: {
+          vendor: [createdVendor]
+        }
+      });
+
+      const expectedActions = [
+        {
+          type: UPDATE_VENDOR_LOADING,
+          payload: true,
+        },
+        {
+          type: UPDATE_VENDOR_SUCCESS,
+          payload: createdVendor
+        },
+        {
+          type: UPDATE_VENDOR_LOADING,
+          payload: false,
+        }
+      ];
+      const store = mockStore({});
+      await store
+        .dispatch(updateVendor(createdVendor))
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions);
+        });
+      done();
+    });
+    it('return vendor failure', async (done) => {
+      moxios.stubRequest(`${baseUrl}/user/token`, {
+        status: 200,
+        response: {}
+      });
+
+      moxios.stubRequest(`${baseUrl}/admin/vendor/${createdVendor.id}`, {
+        status: 401,
+        response: {}
+      });
+
+      const expectedActions = [
+        {
+          type: UPDATE_VENDOR_LOADING,
+          payload: true,
+        },
+        {
+          type: UPDATE_VENDOR_FAILURE,
+          payload: new Error('Request failed with status code 401'),
+        },
+        {
+          type: UPDATE_VENDOR_LOADING,
+          payload: false,
+        }
+      ];
+      const store = mockStore({});
+      await store
+        .dispatch(updateVendor(createdVendor))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions);
         });

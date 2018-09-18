@@ -8,7 +8,10 @@ import {
   CREATE_VENDOR_LOADING,
   DELETE_VENDOR_SUCCESS,
   DELETE_VENDOR_FAILURE,
-  DELETE_VENDOR_LOADING
+  DELETE_VENDOR_LOADING,
+  UPDATE_VENDOR_SUCCESS,
+  UPDATE_VENDOR_FAILURE,
+  UPDATE_VENDOR_LOADING
 } from '../../actions/actionTypes';
 import { initialVendors } from '../../reducers/initialState';
 import vendorsReducer from '../../reducers/vendorsReducer';
@@ -121,6 +124,7 @@ describe('Vendors Reducer', () => {
       const newState = vendorsReducer(initialVendors, action);
       expect(newState.isDeleting).toEqual(true);
     });
+
     it('should set isDeleting state to false when request is resolved', () => {
       const action = {
         type: DELETE_VENDOR_LOADING,
@@ -147,6 +151,49 @@ describe('Vendors Reducer', () => {
     it('should return the previous state', () => {
       const action = {
         type: DELETE_VENDOR_FAILURE,
+        payload: {},
+      };
+      const newState = vendorsReducer(initialVendors, action);
+      expect(newState.vendors).toEqual([]);
+    });
+  });
+
+  describe('UPDATE_VENDOR_LOADING', () => {
+    it('should set isUpdating state to true when deleting vendor', () => {
+      const action = {
+        type: UPDATE_VENDOR_LOADING,
+        payload: true,
+      };
+      const newState = vendorsReducer(initialVendors, action);
+      expect(newState.isUpdating).toEqual(true);
+    });
+    
+    it('should set isUpdating state to false when request is resolved', () => {
+      const action = {
+        type: UPDATE_VENDOR_LOADING,
+        payload: false,
+      };
+      const newState = vendorsReducer(initialVendors, action);
+      expect(newState.isUpdating).toEqual(false);
+    });
+  });
+
+  describe('UPDATE_VENDOR_SUCCESS', () => {
+    it('should update vendors in the store', () => {
+      const action = {
+        type: UPDATE_VENDOR_SUCCESS,
+        payload: vendors[0],
+      };
+
+      const newState = vendorsReducer(initialVendors, action);
+      expect(newState.vendors).toEqual([vendors[0]]);
+    });
+  });
+
+  describe('UPDATE_VENDOR_FAILURE', () => {
+    it('should return the previous state', () => {
+      const action = {
+        type: UPDATE_VENDOR_FAILURE,
         payload: {},
       };
       const newState = vendorsReducer(initialVendors, action);

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 const DeleteVendorModal = ({
-  closeDeleteModal,
+  closeModal,
   isDeleting,
   deleteVendor,
   displayDeleteModal,
@@ -27,7 +27,7 @@ const DeleteVendorModal = ({
                 className="grayed upper" 
                 type="button"
                 disabled={isDeleting}
-                onClick={closeDeleteModal}
+                onClick={closeModal}
               >
                 Cancel
               </button>
@@ -50,7 +50,7 @@ const DeleteVendorModal = ({
 );
 
 DeleteVendorModal.propTypes = {
-  closeDeleteModal: PropTypes.func,
+  closeModal: PropTypes.func,
   displayDeleteModal: PropTypes.bool,
   isDeleting: PropTypes.bool,
   deleteVendor: PropTypes.func,

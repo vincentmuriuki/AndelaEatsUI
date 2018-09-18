@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-
 import React, { Component } from 'react';
 import { mount } from 'enzyme';
 import DeleteVendorModal from '../../../../components/Admin/Vendors/DeleteVendorModal';

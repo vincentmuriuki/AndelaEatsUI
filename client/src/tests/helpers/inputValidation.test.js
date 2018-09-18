@@ -1,9 +1,11 @@
+/* eslint-disable no-undef */
 import inputValidation from "../../helpers/inputValidation";
 
 const FormField = {
   lastName: "Chibueze",
   firstName: "Ayogu",
-  errors: {}
+  errors: {},
+  id: '1234566'
 };
 
 test('Validate form field', () => {
