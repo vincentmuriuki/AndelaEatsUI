@@ -41,3 +41,8 @@ export const mealOrders = {
   isLoading: false,
   orders: []
 };
+
+export const initialMealItems = {
+  isLoading: false,
+  meals: [],
+};

@@ -1,35 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const MealCard = (props) => {
-  const {
-    name,
-    image,
-    category
-  } = props;
+/**
+ * @function MealCard
+ * 
+ * @param {object} { name, image, category }
+ * 
+ * @returns {JSX}
+ */
+const MealCard = ({ name, image, category }) => (
+  <div className="meal-card">
+    <div
+      className="image"
+      style={{ backgroundImage: `url(${image})` }}
+    />
 
-  return (
-    <div className="meal-card">
-      <div
-        className="image"
-        style={{ backgroundImage: `url(${image})` }}
-      />
+    <div className="label-container">
+      <span>{category}</span>
+    </div>
 
-      <div className="label-container">
-        <span>{category}</span>
-      </div>
+    <div className="details">
+      <div>{name}</div>
 
-      <div className="details">
-        <div>{name}</div>
-
-        <div className="controls">
-          <button type="button">Edit</button>
-          <button type="button">Delete</button>
-        </div>
+      <div className="controls">
+        <button type="button">Edit</button>
+        <button type="button">Delete</button>
       </div>
     </div>
-  );
-}
+  </div>
+);
 
 MealCard.propTypes = {
   image: PropTypes.string,

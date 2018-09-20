@@ -1,6 +1,10 @@
 import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import MealCard from './MealCard';
 import { AddMealModal } from './AddMealModal';
+import Loader from '../../common/Loader/Loader';
+import { fetchMealItems } from '../../../actions/admin/mealItemsAction';
 
 /**
  * 
@@ -10,35 +14,37 @@ import { AddMealModal } from './AddMealModal';
  * 
  * @extends Component
  */
-class Meals extends Component {
+export class Meals extends Component {
   constructor(props) {
     super(props);
-
-    /**
-     * @description
-     * populate meals dummy array for design check
-     * this should be removed first when loading meals from backend
-     * and update test case that checks the number of loaded meals
-     */
-    this.dummyMeals = [];
-    let index;
-    for (index = 0; index < 8; index += 1) {
-      this.dummyMeals.push({
-        id: index,
-        name: 'Ugeli',
-        vendor: 'Kempiski',
-        vendorUrl: 'https://www.google.com',
-        category: 'Main meal',
-        image: '../../../assets/images/side_img.jpg'
-      });
-    }
-    
     this.state = {
       addModalShow: false
     };
 
     this.toggleAddModal = this.toggleAddModal.bind(this);
   }
+
+  componentDidMount() {
+    this.props.fetchMealItems();
+  }
+
+  /**
+   * @method renderMeal
+   *
+   * @memberof Meals
+   *
+   * @param {object} meal
+   *
+   * @returns {JSX}
+   */
+  renderMeal = (meal) => (
+    <MealCard
+      key={meal.id}
+      name={meal.nameOfMeal}
+      image={meal.image}
+      category={meal.mealType}
+    />
+  );
 
   toggleAddModal() {
     const { addModalShow } = this.state;
@@ -49,13 +55,22 @@ class Meals extends Component {
   }
 
   render() {
+    const { isLoading, meals } = this.props;
+
+    if (!isLoading && !meals.length) {
+      return (
+        <div className="no-content">No meal has been added yet :-(</div>
+      );
+    }
+
     return (
       <Fragment>
         <AddMealModal
           toggleAddModal={this.toggleAddModal}
           show={this.state.addModalShow}
         />
-        <div id="admin-meals">
+        { isLoading && (<Loader />) }
+        <div className={`${isLoading && 'blurred'}`} id="admin-meals">
           <header>
             <div>
               <span className="title pull-left">Meals</span>
@@ -71,18 +86,7 @@ class Meals extends Component {
           
           <main>
             <div>
-              { this.dummyMeals.map((meal) => (
-                <MealCard
-                  key={meal.id}
-                  name={meal.name}
-                  image={meal.image}
-                  category={meal.category}
-                  vendor={{
-                    name: meal.vendor,
-                    url: meal.vendorUrl
-                  }}
-                />
-              )) }
+              { meals.map((meal) => this.renderMeal(meal)) }
             </div>
           </main>
         </div>
@@ -91,4 +95,15 @@ class Meals extends Component {
   }
 }
 
-export default Meals;
+const mapStateToProps = ({ mealItems }) => ({
+  meals: mealItems.meals,
+  isLoading: mealItems.isLoading,
+});
+
+Meals.propTypes = {
+  fetchMealItems: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  meals: PropTypes.arrayOf(PropTypes.shape({})),
+};
+
+export default connect(mapStateToProps, { fetchMealItems })(Meals);

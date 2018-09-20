@@ -253,44 +253,43 @@ export class Vendors extends Component {
       modalTitle,
       modalButtontext
     } = this.state;
+
+    if (!isLoading && !vendors.length) {
+      return (
+        <div className="no-content">No vendor has been added yet :-(</div>
+      );
+    }
+
     return (
       <div>
         { isLoading && <Loader /> }
-        { (!isLoading && vendors.length) ? (
-          <div className="table-wrapper">
-            <div className="vendors-header">
-              <h3 className="vendor-menu">Menu</h3>
-              <button 
-                type="button"
-                name="addVendor" 
-                className="vendor-button"
-                onClick={this.showAddModal}
-              >
-                Add Vendor
-              </button>
-            </div>
+        <div className={`${isLoading && 'blurred'} table-wrapper`}>
+          <div className="vendors-header">
+            <h3 className="vendor-menu">Menu</h3>
+            <button 
+              type="button"
+              name="addVendor" 
+              className="vendor-button"
+              onClick={this.showAddModal}
+            >
+              Add Vendor
+            </button>
+          </div>
 
-            <div className="table-header custom-row">
-              <div className="custom-col-4">Name</div>
-              <div className="custom-col-2">Contacts</div>
-              <div className="custom-col-2">Start Date</div>
-              <div className="custom-col-2">End Date</div>
-              <div className="custom-col-3">Rating</div>
-              <div className="custom-col-3">Options</div>
-            </div>
+          <div className="table-header custom-row">
+            <div className="custom-col-4">Name</div>
+            <div className="custom-col-2">Contacts</div>
+            <div className="custom-col-2">Start Date</div>
+            <div className="custom-col-2">End Date</div>
+            <div className="custom-col-3">Rating</div>
+            <div className="custom-col-3">Options</div>
+          </div>
 
-            { vendors.map((vendor) => (
-              this.renderVendor(vendor))
-            )}
-          </div>) : null
-        }
-        {
-          !isLoading && !vendors.length && (
-            <div className="no-content">
-              No vendor has been added yet :-(
-            </div>
-          )
-        }
+          { vendors.map((vendor) => (
+            this.renderVendor(vendor))
+          )}
+
+        </div>
         <ToastContainer />
         <Modal
           displayModal={displayModal}

@@ -5,18 +5,7 @@ import { render } from 'react-testing-library';
 import MealCard from '../../../../components/Admin/Meals/MealCard';
 
 describe('MealCard Component', () => {
-  /** 
-   * mealInfo values are set to null as focus is on
-   * presentation not values displayed
-   */
-  const mealInfo = {
-    vendor: {
-      name: null,
-      url: null
-    }
-  };
-
-  const { container } = render(<MealCard {...mealInfo} />);
+  const { container } = render(<MealCard />);
   it('should have image div', () => {
     const elements = container.getElementsByClassName('image');
     expect(elements.length).toBe(1);
