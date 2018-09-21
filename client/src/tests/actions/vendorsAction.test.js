@@ -23,7 +23,8 @@ import {
 } from '../../actions/vendorsAction';
 import {
   newVendor,
-  createdVendor
+  createdVendor,
+  update
 } from '../__mocks__/mockNewVendor';
 import vendors from '../__mocks__/mockVendors';
 import { Vendors } from '../../components/Admin/Vendors/Vendors';
@@ -287,7 +288,7 @@ describe('Vendors Action', () => {
       ];
       const store = mockStore({});
       await store
-        .dispatch(updateVendor(createdVendor))
+        .dispatch(updateVendor(update.id, update.vendor))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions);
         });
@@ -320,7 +321,7 @@ describe('Vendors Action', () => {
       ];
       const store = mockStore({});
       await store
-        .dispatch(updateVendor(createdVendor))
+        .dispatch(updateVendor(update.id, update.vendor))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions);
         });

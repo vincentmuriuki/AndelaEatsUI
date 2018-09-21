@@ -249,3 +249,11 @@
     }
   }
 }
+
+/* Delete Meal */
+#delete-meal-modal {
+  .modal-content{
+    width: 95%;
+    max-width: px-to-rem(420px);
+  }
+}

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toastSuccess, toastError } from '../../helpers/toast';
 import {
   FETCH_MEAL_ITEMS_LOADING,
   FETCH_MEAL_ITEMS_SUCCESS,
@@ -6,8 +7,12 @@ import {
   SET_ADD_MEAL_ERRORS,
   SET_ADD_MEAL_LOADING,
   ADD_MEAL_ITEM_SUCCESS,
-  SHOW_ADD_MEAL_MODAL
+  SHOW_ADD_MEAL_MODAL,
+  DELETE_MEAL_ITEM_LOADING,
+  DELETE_MEAL_ITEM_SUCCESS,
+  DELETE_MEAL_ITEM_FAILURE,
 } from '../actionTypes';
+
 
 export const baseUrl = 'https://private-b7e73-andelaeats.apiary-mock.com';
 
@@ -78,5 +83,35 @@ export const addMealItem = formData => dispatch => {
     })
     .catch(() => {
       dispatch(setAddMealLoading(false));
+    });
+};
+
+export const deleteMealItemLoading = isDeleting => ({
+  type: DELETE_MEAL_ITEM_LOADING,
+  payload: isDeleting,
+});
+
+export const deleteMealItemFailure = error => ({
+  type: DELETE_MEAL_ITEM_FAILURE,
+  payload: error
+});
+
+export const deleteMealItemSuccess = mealItemId => ({
+  type: DELETE_MEAL_ITEM_SUCCESS,
+  payload: mealItemId,
+});
+
+export const deleteMealItem = (mealItemId) => dispatch => {
+  dispatch(deleteMealItemLoading(true));
+  return axios.delete(`${baseUrl}/admin/meal-items/${mealItemId}`)
+    .then(() => {
+      toastSuccess("Deleted successfully");
+      dispatch(deleteMealItemSuccess(mealItemId));
+      dispatch(deleteMealItemLoading(false));
+    })
+    .catch((error) => {
+      toastError(error.message);
+      dispatch(deleteMealItemFailure(error));
+      dispatch(deleteMealItemLoading(false));
     });
 };

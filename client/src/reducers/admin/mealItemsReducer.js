@@ -5,9 +5,12 @@ import {
   SET_ADD_MEAL_ERRORS,
   SET_ADD_MEAL_LOADING,
   ADD_MEAL_ITEM_SUCCESS,
-  SHOW_ADD_MEAL_MODAL
+  SHOW_ADD_MEAL_MODAL,
+  DELETE_MEAL_ITEM_LOADING,
+  DELETE_MEAL_ITEM_SUCCESS,
+  DELETE_MEAL_ITEM_FAILURE
 } from '../../actions/actionTypes';
-
+import filter from '../../helpers/filter';
 import { initialMealItems } from '../initialState';
 
 const mealItemsReducer = (state = initialMealItems, action) => {
@@ -16,7 +19,15 @@ const mealItemsReducer = (state = initialMealItems, action) => {
       return { ...state, isLoading: action.payload };
     case FETCH_MEAL_ITEMS_SUCCESS:
       return { ...state, meals: action.payload };
+    case DELETE_MEAL_ITEM_LOADING:
+      return { ...state, isDeleting: action.payload };
+    case DELETE_MEAL_ITEM_SUCCESS:
+      return {
+        ...state,
+        meals: filter(state.meals, action.payload)
+      };
     case FETCH_MEAL_ITEMS_FAILURE:
+    case DELETE_MEAL_ITEM_FAILURE:
       return state;
     case SET_ADD_MEAL_ERRORS:
       return {

@@ -75,7 +75,7 @@ describe('Vendors Component', () => {
     expect(closeModalSpy).toHaveBeenCalled();
   });
 
-  it('should call closeDeleteModal method', () => {
+  it('should call showDeleteModal method', () => {
     const showDeleteModalSpy = jest
       .spyOn(wrapper.instance(), 'showDeleteModal');
     wrapper.instance().showDeleteModal(modalContent);

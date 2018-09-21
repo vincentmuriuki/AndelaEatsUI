@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toastSuccess, toastError } from '../helpers/toast';
 import {
   FETCH_VENDORS_SUCCESS,
   FETCH_VENDORS_FAILURE,
@@ -77,7 +77,7 @@ export const createVendorFailure = error => ({
 });
 
 
-export const createVendor = (vendor) => dispatch => {
+export const createVendor = (vendorDetails) => dispatch => {
   dispatch(createVendorLoading(true));
 
   return axios.post(`${baseUrl}/user/token`, {
@@ -88,31 +88,21 @@ export const createVendor = (vendor) => dispatch => {
       const { token } = res.data;
       axios.defaults.headers.Authorization = `Bearer ${token}`;
       
-      return axios.post(`${baseUrl}/admin/vendor`, {
-        vendorName: vendor.vendorName,
-        vendorAddress: vendor.vendorAddress,
-        contactPerson: vendor.contactPerson,
-        phoneNumber: vendor.phoneNumber
-      })
+      return axios.post(`${baseUrl}/admin/vendor`, vendorDetails)
         .then((res) => {
-          toast.success(res.data.message, {
-            position: toast.POSITION.TOP_CENTER
-          });
-          dispatch(createVendorSuccess(res.data.vendor[0]));
+          const { message, vendor } = res.data;
+          toastSuccess(message);
+          dispatch(createVendorSuccess(vendor[0]));
           dispatch(createVendorLoading(false));
         })
         .catch((error) => {
-          toast.error(error.response.data.message, {
-            position: toast.POSITION.TOP_CENTER
-          });
+          toastError(error.response.data.message);
           dispatch(createVendorFailure(error));
           dispatch(createVendorLoading(false));
         });
     })
     .catch((error) => {
-      toast.error(error.message, {
-        position: toast.POSITION.TOP_CENTER
-      });
+      toastError(error.message);
       dispatch(createVendorFailure(error));
       dispatch(createVendorLoading(false));
     });
@@ -149,24 +139,18 @@ export const deleteVendor = (vendorId) => dispatch => {
 
       return axios.delete(`${baseUrl}/admin/vendor/${vendorId}`)
         .then((res) => {
-          toast.success(res.data.message, {
-            position: toast.POSITION.TOP_CENTER
-          });
+          toastSuccess(res.data.message);
           dispatch(deleteVendorSuccess(vendorId));
           dispatch(deleteVendorLoading(false));
         })
         .catch((error) => {
-          toast.error(error.response.data.message, {
-            position: toast.POSITION.TOP_CENTER
-          });
+          toastError(error.response.data.message);
           dispatch(deleteVendorFailure(error));
           dispatch(deleteVendorLoading(false));
         });
     })
     .catch((error) => {
-      toast.error(error.message, {
-        position: toast.POSITION.TOP_CENTER
-      });
+      toastError(error.message);
       dispatch(deleteVendorFailure(error));
       dispatch(deleteVendorLoading(false));
     });
@@ -190,7 +174,7 @@ export const updateVendorFailure = error => ({
 });
 
 
-export const updateVendor = vendor => dispatch => {
+export const updateVendor = (id, vendorDetails) => dispatch => {
   dispatch(updateVendorLoading(true));
 
   return axios.post(`${baseUrl}/user/token`, {
@@ -201,31 +185,21 @@ export const updateVendor = vendor => dispatch => {
       const { token } = res.data;
       axios.defaults.headers.Authorization = `Bearer ${token}`;
 
-      return axios.put(`${baseUrl}/admin/vendor/${vendor.id}`, {
-        vendorName: vendor.vendorName,
-        vendorAddress: vendor.vendorAddress,
-        contactPerson: vendor.contactPerson,
-        phoneNumber: vendor.phoneNumber
-      })
+      return axios.put(`${baseUrl}/admin/vendor/${id}`, vendorDetails)
         .then((res) => {
-          toast.success(res.data.message, {
-            position: toast.POSITION.TOP_CENTER
-          });
-          dispatch(updateVendorSuccess(res.data.vendor[0]));
+          const { message, vendor } = res.data;
+          toastSuccess(message);
+          dispatch(updateVendorSuccess(vendor[0]));
           dispatch(updateVendorLoading(false));
         })
         .catch((error) => {
-          toast.error(error.response.data.message, {
-            position: toast.POSITION.TOP_CENTER
-          });
+          toastError(error.response.data.message);
           dispatch(updateVendorFailure(error));
           dispatch(updateVendorLoading(false));
         });
     })
     .catch((error) => {
-      toast.error(error.message, {
-        position: toast.POSITION.TOP_CENTER
-      });
+      toastError(error.message);
       dispatch(updateVendorFailure(error));
       dispatch(updateVendorLoading(false));
     });

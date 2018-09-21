@@ -44,6 +44,7 @@ export const mealOrders = {
 
 export const initialMealItems = {
   isLoading: false,
+  isDeleting: false,
   meals: [],
 
   addMealModal: {

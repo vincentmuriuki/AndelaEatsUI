@@ -14,3 +14,13 @@ export const createdVendor = {
   vendorAddress: "No 233, Ikorodu road, Lagos",
   vendorName: "Obito"
 };
+
+export const update = {
+  id: "-LMFc65ukgiTtYCIK9Gj",
+  vendor: {
+    contactPerson: "Chibueze",
+    phoneNumber: "01234567890",
+    vendorAddress: "No 233, Ikorodu road, Lagos",
+    vendorName: "Obito"
+  }
+};

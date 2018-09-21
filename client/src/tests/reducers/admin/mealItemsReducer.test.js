@@ -6,7 +6,10 @@ import {
   SET_ADD_MEAL_ERRORS,
   SHOW_ADD_MEAL_MODAL,
   SET_ADD_MEAL_LOADING,
-  ADD_MEAL_ITEM_SUCCESS
+  ADD_MEAL_ITEM_SUCCESS,
+  DELETE_MEAL_ITEM_LOADING,
+  DELETE_MEAL_ITEM_SUCCESS,
+  DELETE_MEAL_ITEM_FAILURE,
 } from '../../../actions/actionTypes';
 import mealItemsReducer from '../../../reducers/admin/mealItemsReducer';
 import { initialMealItems } from '../../../reducers/initialState';
@@ -109,6 +112,52 @@ describe('Admin:: Meal Items Reducer', () => {
 
       newState = mealItemsReducer(initialMealItems, action);
       expect(newState.meals.includes(mealItems[0])).toBe(true);
+    });
+  });
+      
+  describe('DELETE_MEAL_ITEM_LOADING', () => {
+    it('should set isDeleting state to true when making api request', () => {
+      action = {
+        type: DELETE_MEAL_ITEM_LOADING,
+        payload: true,
+      };
+
+      newState = mealItemsReducer(initialMealItems, action);
+      expect(newState.isDeleting).toBe(true);
+    });
+
+    it('should set isDeleting state to false when request is resolved', () => {
+      action = {
+        type: DELETE_MEAL_ITEM_LOADING,
+        payload: false,
+      };
+
+      newState = mealItemsReducer(initialMealItems, action);
+      expect(newState.isDeleting).toBe(false);
+    });
+  });
+
+  describe('DELETE_MEAL_ITEMS_SUCCESS', () => {
+    it('should update the mealItems state in the store', () => {
+      action = {
+        type: DELETE_MEAL_ITEM_SUCCESS,
+        payload: mealItems[0].id,
+      };
+
+      newState = mealItemsReducer(initialMealItems, action);
+      expect(newState.meals).toEqual([]);
+    });
+  });
+
+  describe('DELETE_MEAL_ITEM_FAILURE', () => {
+    it('should return the previous state of mealItems', () => {
+      action = {
+        type: DELETE_MEAL_ITEM_FAILURE,
+        payload: {}
+      };
+
+      newState = mealItemsReducer(newState, action);
+      expect(newState.meals).toEqual([]);
     });
   });
 });

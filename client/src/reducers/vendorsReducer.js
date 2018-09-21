@@ -12,7 +12,7 @@ import {
   UPDATE_VENDOR_FAILURE,
   UPDATE_VENDOR_LOADING
 } from '../actions/actionTypes';
-import filterDeletedVendor from '../helpers/filterDeletedVendor';
+import filter from '../helpers/filter';
 import findIndex from '../helpers/findindex';
 
 import { initialVendors } from './initialState';
@@ -34,7 +34,7 @@ const vendorsReducer = (state = initialVendors, action) => {
     case DELETE_VENDOR_SUCCESS:
       return {
         ...state,
-        vendors: filterDeletedVendor(state.vendors, action.payload)
+        vendors: filter(state.vendors, action.payload)
       };
     case UPDATE_VENDOR_SUCCESS:
       index = findIndex(state.vendors, action.payload.id);

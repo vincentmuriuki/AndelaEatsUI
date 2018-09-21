@@ -38,16 +38,6 @@ export class Vendors extends Component {
   constructor(props) {
     super(props);
     this.state = Vendors.initialState();
-
-    this.onChange = this.onChange.bind(this);
-    this.showAddModal = this.showAddModal.bind(this);
-    this.showEditModal = this.showEditModal.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.showDeleteModal = this.showDeleteModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-    this.deleteVendor = this.deleteVendor.bind(this);
-    this.clearErrors = this.clearErrors.bind(this);
-    this.formValidation = this.formValidation.bind(this);
   }
   
   componentDidMount() {
@@ -63,7 +53,7 @@ export class Vendors extends Component {
    * 
    * @returns {void}
    */
-  onChange(event) {
+  onChange = (event) => {
     event.preventDefault();
     this.setState({
       [event.target.name]: event.target.value
@@ -79,7 +69,7 @@ export class Vendors extends Component {
    * 
    * @returns {void}
    */
-  showAddModal() {
+  showAddModal = () => {
     this.setState({
       modalTitle: "ADD VENDOR",
       modalButtontext: "Add Vendor",
@@ -97,7 +87,7 @@ export class Vendors extends Component {
    * 
    * @returns {void}
    */
-  showEditModal(vendor) {
+  showEditModal = (vendor) => {
     this.setState({
       modalTitle: "EDIT VENDOR",
       modalButtontext: "Update",
@@ -120,12 +110,19 @@ export class Vendors extends Component {
    * 
    * @returns {void}
    */
-  handleSubmit() {
+  handleSubmit = () => {
+    const { id } = this.state;
+    const vendor = {
+      vendorName: this.state.vendorName,
+      vendorAddress: this.state.vendorAddress,
+      contactPerson: this.state.contactPerson,
+      phoneNumber: this.state.phoneNumber
+    };
     if (this.state.modalTitle === "ADD VENDOR") {
-      this.props.createVendor(this.state)
+      this.props.createVendor(vendor)
         .then(() => this.closeModal());
     } else {
-      this.props.updateVendor(this.state)
+      this.props.updateVendor(id, vendor)
         .then(() => this.closeModal());
     }
   }
@@ -139,7 +136,7 @@ export class Vendors extends Component {
    * 
    * @returns {void}
    */
-  formValidation(event) {
+  formValidation = (event) => {
     event.preventDefault();
     const err = inputValidation(this.state);
     if (err.isEmpty) {
@@ -160,7 +157,7 @@ export class Vendors extends Component {
    * 
    * @returns {void}
    */
-  clearErrors() {
+  clearErrors = () => {
     this.setState({ errors: {} });
   }
   
@@ -174,7 +171,7 @@ export class Vendors extends Component {
    * 
    * @returns {void}
    */
-  deleteVendor(vendorId) {
+  deleteVendor = (vendorId) => {
     this.props.deleteVendor(vendorId)
       .then(() => this.closeModal());
   }
@@ -189,7 +186,7 @@ export class Vendors extends Component {
    * 
    * @returns {void}
    */
-  showDeleteModal(vendor) {
+  showDeleteModal = (vendor) => {
     this.setState({
       displayDeleteModal: true,
       modalContent: vendor
@@ -206,7 +203,7 @@ export class Vendors extends Component {
    * 
    * @returns {void}
    */
-  closeModal() {
+  closeModal = () => {
     this.setState(Vendors.initialState());
   }
 
@@ -317,22 +314,14 @@ export class Vendors extends Component {
   }
 }
 
-const mapStateToProps = ({ allVendors }) => {
-  const {
-    isLoading,
-    isCreating,
-    isDeleting,
-    isUpdating,
-    vendors
-  } = allVendors;
-  return {
-    isLoading,
-    isCreating,
-    isDeleting,
-    isUpdating,
-    vendors
-  };
-};
+const mapStateToProps = ({ allVendors }) => ({
+  isLoading: allVendors.isLoading,
+  isCreating: allVendors.isCreating,
+  isDeleting: allVendors.isDeleting,
+  isUpdating: allVendors.isUpdating,
+  vendors: allVendors.vendors
+});
+   
 
 Vendors.propTypes = {
   deleteVendor: PropTypes.func,
