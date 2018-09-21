@@ -254,12 +254,6 @@ export class Vendors extends Component {
       modalButtontext
     } = this.state;
 
-    if (!isLoading && !vendors.length) {
-      return (
-        <div className="no-content">No vendor has been added yet :-(</div>
-      );
-    }
-
     return (
       <div>
         { isLoading && <Loader /> }
@@ -276,6 +270,7 @@ export class Vendors extends Component {
             </button>
           </div>
 
+          { vendors.length > 0 && (
           <div className="table-header custom-row">
             <div className="custom-col-4">Name</div>
             <div className="custom-col-2">Contacts</div>
@@ -283,10 +278,13 @@ export class Vendors extends Component {
             <div className="custom-col-2">End Date</div>
             <div className="custom-col-3">Rating</div>
             <div className="custom-col-3">Options</div>
-          </div>
+          </div>)}
 
           { vendors.map((vendor) => (
             this.renderVendor(vendor))
+          )}
+          { !isLoading && !vendors.length && (
+            <div className="no-content">No vendor has been added yet :-(</div>
           )}
 
         </div>
@@ -325,14 +323,14 @@ const mapStateToProps = ({ allVendors }) => {
     isCreating,
     isDeleting,
     isUpdating,
-    vendors 
+    vendors
   } = allVendors;
   return {
     isLoading,
     isCreating,
     isDeleting,
     isUpdating,
-    vendors 
+    vendors
   };
 };
 

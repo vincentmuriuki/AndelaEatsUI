@@ -40,7 +40,7 @@ export class Meals extends Component {
   renderMeal = (meal) => (
     <MealCard
       key={meal.id}
-      name={meal.nameOfMeal}
+      name={meal.name}
       image={meal.image}
       category={meal.mealType}
     />
@@ -56,12 +56,6 @@ export class Meals extends Component {
 
   render() {
     const { isLoading, meals } = this.props;
-
-    if (!isLoading && !meals.length) {
-      return (
-        <div className="no-content">No meal has been added yet :-(</div>
-      );
-    }
 
     return (
       <Fragment>
@@ -87,6 +81,9 @@ export class Meals extends Component {
           <main>
             <div>
               { meals.map((meal) => this.renderMeal(meal)) }
+              { !isLoading && !meals.length && (
+                <div className="no-content">No meal has been added yet :-(</div>
+              )}
             </div>
           </main>
         </div>

@@ -17,7 +17,7 @@ describe('Admin::Meal Items Action', () => {
     afterEach(() => moxios.uninstall());
 
     it('fetch meal items success', async (done) => {
-      moxios.stubRequest(`${baseUrl}/admin/meal-item`, {
+      moxios.stubRequest(`${baseUrl}/admin/meal-items`, {
         status: 200,
         response: {
           mealItems
@@ -50,7 +50,7 @@ describe('Admin::Meal Items Action', () => {
     });
 
     it('fetch meal items failure', async (done) => {
-      moxios.stubRequest(`${baseUrl}/admin/meal-item`, {
+      moxios.stubRequest(`${baseUrl}/admin/meal-items`, {
         status: 401,
       });
   

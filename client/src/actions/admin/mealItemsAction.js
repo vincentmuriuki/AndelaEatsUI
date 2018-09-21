@@ -24,7 +24,7 @@ export const fetchMealItemsSuccess = mealItems => ({
 
 export const fetchMealItems = () => dispatch => {
   dispatch(fectchMealItemsLoading(true));
-  return axios.get(`${baseUrl}/admin/meal-item`)
+  return axios.get(`${baseUrl}/admin/meal-items`)
     .then((response) => {
       const { mealItems } = response.data;
       dispatch(fetchMealItemsSuccess(mealItems));

@@ -96,14 +96,14 @@ export const createVendor = (vendor) => dispatch => {
       })
         .then((res) => {
           toast.success(res.data.message, {
-            position: toast.POSITION.TOP_RIGHT
+            position: toast.POSITION.TOP_CENTER
           });
           dispatch(createVendorSuccess(res.data.vendor[0]));
           dispatch(createVendorLoading(false));
         })
         .catch((error) => {
           toast.error(error.response.data.message, {
-            position: toast.POSITION.TOP_RIGHT
+            position: toast.POSITION.TOP_CENTER
           });
           dispatch(createVendorFailure(error));
           dispatch(createVendorLoading(false));
@@ -111,7 +111,7 @@ export const createVendor = (vendor) => dispatch => {
     })
     .catch((error) => {
       toast.error(error.message, {
-        position: toast.POSITION.TOP_RIGHT
+        position: toast.POSITION.TOP_CENTER
       });
       dispatch(createVendorFailure(error));
       dispatch(createVendorLoading(false));
@@ -150,14 +150,14 @@ export const deleteVendor = (vendorId) => dispatch => {
       return axios.delete(`${baseUrl}/admin/vendor/${vendorId}`)
         .then((res) => {
           toast.success(res.data.message, {
-            position: toast.POSITION.TOP_RIGHT
+            position: toast.POSITION.TOP_CENTER
           });
           dispatch(deleteVendorSuccess(vendorId));
           dispatch(deleteVendorLoading(false));
         })
         .catch((error) => {
           toast.error(error.response.data.message, {
-            position: toast.POSITION.TOP_RIGHT
+            position: toast.POSITION.TOP_CENTER
           });
           dispatch(deleteVendorFailure(error));
           dispatch(deleteVendorLoading(false));
@@ -165,7 +165,7 @@ export const deleteVendor = (vendorId) => dispatch => {
     })
     .catch((error) => {
       toast.error(error.message, {
-        position: toast.POSITION.TOP_RIGHT
+        position: toast.POSITION.TOP_CENTER
       });
       dispatch(deleteVendorFailure(error));
       dispatch(deleteVendorLoading(false));
@@ -209,14 +209,14 @@ export const updateVendor = vendor => dispatch => {
       })
         .then((res) => {
           toast.success(res.data.message, {
-            position: toast.POSITION.TOP_RIGHT
+            position: toast.POSITION.TOP_CENTER
           });
           dispatch(updateVendorSuccess(res.data.vendor[0]));
           dispatch(updateVendorLoading(false));
         })
         .catch((error) => {
           toast.error(error.response.data.message, {
-            position: toast.POSITION.TOP_RIGHT
+            position: toast.POSITION.TOP_CENTER
           });
           dispatch(updateVendorFailure(error));
           dispatch(updateVendorLoading(false));
@@ -224,7 +224,7 @@ export const updateVendor = vendor => dispatch => {
     })
     .catch((error) => {
       toast.error(error.message, {
-        position: toast.POSITION.TOP_RIGHT
+        position: toast.POSITION.TOP_CENTER
       });
       dispatch(updateVendorFailure(error));
       dispatch(updateVendorLoading(false));
