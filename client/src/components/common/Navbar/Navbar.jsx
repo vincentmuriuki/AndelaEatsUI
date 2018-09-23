@@ -119,8 +119,8 @@ Navbar.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }),
-  isAdmin: PropTypes.bool.isRequired,
-  adminDashboard: PropTypes.bool.isRequired
+  isAdmin: PropTypes.bool,
+  adminDashboard: PropTypes.bool
 };
 
 export default connect(mapStateToProps, 

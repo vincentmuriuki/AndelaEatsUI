@@ -2,7 +2,11 @@
 import {
   FETCH_MEAL_ITEMS_LOADING,
   FETCH_MEAL_ITEMS_SUCCESS,
-  FETCH_MEAL_ITEMS_FAILURE
+  FETCH_MEAL_ITEMS_FAILURE,
+  SET_ADD_MEAL_ERRORS,
+  SHOW_ADD_MEAL_MODAL,
+  SET_ADD_MEAL_LOADING,
+  ADD_MEAL_ITEM_SUCCESS
 } from '../../../actions/actionTypes';
 import mealItemsReducer from '../../../reducers/admin/mealItemsReducer';
 import { initialMealItems } from '../../../reducers/initialState';
@@ -57,6 +61,54 @@ describe('Admin:: Meal Items Reducer', () => {
 
       newState = mealItemsReducer(newState, action);
       expect(newState.meals).toEqual(mealItems);
+    });
+  });
+
+  describe('SET_ADD_MEAL_ERRORS', () => {
+    it('should set form submit errors', () => {
+      action = {
+        type: SET_ADD_MEAL_ERRORS,
+        payload: ['name'],
+      };
+
+      newState = mealItemsReducer(initialMealItems, action);
+      expect(newState.addMealModal.errors.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('SHOW_ADD_MEAL_MODAL', () => {
+    it('should set show for add modal to true', () => {
+      action = {
+        type: SHOW_ADD_MEAL_MODAL,
+        payload: true,
+      };
+
+      newState = mealItemsReducer(initialMealItems, action);
+      expect(newState.addMealModal.show).toBe(true);
+    });
+  });
+
+  describe('SET_ADD_MEAL_LOADING', () => {
+    it('should set submit action loading to true', () => {
+      action = {
+        type: SET_ADD_MEAL_LOADING,
+        payload: true,
+      };
+
+      newState = mealItemsReducer(initialMealItems, action);
+      expect(newState.addMealModal.isLoading).toBe(true);
+    });
+  });
+
+  describe('ADD_MEAL_ITEM_SUCCESS', () => {
+    it('should include new meal items into meals array', () => {
+      action = {
+        type: ADD_MEAL_ITEM_SUCCESS,
+        payload: mealItems[0],
+      };
+
+      newState = mealItemsReducer(initialMealItems, action);
+      expect(newState.meals.includes(mealItems[0])).toBe(true);
     });
   });
 });

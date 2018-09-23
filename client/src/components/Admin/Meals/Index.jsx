@@ -2,9 +2,12 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import MealCard from './MealCard';
-import { AddMealModal } from './AddMealModal';
 import Loader from '../../common/Loader/Loader';
-import { fetchMealItems } from '../../../actions/admin/mealItemsAction';
+import {
+  fetchMealItems,
+  showAddMealModal
+} from '../../../actions/admin/mealItemsAction';
+import AddMealModal from './AddMealModal/Index';
 
 /**
  * 
@@ -17,10 +20,6 @@ import { fetchMealItems } from '../../../actions/admin/mealItemsAction';
 export class Meals extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      addModalShow: false
-    };
-
     this.toggleAddModal = this.toggleAddModal.bind(this);
   }
 
@@ -47,21 +46,18 @@ export class Meals extends Component {
   );
 
   toggleAddModal() {
-    const { addModalShow } = this.state;
-  
-    this.setState({
-      addModalShow: !addModalShow
-    });
+    const { addModalShow } = this.props;
+    this.props.showAddMealModal(!addModalShow);
   }
 
   render() {
-    const { isLoading, meals } = this.props;
+    const { addModalShow, isLoading, meals } = this.props;
 
     return (
       <Fragment>
         <AddMealModal
           toggleAddModal={this.toggleAddModal}
-          show={this.state.addModalShow}
+          show={addModalShow}
         />
         { isLoading && (<Loader />) }
         <div className={`${isLoading && 'blurred'}`} id="admin-meals">
@@ -95,12 +91,20 @@ export class Meals extends Component {
 const mapStateToProps = ({ mealItems }) => ({
   meals: mealItems.meals,
   isLoading: mealItems.isLoading,
+  addModalShow: mealItems.addMealModal.show
 });
+
+const mapDispatchToProps = {
+  fetchMealItems,
+  showAddMealModal
+};
 
 Meals.propTypes = {
   fetchMealItems: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
+  showAddMealModal: PropTypes.func.isRequired,
   meals: PropTypes.arrayOf(PropTypes.shape({})),
+  addModalShow: PropTypes.bool
 };
 
-export default connect(mapStateToProps, { fetchMealItems })(Meals);
+export default connect(mapStateToProps, mapDispatchToProps)(Meals);

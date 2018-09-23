@@ -66,3 +66,35 @@ body {
   color: $color-red;
   margin: 0 auto 40px;
 }
+
+.two-col-wrap {
+  display: block;
+  width: 100%;
+
+  div.column {
+    width: calc(50% - 8px);
+    margin-right: 16px;
+    overflow: hidden;
+    float: left;
+  }
+
+  div.column:last-child {
+    margin-right: 0;
+  }
+
+  &:after {
+    display: block;
+    content: '';
+    clear: both;
+  }
+}
+
+.loader-wheel {
+  width: 25px;
+  height: 25px;
+  border: 3px solid $color-blue;
+  border-radius: 50%;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  animation: spin 950ms infinite linear;
+}

@@ -45,4 +45,11 @@ export const mealOrders = {
 export const initialMealItems = {
   isLoading: false,
   meals: [],
+
+  addMealModal: {
+    show: false,
+    addBtnDisabled: false,
+    errors: [],
+    isLoading: false
+  }
 };

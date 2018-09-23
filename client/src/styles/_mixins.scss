@@ -47,17 +47,13 @@
   display: $display;
   border: 1px solid lightgray;
   outline: none;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 100;
   border-radius: 2px;
+  padding: 11px 10px;
 
   @if $display == "block" {
     width: 100%;
-    padding: 10px 2%;
-  }
-
-  @else {
-    padding: 10px;
   }
 }
 
@@ -67,7 +63,6 @@
   display: $display;
   border: 1px solid lightgray;
   outline: none;
-  min-width: 200px;
   font-weight: 100;
   font-size: 15px;
   cursor: pointer;
@@ -75,14 +70,10 @@
   background-size: 20px 20px;
   background-position: 98% 50%;
   border-radius: 2px;
+  padding: 10px;
 
   @if $display == "block" {
-    width: 96%;
-    padding: 10px 2%;
-  }
-
-  @else {
-    padding: 10px;
+    width: calc(100% - 22px);
   }
 }
 

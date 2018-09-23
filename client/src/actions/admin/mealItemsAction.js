@@ -3,6 +3,10 @@ import {
   FETCH_MEAL_ITEMS_LOADING,
   FETCH_MEAL_ITEMS_SUCCESS,
   FETCH_MEAL_ITEMS_FAILURE,
+  SET_ADD_MEAL_ERRORS,
+  SET_ADD_MEAL_LOADING,
+  ADD_MEAL_ITEM_SUCCESS,
+  SHOW_ADD_MEAL_MODAL
 } from '../actionTypes';
 
 export const baseUrl = 'https://private-b7e73-andelaeats.apiary-mock.com';
@@ -33,5 +37,46 @@ export const fetchMealItems = () => dispatch => {
     .catch((error) => {
       dispatch(fetchMealItemsFailure(error));
       dispatch(fectchMealItemsLoading(false));
+    });
+};
+
+export const showAddMealModalAction = show => ({
+  type: SHOW_ADD_MEAL_MODAL,
+  payload: show
+});
+
+export const setAddMealErrors = errors => dispatch => dispatch({
+  type: SET_ADD_MEAL_ERRORS,
+  payload: errors
+});
+
+export const setAddMealLoading = loading => ({
+  type: SET_ADD_MEAL_LOADING,
+  payload: loading
+});
+
+export const addMealItemSuccess = mealItem => ({
+  type: ADD_MEAL_ITEM_SUCCESS,
+  payload: mealItem
+});
+
+export const showAddMealModal = show => dispatch => dispatch(
+  showAddMealModalAction(show)
+);
+
+export const addMealItem = formData => dispatch => {
+  dispatch(setAddMealLoading(true));
+
+  return axios.post(`${baseUrl}/admin/meal-items`, formData, {
+    headers: { 'content-type': 'application/json' }
+  })
+    .then((response) => {
+      const { mealItem } = response.data;
+      dispatch(addMealItemSuccess(mealItem));
+      dispatch(showAddMealModalAction(false));
+      dispatch(setAddMealLoading(false));
+    })
+    .catch(() => {
+      dispatch(setAddMealLoading(false));
     });
 };
