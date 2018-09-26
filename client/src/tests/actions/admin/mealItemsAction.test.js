@@ -6,7 +6,7 @@ import {
   FETCH_MEAL_ITEMS_SUCCESS,
   SET_ADD_MEAL_LOADING,
   ADD_MEAL_ITEM_SUCCESS,
-  SHOW_ADD_MEAL_MODAL,
+  SHOW_MEAL_MODAL,
   DELETE_MEAL_ITEM_LOADING,
   DELETE_MEAL_ITEM_SUCCESS,
   DELETE_MEAL_ITEM_FAILURE,
@@ -112,7 +112,7 @@ describe('Admin::Meal Items Action', () => {
         payload: mealItems[0]
       },
       {
-        type: SHOW_ADD_MEAL_MODAL,
+        type: SHOW_MEAL_MODAL,
         payload: false
       },
       {

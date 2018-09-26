@@ -4,7 +4,7 @@ import {
   FETCH_MEAL_ITEMS_SUCCESS,
   FETCH_MEAL_ITEMS_FAILURE,
   SET_ADD_MEAL_ERRORS,
-  SHOW_ADD_MEAL_MODAL,
+  SHOW_MEAL_MODAL,
   SET_ADD_MEAL_LOADING,
   ADD_MEAL_ITEM_SUCCESS,
   DELETE_MEAL_ITEM_LOADING,
@@ -75,19 +75,19 @@ describe('Admin:: Meal Items Reducer', () => {
       };
 
       newState = mealItemsReducer(initialMealItems, action);
-      expect(newState.addMealModal.errors.length).toBeGreaterThan(0);
+      expect(newState.mealModal.errors.length).toBeGreaterThan(0);
     });
   });
 
-  describe('SHOW_ADD_MEAL_MODAL', () => {
+  describe('SHOW_MEAL_MODAL', () => {
     it('should set show for add modal to true', () => {
       action = {
-        type: SHOW_ADD_MEAL_MODAL,
+        type: SHOW_MEAL_MODAL,
         payload: true,
       };
 
       newState = mealItemsReducer(initialMealItems, action);
-      expect(newState.addMealModal.show).toBe(true);
+      expect(newState.mealModal.show).toBe(true);
     });
   });
 
@@ -99,7 +99,7 @@ describe('Admin:: Meal Items Reducer', () => {
       };
 
       newState = mealItemsReducer(initialMealItems, action);
-      expect(newState.addMealModal.isLoading).toBe(true);
+      expect(newState.mealModal.isLoading).toBe(true);
     });
   });
 

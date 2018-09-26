@@ -21,7 +21,7 @@ import {
  * 
  * @extends {Component}
  */
-class AddMealModal extends Component {
+class MealModal extends Component {
   static initalState = {
     image: {
       file: null,
@@ -43,11 +43,11 @@ class AddMealModal extends Component {
       'Main',
       'Side',
       'Protein',
-      'Soup'
+      'Soup',
     ];
 
     this.state = {
-      ...AddMealModal.initalState
+      ...MealModal.initalState
     };
   }
 
@@ -82,11 +82,31 @@ class AddMealModal extends Component {
     }
   }
 
+  static getDerivedStateFromProps({ mealDetails }, { type }) {
+    if (mealDetails && !type) {
+      const {
+        id, name, image, mealType, description
+      } = mealDetails;
+
+      return {
+        id,
+        name,
+        image: {
+          dataurl: image
+        },
+        desc: description,
+        type: mealType
+      };
+    }
+
+    return null;
+  }
+
   clearModal() {
     this.props.setAddMealErrors([]);
 
     this.setState({
-      ...AddMealModal.initalState
+      ...MealModal.initalState
     });
 
     if (this.imageInput.current) {
@@ -137,9 +157,9 @@ class AddMealModal extends Component {
 
   render() {
     const {
-      show, errors, isLoading, addBtnDisabled
+      show, errors, isLoading, addBtnDisabled, edit
     } = this.props;
-  
+    
     const {
       name, type, desc, image: { dataurl }
     } = this.state;
@@ -158,7 +178,7 @@ class AddMealModal extends Component {
       >
         <div className="modal-content">
           <div className="modal-header">
-            <div className="header-title">ADD MEAL</div>
+            <div className="header-title">{edit ? 'EDIT' : 'ADD'} MEAL</div>
             <div>
               <button
                 tabIndex={0}
@@ -200,7 +220,7 @@ class AddMealModal extends Component {
                 state={{
                   name,
                   desc,
-                  type
+                  type,
                 }}
                 errors={errors}
                 onChange={this.onChange}
@@ -227,7 +247,7 @@ class AddMealModal extends Component {
                 type="submit"
                 disabled={addBtnDisabled}
               >
-                Add meal
+                {edit ? 'Update' : 'Add'} meal
               </button>
             </div>
           </form>
@@ -237,8 +257,9 @@ class AddMealModal extends Component {
   }
 }
 
-AddMealModal.propTypes = {
+MealModal.propTypes = {
   show: PropTypes.bool,
+  edit: PropTypes.bool,
   toggleAddModal: PropTypes.func.isRequired,
   addMealItem: PropTypes.func.isRequired,
   errors: PropTypes.arrayOf(PropTypes.string),
@@ -247,13 +268,13 @@ AddMealModal.propTypes = {
   setAddMealErrors: PropTypes.func.isRequired
 };
 
-const mapStateToProps = ({ mealItems: { addMealModal } }) => ({
-  isLoading: addMealModal.isLoading,
-  addBtnDisabled: addMealModal.addBtnDisabled,
-  errors: addMealModal.errors
+const mapStateToProps = ({ mealItems: { mealModal } }) => ({
+  isLoading: mealModal.isLoading,
+  addBtnDisabled: mealModal.addBtnDisabled,
+  errors: mealModal.errors
 });
 
 export default connect(mapStateToProps, {
   addMealItem,
   setAddMealErrors
-})(AddMealModal);
+})(MealModal);

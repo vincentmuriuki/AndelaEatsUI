@@ -5,7 +5,7 @@ import {
   SET_ADD_MEAL_ERRORS,
   SET_ADD_MEAL_LOADING,
   ADD_MEAL_ITEM_SUCCESS,
-  SHOW_ADD_MEAL_MODAL,
+  SHOW_MEAL_MODAL,
   DELETE_MEAL_ITEM_LOADING,
   DELETE_MEAL_ITEM_SUCCESS,
   DELETE_MEAL_ITEM_FAILURE
@@ -32,24 +32,24 @@ const mealItemsReducer = (state = initialMealItems, action) => {
     case SET_ADD_MEAL_ERRORS:
       return {
         ...state,
-        addMealModal: {
-          ...state.addMealModal,
+        mealModal: {
+          ...state.mealModal,
           errors: action.payload
         }
       };
-    case SHOW_ADD_MEAL_MODAL:
+    case SHOW_MEAL_MODAL:
       return {
         ...state,
-        addMealModal: {
-          ...state.addMealModal,
+        mealModal: {
+          ...state.mealModal,
           show: action.payload
         }
       };
     case SET_ADD_MEAL_LOADING:
       return {
         ...state,
-        addMealModal: {
-          ...state.addMealModal,
+        mealModal: {
+          ...state.mealModal,
           isLoading: action.payload,
           addBtnDisabled: action.payload
         }

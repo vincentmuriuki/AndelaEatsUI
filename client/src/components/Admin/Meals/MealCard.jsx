@@ -12,8 +12,10 @@ const MealCard = ({
   id,
   name,
   mealType,
-  image, 
-  showDeleteModal 
+  image,
+  description,
+  showDeleteModal,
+  showEditModal,
 }) => (
   <div className="meal-card">
     <div
@@ -29,7 +31,16 @@ const MealCard = ({
       <div>{ name }</div>
 
       <div className="controls">
-        <button type="button">Edit</button>
+        <button
+          type="button"
+          onClick={() => {
+            showEditModal({
+              id, name, mealType, image, description
+            }, true);
+          }}
+        >
+        Edit
+        </button>
         <button
           type="button"
           onClick={() => showDeleteModal({ id, name })}
@@ -45,8 +56,10 @@ MealCard.propTypes = {
   mealType: PropTypes.string,
   name: PropTypes.string,
   image: PropTypes.string,
+  description: PropTypes.string,
   id: PropTypes.number,
-  showDeleteModal: PropTypes.func
+  showDeleteModal: PropTypes.func,
+  showEditModal: PropTypes.func,
 };
 
 export default MealCard;

@@ -7,7 +7,7 @@ import {
   SET_ADD_MEAL_ERRORS,
   SET_ADD_MEAL_LOADING,
   ADD_MEAL_ITEM_SUCCESS,
-  SHOW_ADD_MEAL_MODAL,
+  SHOW_MEAL_MODAL,
   DELETE_MEAL_ITEM_LOADING,
   DELETE_MEAL_ITEM_SUCCESS,
   DELETE_MEAL_ITEM_FAILURE,
@@ -45,8 +45,8 @@ export const fetchMealItems = () => dispatch => {
     });
 };
 
-export const showAddMealModalAction = show => ({
-  type: SHOW_ADD_MEAL_MODAL,
+export const showMealModalAction = show => ({
+  type: SHOW_MEAL_MODAL,
   payload: show
 });
 
@@ -65,8 +65,8 @@ export const addMealItemSuccess = mealItem => ({
   payload: mealItem
 });
 
-export const showAddMealModal = show => dispatch => dispatch(
-  showAddMealModalAction(show)
+export const showMealModal = show => dispatch => dispatch(
+  showMealModalAction(show)
 );
 
 export const addMealItem = formData => dispatch => {
@@ -78,7 +78,7 @@ export const addMealItem = formData => dispatch => {
     .then((response) => {
       const { mealItem } = response.data;
       dispatch(addMealItemSuccess(mealItem));
-      dispatch(showAddMealModalAction(false));
+      dispatch(showMealModalAction(false));
       dispatch(setAddMealLoading(false));
     })
     .catch(() => {

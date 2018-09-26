@@ -6,18 +6,18 @@ import { mount } from 'enzyme';
 import { BrowserRouter } from 'react-router-dom';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
-import AddMealModal from '../../../../components/Admin/Meals/AddMealModal/Index'; /* eslint-disable-line */
+import MealModal from '../../../../components/Admin/Meals/MealModal/Index'; /* eslint-disable-line */
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe('AddMealModal Component', () => {
+describe('MealModal Component', () => {
   const store = mockStore({
     mealItems: {
       isLoading: false,
       meals: [],
     
-      addMealModal: {
+      mealModal: {
         show: false,
         addBtnDisabled: false,
         errors: ['name'],
@@ -47,12 +47,12 @@ describe('AddMealModal Component', () => {
 
   const wrapper = mount(
     <BrowserRouter>
-      <AddMealModal store={store} {...props} />
+      <MealModal store={store} {...props} />
     </BrowserRouter>
   );
 
-  const addMealModalWrap = wrapper.find('AddMealModal');
-  const addMealModal = addMealModalWrap.instance();
+  const mealModalWrap = wrapper.find('MealModal');
+  const mealModal = mealModalWrap.instance();
 
   it('should render correctly', () => {
     expect(wrapper).toMatchSnapshot();
@@ -71,16 +71,16 @@ describe('AddMealModal Component', () => {
     };
     
     wrapper.find('[name="name"]').simulate('change', event);
-    expect(addMealModal.state.name).toBe(name);
+    expect(mealModal.state.name).toBe(name);
 
     event.target.name = 'desc';
     event.target.value = desc;    
     wrapper.find('[name="desc"]').simulate('change', event);
-    expect(addMealModal.state.desc).toBe(desc);
+    expect(mealModal.state.desc).toBe(desc);
   });
 
   it('call previewImage with invalid image', () => {
-    addMealModal.imageInput = {
+    mealModal.imageInput = {
       current: {
         files: [
           new File([''], 'filename.jpg', { type: "image/gif" })
@@ -88,8 +88,8 @@ describe('AddMealModal Component', () => {
       }
     };
 
-    addMealModal.previewImage();
-    expect(addMealModal.state.image.dataurl).toBe(null);
+    mealModal.previewImage();
+    expect(mealModal.state.image.dataurl).toBe(null);
   });
 
   it('should call previewImage with valid image', () => {
@@ -102,47 +102,47 @@ describe('AddMealModal Component', () => {
         };
       }
     };
-    addMealModal.imageInput = {
+    mealModal.imageInput = {
       current: {
         files: [imageFile]
       }
     };
 
-    addMealModal.previewImage();
-    expect(addMealModal.state.image.dataurl).toBe('data:url/to/image');
+    mealModal.previewImage();
+    expect(mealModal.state.image.dataurl).toBe('data:url/to/image');
   });
 
   it('should call openFileDialog', () => {
-    addMealModal.imageInput = {
+    mealModal.imageInput = {
       current: {
         click: jest.fn()
       }
     };
 
-    const spy = jest.spyOn(addMealModal.imageInput.current, 'click');
-    addMealModal.openFileDialog();
+    const spy = jest.spyOn(mealModal.imageInput.current, 'click');
+    mealModal.openFileDialog();
     expect(spy).toHaveBeenCalled();
   });
 
   it('should submit form with invalid details', () => {
     const form = wrapper.find('#add-meal-form');
-    addMealModal.state = mealObject;
-    addMealModal.state.name = '';
+    mealModal.state = mealObject;
+    mealModal.state.name = '';
     form.simulate('submit', { preventDefault: jest.fn() });
-    expect(addMealModal.props.errors.includes('name')).toBe(true);
+    expect(mealModal.props.errors.includes('name')).toBe(true);
   });
 
   it('should submit form with valid details', () => {
     const form = wrapper.find('#add-meal-form');
-    addMealModal.state.name = 'Ugeli';
+    mealModal.state.name = 'Ugeli';
     form.simulate('submit', { preventDefault: jest.fn() });
-    expect(addMealModal.state.name).toBe('Ugeli');
+    expect(mealModal.state.name).toBe('Ugeli');
   });
 
   it('should call closeModal', () => {
-    addMealModal.closeModal();
-    expect(addMealModal.state.name).toBe('');
-    expect(addMealModal.state.type).toBe('');
-    expect(addMealModal.state.desc).toBe('');
+    mealModal.closeModal();
+    expect(mealModal.state.name).toBe('');
+    expect(mealModal.state.type).toBe('');
+    expect(mealModal.state.desc).toBe('');
   });
 });

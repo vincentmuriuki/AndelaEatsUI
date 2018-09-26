@@ -19,7 +19,7 @@ const setup = (isLoading, meals = []) => {
   const props = {
     isLoading,
     meals,
-    showAddMealModal: jest.fn(),
+    showMealModal: jest.fn(),
     fetchMealItems: jest.fn(),
     deleteMealItem: jest.fn().mockImplementation(() => Promise.resolve())
   };

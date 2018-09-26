@@ -47,7 +47,7 @@ export const initialMealItems = {
   isDeleting: false,
   meals: [],
 
-  addMealModal: {
+  mealModal: {
     show: false,
     addBtnDisabled: false,
     errors: [],

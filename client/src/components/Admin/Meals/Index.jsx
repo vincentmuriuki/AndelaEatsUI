@@ -6,10 +6,10 @@ import MealCard from './MealCard';
 import Loader from '../../common/Loader/Loader';
 import {
   fetchMealItems,
-  showAddMealModal,
+  showMealModal,
   deleteMealItem
 } from '../../../actions/admin/mealItemsAction';
-import AddMealModal from './AddMealModal/Index';
+import MealModal from './MealModal/Index';
 import DeleteMealModal from './DeleteMealModal';
 
 /**
@@ -24,7 +24,8 @@ export class Meals extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      addModalShow: false,
+      displayMealModal: false,
+      editMode: false,
       displayDeleteModal: false,
       modalContent: {}
     };
@@ -35,31 +36,25 @@ export class Meals extends Component {
   }
 
   /**
-   * @method renderMeal
-   *
+   * 
+   * @method toggleAddModal
+   * 
+   * @param {boolean} mealDetails
+   * @param {boolean} edit
+   * 
    * @memberof Meals
-   *
-   * @param {object} meal
-   *
-   * @returns {JSX}
+   * 
+   * @returns {void}
    */
-  renderMeal = (meal) => (
-    <MealCard
-      key={meal.id}
-      id={meal.id}
-      image={meal.image}
-      name={meal.name}
-      mealType={meal.mealType}
-      showDeleteModal={this.showDeleteModal}
-    />
-  );
+  toggleAddModal = (mealDetails, edit = false) => {
+    const { displayMealModal } = this.state;
 
-  toggleAddModal = () => {
-    const { addModalShow } = this.state;
-    this.props.showAddMealModal(!addModalShow);
-    
+    this.props.showMealModal(!displayMealModal);
+
     this.setState({
-      addModalShow: !addModalShow
+      editMode: edit,
+      displayMealModal: !displayMealModal,
+      mealDetails
     });
   }
 
@@ -109,21 +104,44 @@ export class Meals extends Component {
     });
   }
 
+  /**
+   * @method renderMeal
+   *
+   * @memberof Meals
+   *
+   * @param {object} meal
+   *
+   * @returns {JSX}
+   */
+  renderMeal = (meal) => (
+    <MealCard
+      key={meal.id}
+      {...meal}
+      showDeleteModal={this.showDeleteModal}
+      showEditModal={this.toggleAddModal}
+    />
+  );
+
 
   render() {
     const {
-      addModalShow,
+      displayMealModal,
       isLoading,
       isDeleting,
       meals 
     } = this.props;
-    const { displayDeleteModal, modalContent } = this.state;
+    const {
+      displayDeleteModal, modalContent, editMode, mealDetails
+    } = this.state;
+
     return (
       <Fragment>
         <ToastContainer />
-        <AddMealModal
+        <MealModal
           toggleAddModal={this.toggleAddModal}
-          show={addModalShow}
+          show={displayMealModal}
+          edit={editMode}
+          mealDetails={mealDetails}
         />
         { isLoading && (<Loader />) }
         <div className={`${isLoading && 'blurred'}`} id="admin-meals">
@@ -133,7 +151,7 @@ export class Meals extends Component {
               <button
                 className="pull-right"
                 type="button"
-                onClick={this.toggleAddModal}
+                onClick={() => this.toggleAddModal(null)}
               >
                 Add meal
               </button>
@@ -164,24 +182,24 @@ export class Meals extends Component {
 const mapStateToProps = ({ mealItems }) => ({
   meals: mealItems.meals,
   isLoading: mealItems.isLoading,
-  addModalShow: mealItems.addMealModal.show,
+  displayMealModal: mealItems.mealModal.show,
   isDeleting: mealItems.isDeleting
 });
 
 const mapDispatchToProps = {
   fetchMealItems,
-  showAddMealModal,
+  showMealModal,
   deleteMealItem
 };
 
 Meals.propTypes = {
   fetchMealItems: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  showAddMealModal: PropTypes.func.isRequired,
+  showMealModal: PropTypes.func.isRequired,
   deleteMealItem: PropTypes.func,
   isDeleting: PropTypes.bool,
   meals: PropTypes.arrayOf(PropTypes.shape({})),
-  addModalShow: PropTypes.bool
+  displayMealModal: PropTypes.bool
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Meals);

@@ -36,7 +36,7 @@ const DeleteMealModal = ({
               type="button" 
               tabIndex={0}
               disabled={isDeleting}
-              onClick={deleteMealItem.bind(null, modalContent.id)}
+              onClick={() => deleteMealItem(modalContent.id)}
             >
                 Delete
             </button>
