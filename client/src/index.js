@@ -6,6 +6,8 @@ import App from './components/App';
 import configureStore from './store/store';
 import './styles/main.scss';
 import 'react-day-picker/lib/style.css';
+import 'react-datepicker/dist/react-datepicker.css';
+
 import './assets/images/favicon.ico';
 import { config } from './config';
 

@@ -1,21 +1,30 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 import { menuItemsUI } from '../../../tests/__mocks__/mockMenuItems';
+import MenuModal from './MenuModal';
+import inputValidation from '../../../helpers/inputValidation';
 
 /**
  * 
  * 
  * @description Menus Component
  * 
- * @name Menus
+ * @class Menus
+ * @extends Component
  */
 class Menus extends Component {
+  static initialState = () => ({
+    menus: [],
+    displayModal: false,
+    modalTitle: '',
+    modalButtontext: '',
+  })
+
   constructor(props) {
     super(props);
 
-    this.state = {
-      menus: []
-    };
+    this.state = Menus.initialState();
   }
 
   /**
@@ -70,7 +79,55 @@ class Menus extends Component {
     });
   }
 
+  /**
+   * 
+   * @method showAddModal
+   * 
+   * @memberof Menus
+   * 
+   * @returns {void}
+   */
+  showAddModal = () => {
+    this.setState(prev => ({
+      displayModal: !prev.displayModal,
+      modalTitle: 'ADD MENU',
+      modalButtontext: 'Add Menu'
+    }));
+  }
+
+  /**
+   * 
+   * @method closeModal
+   *
+   * @param {object} vendor
+   * 
+   * @memberof Menu
+   * 
+   * @returns {void}
+   */
+  closeModal = () => {
+    this.setState({
+      displayModal: false,
+    });
+  }
+
+  /**
+   * Handles form submission
+   * 
+   * @param {object} menuDetails
+   * 
+   * @memberof Menu
+   * 
+   * @returns {void}
+   */
+  handleSubmit = () => {}
+
   render() {
+    const {
+      displayModal,
+      modalTitle,
+      modalButtontext,
+    } = this.state;
     return (
       <div id="admin-menus">
         <header>
@@ -79,6 +136,7 @@ class Menus extends Component {
             <button
               className="pull-right"
               type="button"
+              onClick={this.showAddModal}
             >
               Add menu item
             </button>
@@ -101,6 +159,13 @@ class Menus extends Component {
             </div>
           </div>
         </main>
+        <MenuModal
+          closeModal={this.closeModal}
+          modalTitle={modalTitle}
+          modalButtontext={modalButtontext}
+          displayModal={displayModal}
+          handleSubmit={this.handleSubmit}
+        />
       </div>
     );
   }

@@ -66,3 +66,83 @@
     }
   }
 }
+
+/* Menu Modal */
+#menu-modal {
+  .modal-header {
+    .close-icon {
+      margin-top: 5px;
+    }
+  }
+
+  .modal-content{
+    width: 95%;
+    max-width: px-to-rem(550px);
+    top: 14%;
+
+    .form-field-double {
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 20px;
+      margin-top: 10px;
+      justify-content: space-between;
+
+        .select-width {
+          width: 45%;
+          
+          label {
+            @include field-label();
+            font-size: 16px;
+            color: #333E44;
+            margin-top: 2px;
+
+            span {
+              display: inline-block;
+              color: red;
+              font-size: 12px;
+            }
+          }
+        }
+      }
+
+      .date-input {
+        input {
+          @include field-input();
+          padding: 8px !important;
+        }
+      }
+
+      .form-field-single {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+        margin-top: 10px;
+        justify-content: space-between;
+
+          label {
+            @include field-label();
+            font-size: 16px;
+            color: #333E44;
+            margin-top: 2px;
+  
+            span {
+              display: inline-block;
+              color: red;
+              font-size: 12px;
+            }
+          }
+        }
+  }
+
+  @media only screen and (max-width: 640px) {
+    .modal-content {
+      width: 60%;
+    }
+  }
+  
+  @media only screen and (min-width: 641px) and (max-width: 1007px) {
+    .modal-content {
+      width: 50%;
+    }
+  }
+}
