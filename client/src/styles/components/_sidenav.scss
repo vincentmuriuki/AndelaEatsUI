@@ -114,6 +114,19 @@
   }
 }
 
+.menus {
+  background-image: url('../assets/images/menus.svg');
+  background-repeat: no-repeat;
+  background-size: 33px;
+  background-position: center; 
+  &.active {
+    background-image: url('../assets/images/active-menus.svg');
+  }
+  &:hover {
+    background-image: url('../assets/images/active-menus.svg');
+  }
+}
+
 .main-container {
   margin-left: 150px;
   width: calc(100% - 150px);

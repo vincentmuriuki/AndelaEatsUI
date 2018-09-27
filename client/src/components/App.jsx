@@ -11,6 +11,8 @@ import EditOrder from './EditOrder/EditOrder';
 import AdminOrders from './Admin/Orders/Orders';
 import Vendors from './Admin/Vendors/Vendors';
 import Meals from './Admin/Meals/Index';
+import Menus from './Admin/Menus/Index';
+
 
 export const NotFound = () => (
   <h1>Page Not Found</h1>
@@ -28,6 +30,7 @@ const Root = () => (
           <Route exact path="/admin/orders" component={AdminOrders} />
           <Route exact path="/admin/vendors" component={Vendors} />
           <Route exact path="/admin/meals" component={Meals} />
+          <Route exact path="/admin/menus" component={Menus} />
           <Route component={NotFound} />
         </Switch>
       </SideNav>

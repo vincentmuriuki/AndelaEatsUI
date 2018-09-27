@@ -98,3 +98,37 @@ body {
   border-right-color: transparent;
   animation: spin 950ms infinite linear;
 }
+
+.custom-table {
+  .ct-header {
+    display: flex;
+    padding: 10px;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    font-weight: 900;
+    font-size: 14px;
+    color: $color-light-black;
+  }
+
+  .ct-body {
+    .ct-row {
+      background: white;
+      border-radius: 2px;
+      padding: 6px 0;
+      margin-bottom: 10px;
+
+      .ct-wrap {
+        display: flex;
+        padding: 10px;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        font-size: 14px;
+        font-family: $font-family-opensans;
+        font-weight: 300;
+        color: #333E44;
+      }
+    }
+  }
+}
