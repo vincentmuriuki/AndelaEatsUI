@@ -34,34 +34,52 @@ export const validateAddMealImage = (image) => {
   return true;
 };
 
+const validateFileUpload = (file, dataurl) => {
+  const errors = [];
+  if (!file && !dataurl) { errors.push('image'); }
+  if (file && !(file instanceof File)) { errors.push('image'); }
+
+  return errors;
+};
+
+const validateInputFields = (mealDetails) => {
+  const errors = [];
+
+  Object.entries(mealDetails).forEach(([key, value]) => {
+    if (key === 'image' || key === 'type') return false;
+    if (!value.toString().trim().length) { errors.push(key); }
+  });
+
+  return errors;
+};
+
 export const generateFormData = (mealDetails, types) => {
   const {
-    name, desc, type, image: { file }
+    name, desc, type, image: { file, dataurl }
   } = mealDetails;
   
-  const errors = [];
-  if (!(file instanceof File)) {
-    errors.push('image');
-  }
-  if (name.trim().length <= 0) {
-    errors.push('name');
-  }
-  if (!types.includes(type)) {
-    errors.push('type');
-  }
-  if (desc.trim().length <= 0) {
-    errors.push('desc');
-  }
-  return (
-    errors.length !== 0
-      ? errors : {
-        mealName: title(name),
-        mealType: type.toLowerCase(),
-        description: title(desc),
-        image: file
-      }
-  );
+  let errors = [];
+
+  errors = [
+    ...errors,
+    ...validateInputFields(mealDetails),
+    ...validateFileUpload(file, dataurl)
+  ];
+  
+  if (!types.includes(type)) { errors.push('type'); }
+  if (errors.length) return errors;
+
+  return {
+    mealName: title(name),
+    mealType: type.toLowerCase(),
+    description: title(desc),
+    image: file || dataurl
+  };
 };
 
 export const endDate = () => new Date(today.getFullYear(), 
   today.getMonth(), today.getDate() + 7);
+
+export const findUpdatedIndex = (prevState, updatedId) => (
+  prevState.findIndex(item => item.id === updatedId)
+);

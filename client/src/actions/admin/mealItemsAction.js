@@ -11,6 +11,9 @@ import {
   DELETE_MEAL_ITEM_LOADING,
   DELETE_MEAL_ITEM_SUCCESS,
   DELETE_MEAL_ITEM_FAILURE,
+  EDIT_MEAL_ITEM_FAILURE,
+  EDIT_MEAL_ITEM_SUCCESS,
+  EDIT_MEAL_ITEM_LOADING
 } from '../actionTypes';
 
 
@@ -45,9 +48,9 @@ export const fetchMealItems = () => dispatch => {
     });
 };
 
-export const showMealModalAction = show => ({
+export const showMealModalAction = (show, edit) => ({
   type: SHOW_MEAL_MODAL,
-  payload: show
+  payload: { show, edit }
 });
 
 export const setAddMealErrors = errors => dispatch => dispatch({
@@ -65,8 +68,8 @@ export const addMealItemSuccess = mealItem => ({
   payload: mealItem
 });
 
-export const showMealModal = show => dispatch => dispatch(
-  showMealModalAction(show)
+export const showMealModal = (show, edit) => dispatch => dispatch(
+  showMealModalAction(show, edit)
 );
 
 export const addMealItem = formData => dispatch => {
@@ -78,7 +81,7 @@ export const addMealItem = formData => dispatch => {
     .then((response) => {
       const { mealItem } = response.data;
       dispatch(addMealItemSuccess(mealItem));
-      dispatch(showMealModalAction(false));
+      dispatch(showMealModalAction(false, false));
       dispatch(setAddMealLoading(false));
     })
     .catch(() => {
@@ -113,5 +116,40 @@ export const deleteMealItem = (mealItemId) => dispatch => {
       toastError(error.message);
       dispatch(deleteMealItemFailure(error));
       dispatch(deleteMealItemLoading(false));
+    });
+};
+
+export const editMealItemLoading = isLoading => ({
+  type: EDIT_MEAL_ITEM_LOADING,
+  payload: isLoading
+});
+
+export const editMealItemFailure = error => ({
+  type: EDIT_MEAL_ITEM_FAILURE,
+  payload: error
+});
+
+export const editMealItemSuccess = (mealItemId, mealItem) => ({
+  type: EDIT_MEAL_ITEM_SUCCESS,
+  payload: {
+    mealItemId,
+    mealItem
+  }
+});
+
+export const editMealItem = (mealItemId, formData) => dispatch => {
+  dispatch(editMealItemLoading(true));
+  return axios.put(`${baseUrl}/admin/meal-items/${mealItemId}`, formData)
+    .then(response => {
+      const { mealItem } = response.data;
+      toastSuccess("Meal item updated successfully");
+      dispatch(editMealItemSuccess(mealItemId, mealItem));
+      dispatch(showMealModalAction(false, false));
+      dispatch(editMealItemLoading(false));
+    })
+    .catch(error => {
+      toastError("Meal item update failed");
+      dispatch(editMealItemFailure(error));
+      dispatch(editMealItemLoading(false));
     });
 };

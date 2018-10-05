@@ -2,7 +2,8 @@ import {
   validateDate,
   endDate,
   canOrderMeal,
-  generateFormData
+  generateFormData,
+  findUpdatedIndex
 } from "../../helpers/mealsHelper";
 
 /* 
@@ -52,6 +53,12 @@ test('returns array of image string error', () => {
   expect(result).toEqual(['image']);
 });
 
+test('returns no error if dataurl is valid for update', () => {
+  const updateMealDetails = { ...mealDetails, image: { dataurl: 'image' } };
+  const result = generateFormData(updateMealDetails, types);
+  expect(result.image).toBe('image');
+});
+
 test('returns array of name string error', () => {
   const newMealDetails = { ...mealDetails, name: '' };
   const result = generateFormData(newMealDetails, types);
@@ -68,4 +75,11 @@ test('returns array of type string error', () => {
   const newMealDetails = { ...mealDetails, type: '' };
   const result = generateFormData(newMealDetails, types);
   expect(result).toEqual(['type']);
+});
+
+describe('findUpdatedIndex method', () => {
+  it('finds and returns the index of item to be updated', () => {
+    const array = [{ id: 1 }, { id: 3 }];
+    expect(findUpdatedIndex(array, 3)).toBe(1);
+  });
 });

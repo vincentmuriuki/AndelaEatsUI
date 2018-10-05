@@ -11,7 +11,7 @@ import {
 } from '../../../../helpers/mealsHelper';
 
 import {
-  addMealItem, setAddMealErrors
+  addMealItem, setAddMealErrors, editMealItem
 } from '../../../../actions/admin/mealItemsAction';
 
 /**
@@ -78,12 +78,16 @@ class MealModal extends Component {
     if (Array.isArray(formData)) {
       this.props.setAddMealErrors(formData);
     } else {
+      const { edit, mealDetails } = this.props;
+      if (edit) {
+        return this.props.editMealItem(mealDetails.id, formData);
+      }
       this.props.addMealItem(formData);
     }
   }
 
-  static getDerivedStateFromProps({ mealDetails }, { type }) {
-    if (mealDetails && !type) {
+  static getDerivedStateFromProps({ mealDetails, edit }, { type }) {
+    if (edit && !type) {
       const {
         id, name, image, mealType, description
       } = mealDetails;
@@ -116,7 +120,7 @@ class MealModal extends Component {
 
   closeModal() {
     this.clearModal();
-    this.props.toggleAddModal();
+    this.props.toggleAddModal(null, false);
   }
 
   openFileDialog() {
@@ -157,7 +161,11 @@ class MealModal extends Component {
 
   render() {
     const {
-      show, errors, isLoading, addBtnDisabled, edit
+      show,
+      edit,
+      errors,
+      isLoading,
+      addBtnDisabled,
     } = this.props;
     
     const {
@@ -265,16 +273,20 @@ MealModal.propTypes = {
   errors: PropTypes.arrayOf(PropTypes.string),
   isLoading: PropTypes.bool,
   addBtnDisabled: PropTypes.bool,
-  setAddMealErrors: PropTypes.func.isRequired
+  setAddMealErrors: PropTypes.func.isRequired,
+  mealDetails: PropTypes.shape({}),
+  editMealItem: PropTypes.func,
 };
 
 const mapStateToProps = ({ mealItems: { mealModal } }) => ({
   isLoading: mealModal.isLoading,
   addBtnDisabled: mealModal.addBtnDisabled,
-  errors: mealModal.errors
+  errors: mealModal.errors,
+  edit: mealModal.edit,
 });
 
 export default connect(mapStateToProps, {
   addMealItem,
-  setAddMealErrors
+  setAddMealErrors,
+  editMealItem
 })(MealModal);

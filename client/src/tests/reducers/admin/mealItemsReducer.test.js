@@ -10,9 +10,12 @@ import {
   DELETE_MEAL_ITEM_LOADING,
   DELETE_MEAL_ITEM_SUCCESS,
   DELETE_MEAL_ITEM_FAILURE,
+  EDIT_MEAL_ITEM_LOADING,
+  EDIT_MEAL_ITEM_SUCCESS,
+  EDIT_MEAL_ITEM_FAILURE,
 } from '../../../actions/actionTypes';
 import mealItemsReducer from '../../../reducers/admin/mealItemsReducer';
-import { initialMealItems } from '../../../reducers/initialState';
+import initialState, { initialMealItems } from '../../../reducers/initialState';
 import { mealItems } from '../../__mocks__/mockMealItems';
 
 describe('Admin:: Meal Items Reducer', () => {
@@ -83,7 +86,10 @@ describe('Admin:: Meal Items Reducer', () => {
     it('should set show for add modal to true', () => {
       action = {
         type: SHOW_MEAL_MODAL,
-        payload: true,
+        payload: {
+          show: true,
+          edit: false
+        },
       };
 
       newState = mealItemsReducer(initialMealItems, action);
@@ -158,6 +164,39 @@ describe('Admin:: Meal Items Reducer', () => {
 
       newState = mealItemsReducer(newState, action);
       expect(newState.meals).toEqual([]);
+    });
+  });
+
+  describe('EDIT_MEAL_ITEM_LOADING', () => {
+    it('updates the isLoading state of the meal modal in store', () => {
+      action = { 
+        type: EDIT_MEAL_ITEM_LOADING,
+        payload: true
+      };
+      newState = mealItemsReducer(initialMealItems, action);
+      expect(newState.mealModal.isLoading).toBeTruthy();
+    });
+  });
+
+  describe('EDIT_MEAL_ITEM_SUCCESS', () => {
+    it('updates the mealItems meals in the store with the updated meal', () => {
+      action = {
+        type: EDIT_MEAL_ITEM_SUCCESS,
+        payload: {
+          mealItemId: mealItems[0].id,
+          mealItem: mealItems[0]
+        }
+      };
+      newState = mealItemsReducer(initialMealItems, action);
+      expect(newState.meals).toEqual([action.payload.mealItem]);
+    });
+  });
+
+  describe('EDIT_MEAL_ITEM_FAILURE', () => {
+    it('returns the previous state in the store', () => {
+      action = { type: EDIT_MEAL_ITEM_FAILURE };
+      newState = mealItemsReducer(initialMealItems, action);
+      expect(newState).toEqual(initialMealItems);
     });
   });
 });

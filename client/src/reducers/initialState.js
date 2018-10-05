@@ -49,6 +49,7 @@ export const initialMealItems = {
 
   mealModal: {
     show: false,
+    edit: false,
     addBtnDisabled: false,
     errors: [],
     isLoading: false

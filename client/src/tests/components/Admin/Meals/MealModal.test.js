@@ -2,16 +2,25 @@
 /* eslint-disable import/no-named-as-default */
 
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import { BrowserRouter } from 'react-router-dom';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import MealModal from '../../../../components/Admin/Meals/MealModal/Index'; /* eslint-disable-line */
+import { mealItems } from '../../../__mocks__/mockMealItems';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-describe('MealModal Component', () => {
+const setup = (edit) => {
+  const props = {
+    show: true,
+    edit,
+    toggleAddModal: jest.fn(),
+    editMealItem: jest.fn(),
+    mealDetails: { ...mealItems[0] }
+  };
+
   const store = mockStore({
     mealItems: {
       isLoading: false,
@@ -26,11 +35,18 @@ describe('MealModal Component', () => {
     }
   });
 
-  const props = {
-    show: true,
-    toggleAddModal: jest.fn()
-  };
+  const wrapper = mount(
+    <BrowserRouter>
+      <MealModal store={store} {...props} />
+    </BrowserRouter>
+  );
 
+  return wrapper;
+};
+
+let wrapper = setup(false);
+
+describe('MealModal Component', () => {
   const imageFile = new File(
     [''], 'filename.jpg',
     { type: 'image/jpeg' }
@@ -44,12 +60,6 @@ describe('MealModal Component', () => {
       file: imageFile
     }
   };
-
-  const wrapper = mount(
-    <BrowserRouter>
-      <MealModal store={store} {...props} />
-    </BrowserRouter>
-  );
 
   const mealModalWrap = wrapper.find('MealModal');
   const mealModal = mealModalWrap.instance();
@@ -144,5 +154,9 @@ describe('MealModal Component', () => {
     expect(mealModal.state.name).toBe('');
     expect(mealModal.state.type).toBe('');
     expect(mealModal.state.desc).toBe('');
+  });
+
+  it('should derive state from props if edit is true', () => {
+    wrapper = setup(true);
   });
 });

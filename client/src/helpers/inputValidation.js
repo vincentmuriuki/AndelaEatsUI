@@ -8,7 +8,7 @@ const inputValidation = (formFields) => {
   });
 
   return {
-    isEmpty: Object.keys(errors).length === 0 ? true : false,
+    isEmpty: Object.keys(errors).length === 0,
     errors 
   };
 };

@@ -10,18 +10,28 @@ import {
   DELETE_MEAL_ITEM_LOADING,
   DELETE_MEAL_ITEM_SUCCESS,
   DELETE_MEAL_ITEM_FAILURE,
+  EDIT_MEAL_ITEM_LOADING,
+  EDIT_MEAL_ITEM_SUCCESS,
+  EDIT_MEAL_ITEM_FAILURE,
 } from '../../../actions/actionTypes';
 
 import {
   fetchMealItems,
   baseUrl,
   deleteMealItem,
-  addMealItem
+  addMealItem,
+  editMealItem
 } from '../../../actions/admin/mealItemsAction';
 
 import { mealItems } from '../../__mocks__/mockMealItems';
 
 describe('Admin::Meal Items Action', () => {
+  const formData = {
+    name: 'Ugeli',
+    type: 'side',
+    image: new File([''], 'filename', { type: 'image/png' })
+  };
+
   describe('Fetch meal Items', () => {
     beforeEach(() => moxios.install());
     afterEach(() => moxios.uninstall());
@@ -95,12 +105,6 @@ describe('Admin::Meal Items Action', () => {
     afterEach(() => moxios.uninstall());
 
     const store = mockStore({});
-      
-    const formData = {
-      name: 'Ugeli',
-      type: 'side',
-      image: new File([''], 'filename', { type: 'image/png' })
-    };
 
     const expectedActions = [
       {
@@ -113,7 +117,10 @@ describe('Admin::Meal Items Action', () => {
       },
       {
         type: SHOW_MEAL_MODAL,
-        payload: false
+        payload: {
+          show: false,
+          edit: false
+        }
       },
       {
         type: SET_ADD_MEAL_LOADING,
@@ -218,6 +225,86 @@ describe('Admin::Meal Items Action', () => {
   
       await store
         .dispatch(deleteMealItem(mealItems[0].id))
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions);
+        });
+      done();
+    });
+  });
+
+  describe('Edit Meal Item', () => {
+    beforeEach(() => moxios.install());
+    afterEach(() => moxios.uninstall());
+
+    it('updates meal item successfully', async (done) => {
+      const expectedActions = [
+        {
+          type: EDIT_MEAL_ITEM_LOADING,
+          payload: true,
+        },
+        {
+          type: EDIT_MEAL_ITEM_SUCCESS,
+          payload: {
+            mealItemId: 1,
+            mealItem: { ...mealItems[0] }
+          }
+        },
+        {
+          type: SHOW_MEAL_MODAL,
+          payload: {
+            show: false,
+            edit: false,
+          }
+        },
+        {
+          type: EDIT_MEAL_ITEM_LOADING,
+          payload: false,
+        }
+      ];
+
+      const store = mockStore({
+        mealItems: {
+          meals: mealItems
+        }
+      });
+
+      moxios.stubRequest(`${baseUrl}/admin/meal-items/${mealItems[0].id}`, {
+        status: 200,
+        response: {
+          mealItem: mealItems[0]
+        }
+      });
+
+      await store.dispatch(editMealItem(mealItems[0].id, formData))
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions);
+        });
+      done();
+    });
+
+    it('throws error on update failure', async (done) => {
+      const expectedActions = [
+        {
+          type: EDIT_MEAL_ITEM_LOADING,
+          payload: true,
+        },
+        {
+          type: EDIT_MEAL_ITEM_FAILURE,
+          payload: new Error('Request failed with status code 500')
+        },
+        {
+          type: EDIT_MEAL_ITEM_LOADING,
+          payload: false,
+        }
+      ];
+
+      const store = mockStore({});
+
+      moxios.stubRequest(`${baseUrl}/admin/meal-items/${mealItems[0].id}`, {
+        status: 500
+      });
+      
+      await store.dispatch(editMealItem(mealItems[0].id, formData))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions);
         });

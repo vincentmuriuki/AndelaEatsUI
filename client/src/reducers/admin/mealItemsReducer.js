@@ -8,9 +8,13 @@ import {
   SHOW_MEAL_MODAL,
   DELETE_MEAL_ITEM_LOADING,
   DELETE_MEAL_ITEM_SUCCESS,
-  DELETE_MEAL_ITEM_FAILURE
+  DELETE_MEAL_ITEM_FAILURE,
+  EDIT_MEAL_ITEM_LOADING,
+  EDIT_MEAL_ITEM_SUCCESS,
+  EDIT_MEAL_ITEM_FAILURE,
 } from '../../actions/actionTypes';
 import filter from '../../helpers/filter';
+import { findUpdatedIndex } from '../../helpers/mealsHelper';
 import { initialMealItems } from '../initialState';
 
 const mealItemsReducer = (state = initialMealItems, action) => {
@@ -27,6 +31,7 @@ const mealItemsReducer = (state = initialMealItems, action) => {
         meals: filter(state.meals, action.payload)
       };
     case FETCH_MEAL_ITEMS_FAILURE:
+      return state;
     case DELETE_MEAL_ITEM_FAILURE:
       return state;
     case SET_ADD_MEAL_ERRORS:
@@ -42,7 +47,8 @@ const mealItemsReducer = (state = initialMealItems, action) => {
         ...state,
         mealModal: {
           ...state.mealModal,
-          show: action.payload
+          show: action.payload.show,
+          edit: action.payload.edit
         }
       };
     case SET_ADD_MEAL_LOADING:
@@ -59,6 +65,28 @@ const mealItemsReducer = (state = initialMealItems, action) => {
         ...state,
         meals: [action.payload, ...state.meals]
       };
+    case EDIT_MEAL_ITEM_LOADING:
+      return {
+        ...state,
+        mealModal: {
+          ...state.mealModal,
+          isLoading: action.payload,
+          addBtnDisabled: action.payload
+        }
+      };
+    case EDIT_MEAL_ITEM_SUCCESS:
+      return {
+        ...state,
+        meals: [
+          ...state.meals
+            .slice(0, findUpdatedIndex(state.meals, action.payload.mealItemId)),
+          { ...action.payload.mealItem, id: action.payload.mealItemId },
+          ...state.meals
+            .slice(findUpdatedIndex(state.meals, action.payload.mealItemId) + 1)
+        ]
+      };
+    case EDIT_MEAL_ITEM_FAILURE:
+      return state;
     default:
       return state;
   }

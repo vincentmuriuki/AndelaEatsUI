@@ -66,12 +66,22 @@ describe('Admin:Meals Component', () => {
       .spyOn(wrapper.instance(), 'showDeleteModal');
     wrapper.instance().showDeleteModal(modalContent);
     expect(showDeleteModalSpy).toHaveBeenCalled();
-    expect(wrapper.state.di)
   });
 
   it('should call deleteMealItem method', () => {
     const deleteMealItemSpy = jest.spyOn(wrapper.instance(), 'deleteMealItem');
     wrapper.instance().deleteMealItem(modalContent.id);
     expect(deleteMealItemSpy).toHaveBeenCalled();
+  });
+
+  it('should call toggleModal onClick of Add Meal button', () => {
+    const addMealButton = wrapper.find('.pull-right');
+    const toggleAddModalSpy = jest.spyOn(wrapper.instance(), 'toggleAddModal');
+    addMealButton.simulate('click');
+    expect(toggleAddModalSpy).toHaveBeenCalled();
+  });
+
+  it('should have a meals props', () => {
+    expect(wrapper.instance().props.meals).not.toBeNull();
   });
 });

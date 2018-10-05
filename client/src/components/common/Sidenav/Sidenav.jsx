@@ -24,71 +24,6 @@ class SideNav extends Component {
       return <Redirect to="/" />;
     }
 
-    let sideBarComponent;
-
-    if (!this.checkAdmin()) {
-      sideBarComponent = (
-        <ul className="side-nav-item-wrapper">
-          <Link to="/ordermeal">
-            <li className={`side-nav-item home
-            ${homeActive('ordermeal') && "active"}`}
-            >
-              <span>Home</span>
-            </li>
-          </Link>
-          <Link to="/orders">
-            <li className={`side-nav-item home
-              ${homeActive('orders') && "active"}`}
-            >
-              <span>Orders</span>
-            </li>
-          </Link>
-        </ul>
-      );
-    } else {
-      sideBarComponent = (
-        <ul className="side-nav-item-wrapper">
-          <Link to="/admin/orders">
-            <li className={`side-nav-item order
-              ${homeActive('admin/orders') && "active"}`}
-            >
-              <span>Orders</span>
-            </li>
-          </Link>
-          
-          <Link to="/admin/meals">
-            <li
-              className={
-                `side-nav-item meals
-                ${homeActive('admin/meals') && "active"}`
-              }
-            >
-              <span>Meals</span>
-            </li>
-          </Link>
-
-          <Link to="/admin/menus">
-            <li
-              className={
-                `side-nav-item menus
-                ${homeActive('admin/menus') && "active"}`
-              }
-            >
-              <span>Menus</span>
-            </li>
-          </Link>
-         
-          <Link to="/admin/vendors">
-            <li className={`side-nav-item vendors
-              ${homeActive('admin/vendors') && "active"}`}
-            >
-              <span>Vendors</span>
-            </li>
-          </Link>
-        </ul>
-      );
-    }
-
     return (
       <div className="wrapper">
         <Navbar 
@@ -97,7 +32,66 @@ class SideNav extends Component {
         />
         <div className="push-down">
           <div className="side-nav">
-            { sideBarComponent }
+            {!this.checkAdmin() && (
+              <ul className="side-nav-item-wrapper">
+                <Link to="/ordermeal">
+                  <li className={`side-nav-item home
+                  ${homeActive('ordermeal') && "active"}`}
+                  >
+                    <span>Home</span>
+                  </li>
+                </Link>
+                <Link to="/orders">
+                  <li className={`side-nav-item order
+                    ${homeActive('orders') && "active"}`}
+                  >
+                    <span>Orders</span>
+                  </li>
+                </Link>
+              </ul>
+            )}
+            {this.checkAdmin() && (
+              <ul className="side-nav-item-wrapper">
+                <Link to="/admin/orders">
+                  <li className={`side-nav-item order
+                    ${homeActive('admin/orders') && "active"}`}
+                  >
+                    <span>Orders</span>
+                  </li>
+                </Link>
+                
+                <Link to="/admin/meals">
+                  <li
+                    className={
+                      `side-nav-item meals
+                      ${homeActive('admin/meals') && "active"}`
+                    }
+                  >
+                    <span>Meals</span>
+                  </li>
+                </Link>
+
+                <Link to="/admin/menus">
+                  <li
+                    className={
+                      `side-nav-item menus
+                      ${homeActive('admin/menus') && "active"}`
+                    }
+                  >
+                    <span>Menus</span>
+                  </li>
+                </Link>
+              
+                <Link to="/admin/vendors">
+                  <li className={`side-nav-item vendors
+                    ${homeActive('admin/vendors') && "active"}`}
+                  >
+                    <span>Vendors</span>
+                  </li>
+                </Link>
+              </ul>
+            )}
+            {/* { sideBarComponent } */}
           </div>
           <div className="main-container">
             <div className="section">{children}</div>

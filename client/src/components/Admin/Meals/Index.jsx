@@ -24,8 +24,6 @@ export class Meals extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      displayMealModal: false,
-      editMode: false,
       displayDeleteModal: false,
       modalContent: {}
     };
@@ -47,13 +45,11 @@ export class Meals extends Component {
    * @returns {void}
    */
   toggleAddModal = (mealDetails, edit = false) => {
-    const { displayMealModal } = this.state;
+    const { displayMealModal } = this.props;
 
-    this.props.showMealModal(!displayMealModal);
+    this.props.showMealModal(!displayMealModal, edit);
 
     this.setState({
-      editMode: edit,
-      displayMealModal: !displayMealModal,
       mealDetails
     });
   }
@@ -131,7 +127,7 @@ export class Meals extends Component {
       meals 
     } = this.props;
     const {
-      displayDeleteModal, modalContent, editMode, mealDetails
+      displayDeleteModal, modalContent, mealDetails
     } = this.state;
 
     return (
@@ -140,7 +136,6 @@ export class Meals extends Component {
         <MealModal
           toggleAddModal={this.toggleAddModal}
           show={displayMealModal}
-          edit={editMode}
           mealDetails={mealDetails}
         />
         { isLoading && (<Loader />) }
@@ -199,7 +194,7 @@ Meals.propTypes = {
   deleteMealItem: PropTypes.func,
   isDeleting: PropTypes.bool,
   meals: PropTypes.arrayOf(PropTypes.shape({})),
-  displayMealModal: PropTypes.bool
+  displayMealModal: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Meals);
