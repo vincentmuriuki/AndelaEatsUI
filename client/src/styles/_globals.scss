@@ -21,6 +21,14 @@ body {
   padding-left: 38px;
 }
 
+.clearfix {
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+
 .logo-img img {
   height: 50px;
   width: 50px;

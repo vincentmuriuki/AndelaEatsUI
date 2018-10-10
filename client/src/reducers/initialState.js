@@ -55,3 +55,16 @@ export const initialMealItems = {
     isLoading: false
   }
 };
+
+export const initialAdminMenus = {
+  isLoading: false,
+
+  dateOfMeal: null,
+  mealPeriod: null,
+  menuList: [],
+
+  error: {
+    status: false,
+    message: null
+  }
+};

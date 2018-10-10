@@ -90,11 +90,11 @@ export function handleOrderFailure(error) {
   };
 }
 
-
 export const getUpComingMenus = () => (dispatch) => axios.get(`${baseUrl}/menu`)
   .then((response) => {
     dispatch(setMenus(response.data));
   });
+
 // eslint-disable-next-line
 export const orderMeal = (orders) => (dispatch) => {
   dispatch(setMenuLoading(true));

@@ -1,6 +1,10 @@
 #admin-menus {
   display: block;
   overflow: hidden;
+  
+  .no-content {
+    margin-top: 50px;
+  }
 
   header {
     all: unset;
@@ -47,6 +51,21 @@
           .ct-wrap {
             width: 95%;
             margin: 0 auto;
+
+            .side-pick-count {
+              display: block;
+              width: 20px;
+              height: 20px;
+              float: left;
+              background: $color-blue;
+              color: white;
+              border-radius: 50%;
+              font-size: 13px;
+              overflow: hidden;
+              text-align: center;
+              padding-top: 1px;
+              margin-right: 10px;
+            }
 
             &:last-child {
               a {

@@ -1,9 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
-import { menuItemsUI } from '../../../tests/__mocks__/mockMenuItems';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
 import MenuModal from './MenuModal';
-import inputValidation from '../../../helpers/inputValidation';
+import { fetchMenus } from '../../../actions/admin/menuItemsAction';
+import { formatCurrentDate } from '../../../helpers';
+import { formatMenuItemDate } from '../../../helpers/menusHelper';
+import Loader from '../../common/Loader/Loader';
 
 /**
  * 
@@ -23,7 +27,6 @@ class Menus extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = Menus.initialState();
   }
 
@@ -36,9 +39,102 @@ class Menus extends Component {
    * @returns { undefined }
    */
   componentWillMount() {
-    this.setState({
-      menus: [...menuItemsUI]
-    });
+    this.props.fetchMenus();
+  }
+
+  /**
+   *
+   *
+   * @description joins strings
+   *
+   * @param { Array } array
+   * @param { Stirng } key
+   * 
+   * @returns { String }
+   *
+   * @memberof Menus
+   */
+  commaJoinComplementryItems = (array, key) => (
+    array.map(item => item[key]).join(', ')
+  );
+
+  /**
+   *
+   * 
+   * @description render menus section
+   *
+   * @memberof Menus
+   * 
+   * @returns { JSX }
+   */
+  renderMenus = () => {
+    const { error, menuList } = this.props.menus;
+    const {
+      displayModal,
+      modalTitle,
+      modalButtontext,
+    } = this.state;
+
+    return (
+      <div id="admin-menus">
+        { error.status
+          ? (
+            <div className="no-content">
+              Error occured while loading menus :-(
+            </div>
+          )
+          : (
+            <Fragment>
+              <header>
+                <div>
+                  <span className="title pull-left">Menu</span>
+                  <button
+                    className="pull-right"
+                    type="button"
+                    onClick={this.showAddModal}
+                  >
+                    Add menu item
+                  </button>
+                </div>
+              </header>
+              
+              <main>
+                {
+                  !menuList.length
+                    ? (
+                      <div className="no-content">
+                        No menu has been added yet :-(
+                      </div>
+                    )
+                    : (
+                      <div className="custom-table">
+                        <div className="ct-header">
+                          <div className="custom-col-5">Date</div>
+                          <div className="custom-col-4">Main Meal</div>
+                          <div className="custom-col-6">Protein</div>
+                          <div className="custom-col-6">Side</div>
+                          <div className="custom-col-5">Options</div>
+                        </div>
+                        
+                        <div className="ct-body">
+                          { this.renderRows() }
+                        </div>
+                      </div>
+                    )
+                }
+              </main>
+              <MenuModal
+                closeModal={this.closeModal}
+                modalTitle={modalTitle}
+                modalButtontext={modalButtontext}
+                displayModal={displayModal}
+                handleSubmit={this.handleSubmit}
+              />
+            </Fragment>
+          )
+        }
+      </div>
+    );
   }
 
   /**
@@ -49,21 +145,36 @@ class Menus extends Component {
    * @memberof Menus
    */
   renderRows = () => {
-    const { menus } = this.state;
-  
-    return menus.map(menu => {
+    const { menuList, dateOfMeal } = this.props.menus;
+
+    return menuList.map(menuItem => {
       const {
-        id, date, main, protein, soup, side
-      } = menu;
+        mealId,
+        mainMealName,
+        sideItemsAvailable,
+        proteinItemsAvailable,
+        sideOptionsCanPick,
+        proteinOptionsCanPick
+      } = menuItem;
 
       return (
-        <div key={id} className="ct-row">
+        <div key={mealId} className="ct-row">
           <div className="ct-wrap">
-            <div className="custom-col-5">{ date }</div>
-            <div className="custom-col-4">{ main }</div>
-            <div className="custom-col-4">{ protein }</div>
-            <div className="custom-col-4">{ soup }</div>
-            <div className="custom-col-4">{ side }</div>
+            <div className="custom-col-5">
+              { formatMenuItemDate(dateOfMeal) }
+            </div>
+            <div className="custom-col-4">{mainMealName}</div>
+            
+            { this.renderProteinSideItems(
+              proteinItemsAvailable,
+              proteinOptionsCanPick
+            )}
+
+            { this.renderProteinSideItems(
+              sideItemsAvailable,
+              sideOptionsCanPick
+            )}
+
             <div className="custom-col-5">
               <Link to="#">
                 <span>Edit</span>
@@ -122,53 +233,58 @@ class Menus extends Component {
    */
   handleSubmit = () => {}
 
+  /**
+   * 
+   * @description render side and protein listing
+   *
+   * @param { Array } itemsAvailable
+   * @param { Integer } optionsCanPick
+   *
+   * @memberof Menus
+   * 
+   * @returns { JSX }
+   */
+  renderProteinSideItems = (itemsAvailable, optionsCanPick) => (
+    <div className="custom-col-6 clearfix">
+      <span className="side-pick-count">
+        { optionsCanPick }
+      </span>
+      { this.commaJoinComplementryItems(
+        itemsAvailable,
+        'mealDescription'
+      ) }
+    </div>
+  );
+
   render() {
-    const {
-      displayModal,
-      modalTitle,
-      modalButtontext,
-    } = this.state;
+    const { isLoading } = this.props.menus;
+
     return (
-      <div id="admin-menus">
-        <header>
-          <div>
-            <span className="title pull-left">Menu</span>
-            <button
-              className="pull-right"
-              type="button"
-              onClick={this.showAddModal}
-            >
-              Add menu item
-            </button>
-          </div>
-        </header>
-        
-        <main>
-          <div className="custom-table">
-            <div className="ct-header">
-              <div className="custom-col-5">Date</div>
-              <div className="custom-col-4">Main Item</div>
-              <div className="custom-col-4">Protein</div>
-              <div className="custom-col-4">Soup</div>
-              <div className="custom-col-4">Side</div>
-              <div className="custom-col-5">Options</div>
-            </div>
-            
-            <div className="ct-body">
-              { this.renderRows() }
-            </div>
-          </div>
-        </main>
-        <MenuModal
-          closeModal={this.closeModal}
-          modalTitle={modalTitle}
-          modalButtontext={modalButtontext}
-          displayModal={displayModal}
-          handleSubmit={this.handleSubmit}
-        />
-      </div>
+      <Fragment>
+        { isLoading
+          ? <Loader />
+          : this.renderMenus()
+        }
+      </Fragment>
     );
   }
 }
 
-export default Menus;
+Menus.propTypes = {
+  fetchMenus: PropTypes.func.isRequired,
+
+  menus: PropTypes.shape({
+    isLoading: PropTypes.bool.isRequired,
+    menuList: PropTypes.arrayOf(PropTypes.shape({})),
+
+    dateOfMeal: PropTypes.any,
+    error: PropTypes.shape({
+      status: PropTypes.bool,
+      message: PropTypes.any
+    })
+  })
+};
+
+const mapStateToProps = ({ menus }) => ({ menus });
+
+export default connect(mapStateToProps, { fetchMenus })(Menus);
