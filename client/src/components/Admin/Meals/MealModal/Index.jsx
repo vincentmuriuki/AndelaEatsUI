@@ -2,7 +2,6 @@ import React, { Component, createRef } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import autoBind from 'auto-bind';
 import ImageView from './ImageView';
 import AddMealFields from './AddMealFields';
 
@@ -37,7 +36,6 @@ class MealModal extends Component {
   constructor(props) {
     super(props);
     this.imageInput = createRef();
-    autoBind(this);
   
     this.mealTypes = [
       'Main',
@@ -58,7 +56,16 @@ class MealModal extends Component {
     }
   }
 
-  onChange(event) {
+  /**
+   *
+   *
+   * @description handle onChage event
+   * 
+   * @param { Object } event
+   * 
+   * @returns { undefined }
+   */
+  onChange = (event) => {
     const { errors } = this.props;
     const { name, value } = event.target;
     this.setState({ [name]: value });
@@ -68,7 +75,16 @@ class MealModal extends Component {
     }
   }
 
-  onSubmit(event) {
+  /**
+   *
+   *
+   * @description handle onSubmit event
+   * 
+   * @param { Object } event
+   * 
+   * @returns { undefined }
+   */
+  onSubmit = (event) => {
     event.preventDefault();
     const formData = generateFormData(
       this.state,
@@ -106,7 +122,7 @@ class MealModal extends Component {
     return null;
   }
 
-  clearModal() {
+  clearModal = () => {
     this.props.setAddMealErrors([]);
 
     this.setState({
@@ -118,19 +134,19 @@ class MealModal extends Component {
     }
   }
 
-  closeModal() {
+  closeModal = () => {
     this.clearModal();
     this.props.toggleAddModal(null, false);
   }
 
-  openFileDialog() {
+  openFileDialog = () => {
     const { current: element } = this.imageInput;
     if (!element) return;
 
     element.click();
   }
 
-  previewImage() {
+  previewImage = () => {
     const { current: element } = this.imageInput;
     if (!element) return;
 
