@@ -37,6 +37,11 @@
   }
 
   main {
+    .empty-content {
+      width: 96.3%;
+      margin-top: 10%;
+    }
+
     .custom-table {
       width: 96.1%;
       margin-left: 1.9%;
@@ -51,7 +56,7 @@
           .ct-wrap {
             width: 95%;
             margin: 0 auto;
-
+            
             .side-pick-count {
               display: block;
               width: 20px;

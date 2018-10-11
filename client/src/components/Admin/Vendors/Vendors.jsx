@@ -13,6 +13,7 @@ import {
 import Modal from "./Modal";
 import DeleteVendorModal from "./DeleteVendorModal";
 import inputValidation from '../../../helpers/inputValidation';
+import EmptyContent from '../../common/EmptyContent';
 
 /**
  *
@@ -281,7 +282,7 @@ export class Vendors extends Component {
             this.renderVendor(vendor))
           )}
           { !isLoading && !vendors.length && (
-            <div className="no-content">No vendor has been added yet :-(</div>
+            <EmptyContent message="No vendor has been added yet" />
           )}
 
         </div>

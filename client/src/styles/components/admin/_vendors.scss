@@ -37,6 +37,10 @@
 .table-wrapper {
   display: flex;
   flex-direction: column;
+
+  .empty-content {
+    margin-top: 10%;
+  }
 }
 
 .table-body {

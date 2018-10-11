@@ -3,6 +3,11 @@
     outline: none;
   }
   
+  .empty-content {
+    width: 93.6%;
+    margin: 10% 0 0 2.2%;
+  }
+
   .title {
     font-weight: 700;
     padding: 0px 50px 0px 25px;
@@ -29,6 +34,14 @@
         font-size: 18px;
         line-height: 18px;
         cursor: pointer;
+        
+        &.grayed {
+          border-color: $color-light-grey;
+          background-color: $color-light-grey;
+          color: $color-medium-gray;
+
+          i { -webkit-text-stroke-color: $color-medium-gray; }
+        }
 
         &.active {
           background-color: $color-blue;

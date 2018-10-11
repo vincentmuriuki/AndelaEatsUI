@@ -11,6 +11,7 @@ import {
 } from '../../../actions/admin/mealItemsAction';
 import MealModal from './MealModal/Index';
 import DeleteMealModal from './DeleteMealModal';
+import EmptyContent from '../../common/EmptyContent';
 
 /**
  * 
@@ -157,7 +158,7 @@ export class Meals extends Component {
             <div>
               { meals.map((meal) => this.renderMeal(meal)) }
               { !isLoading && !meals.length && (
-                <div className="no-content">No meal has been added yet :-(</div>
+                <EmptyContent message="No meal has been added yet" />
               )}
             </div>
           </main>

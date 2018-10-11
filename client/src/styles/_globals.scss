@@ -55,6 +55,34 @@ body {
   color: $color-medium-grey;
 }
 
+.empty-content {
+  display: block;
+  width: 100%;
+  background: $color-pale-blue;
+  padding: 40px 0;
+  border-radius: 3px;
+  text-align: center;
+  margin: 0 auto;
+
+  span {
+    display: inline-block;
+    font-size: 20px;
+
+    i {
+      font-size: 30px;
+      float: left;
+      margin: -3px 15px 0 0;
+      color: $color-blue;
+    }
+  }
+
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+
 .fa-filter {
   color: #fff;
   -webkit-text-stroke: 1.2px;

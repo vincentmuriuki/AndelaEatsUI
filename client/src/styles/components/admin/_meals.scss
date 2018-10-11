@@ -160,6 +160,10 @@
     div {
       display: block;
 
+      .empty-content {
+        margin-top: 10%;
+      }
+
       .meal-card {
         display: inline-block;
         overflow: hidden;

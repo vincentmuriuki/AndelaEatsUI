@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Pagination from 'rc-pagination/lib';
@@ -9,12 +10,20 @@ import 'react-toastify/dist/ReactToastify.css';
 import MealCard from '../MealCard/MealCard';
 import Modal from '../MealCard/Modal';
 
-import 'rc-pagination/assets/index.css';
-import { fetchOrders, filterOrders, deleteOrder } from '../../actions/ordersAction';
 import Loader from '../common/Loader/Loader';
+import EmptyContent from '../common/EmptyContent';
+import 'rc-pagination/assets/index.css';
+
+import {
+  fetchOrders,
+  filterOrders,
+  deleteOrder
+} from '../../actions/ordersAction';
 
 /**
- * Application's order history page
+ * @description Orders Component
+ * 
+ * @name Orders
  */
 export class Orders extends Component {
   /**
@@ -62,6 +71,28 @@ export class Orders extends Component {
    */
   onChange({ target }) {
     this.setState({ [target.name]: target.value });
+  }
+
+  /**
+   * 
+   * 
+   * @description chhoose filter button class
+   * 
+   * @memberof Orders
+   * 
+   * @returns { String }
+  */
+  filterClassName = () => {
+    const { orders: { meals } } = this.props;
+    const { isOpen } = this.state;
+
+    if (meals.length > 0) {
+      if (isOpen) {
+        return 'active';
+      }
+      return '';
+    }
+    return 'grayed';
   }
 
   /**
@@ -175,6 +206,7 @@ export class Orders extends Component {
    * 
    * This is React render method that render the UI on the dom
    * @function Orders
+   *
    * @return { void }
    */
   render() {
@@ -193,7 +225,8 @@ export class Orders extends Component {
             {orders.isFiltered && <span>&nbsp;(filtered)</span>}
             <div className="filter">
               <button
-                className={`button ${isOpen && "active"}`}
+                disabled={orders.meals.length === 0}
+                className={`button ${this.filterClassName()}`}
                 type="button"
                 onClick={() => this.setState({ isOpen: !isOpen })}
               ><i className="fas fa-filter" />   Filter
@@ -266,30 +299,42 @@ export class Orders extends Component {
             deleteOrder={this.deleteOrder}
             modalContent={this.state.modalContent}
           />
-          <div className="container">
-            {
-              orders.meals.map((meal) => (
-                <MealCard
-                  key={meal.id}
-                  meal={meal}
-                  url={url}
-                  showModal={this.showModal}
-                />
-              ))
-            }
-          </div>
           {
-            orders.meals.length > 0 && (
-              <Pagination
-                locale={{ items_per_page: 'Items' }}
-                onChange={this.handlePageChange}
-                current={+orders.currentPage}
-                pageSize={9}
-                total={+orders.totalRecords}
-                className="pagination"
-                showTotal={this.showTotal}
-              />
-            )
+            Array.isArray(orders.meals) && orders.meals.length > 0
+              ? (
+                <Fragment>
+                  <div className="container">
+                    {
+                      orders.meals.map((meal) => (
+                        <MealCard
+                          key={meal.id}
+                          meal={meal}
+                          url={url}
+                          showModal={this.showModal}
+                        />
+                      ))
+                    }
+                  </div>
+                  {
+                    orders.meals.length > 0 && (
+                      <Pagination
+                        locale={{ items_per_page: 'Items' }}
+                        onChange={this.handlePageChange}
+                        current={+orders.currentPage}
+                        pageSize={9}
+                        total={+orders.totalRecords}
+                        className="pagination"
+                        showTotal={this.showTotal}
+                      />
+                    )
+                  }
+                </Fragment>
+              )
+              : (
+                <EmptyContent
+                  message="No meals available at the moment"
+                />
+              )
           }
         </div>
       </Fragment>

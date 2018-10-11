@@ -53,7 +53,7 @@ describe('Admin: Menu Component', () => {
     menusState.error.status = false;
     const wrapper = mountComponent();
 
-    expect(wrapper.find('.no-content').length).toEqual(1);
+    expect(wrapper.find('.empty-content').length).toEqual(1);
   });
 
   it.only('should render menus items', () => {

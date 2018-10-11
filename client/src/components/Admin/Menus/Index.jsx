@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 
 import MenuModal from './MenuModal';
 import { fetchMenus } from '../../../actions/admin/menuItemsAction';
-import { formatCurrentDate } from '../../../helpers';
 import { formatMenuItemDate } from '../../../helpers/menusHelper';
+import EmptyContent from '../../common/EmptyContent';
 import Loader from '../../common/Loader/Loader';
 
 /**
@@ -101,11 +101,7 @@ class Menus extends Component {
               <main>
                 {
                   !menuList.length
-                    ? (
-                      <div className="no-content">
-                        No menu has been added yet :-(
-                      </div>
-                    )
+                    ? <EmptyContent message="No menus has been added yet" />
                     : (
                       <div className="custom-table">
                         <div className="ct-header">
