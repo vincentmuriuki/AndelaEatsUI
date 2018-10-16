@@ -1,10 +1,12 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Pagination from 'rc-pagination/lib';
 import OrderCard from './OrderCard';
 import EmptyContent from '../../common/EmptyContent';
 import Loader from '../../common/Loader/Loader';
 import { fetchOrders } from '../../../actions/admin/ordersAction';
+import OrdersHeader from './OrdersHeader';
 import svg from '../../../assets/images/download-icon.svg';
 
 /**
@@ -12,15 +14,20 @@ import svg from '../../../assets/images/download-icon.svg';
  * @class Orders
  * @extends {Component}
  */
-export class Orders extends Component {
+export class OrderHistory extends Component {
   componentDidMount() {
     this.props.fetchOrders();
+  }
+
+  redirectToExport = () => {
+    const { history } = this.props;
+    history.push('/admin/orders/export');
   }
 
   /**
    * @method renderOrder
    *
-   * @memberof Orders
+   * @memberof OrderHistory
    *
    * @param {object} order
    *
@@ -28,7 +35,14 @@ export class Orders extends Component {
    */
   renderOrder = (order) => {
     const collected = order.status === "true";
-    return (<OrderCard key={order.id} order={order} status={collected} />);
+    return (
+      <OrderCard
+        key={order.id}
+        order={order}
+        status={collected}
+        showStatus
+      />
+    );
   }
 
   render() {
@@ -46,31 +60,13 @@ export class Orders extends Component {
       <section className="admin-orders">
         { isLoading && <Loader /> }
         <div className={`${isLoading && 'blurred'}`}>
-          <header className="orders-header">
-            <div className="left-section">
-              <h2 className="orders-header-title">Orders</h2>
-              <button
-                disabled={orders.length === 0}
-                className={`export-btn ${orders.length === 0 && "grayed"}`}
-                type="button"
-              >
-                Export
-                <span className="export-icon">
-                  <img src={svg} alt="" />
-                </span>
-              </button>
-            </div>
-            <div>
-              <button
-                disabled={orders.length === 0}
-                className={`filter-btn ${orders.length === 0 && "grayed"}`}
-                type="button"
-              >
-                <i className="fa fa-filter" />
-                Filter
-              </button>
-            </div>
-          </header>
+          
+          <OrdersHeader
+            title="Order History"
+            ordersCount={orders.length}
+            redirectToExport={this.redirectToExport}
+            svg={svg}
+          />
 
           <div className="table-header">
             <div className="custom-col-4">Order Number</div>
@@ -80,6 +76,19 @@ export class Orders extends Component {
           </div>
 
           { orders.map((order) => this.renderOrder(order))}
+
+          {
+            orders.length
+            && (
+              <Pagination
+                onChange={() => {}}
+                current={1}
+                pageSize={3}
+                total={orders.length}
+                className="pagination"
+              />
+            )
+          }
         </div>
       </section>
     );
@@ -91,10 +100,13 @@ const mapStateToProps = ({ mealOrders }) => ({
   isLoading: mealOrders.isLoading
 });
 
-Orders.propTypes = {
+OrderHistory.propTypes = {
   fetchOrders: PropTypes.func.isRequired,
   orders: PropTypes.arrayOf(PropTypes.shape({})),
   isLoading: PropTypes.bool.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
+  })
 };
 
-export default connect(mapStateToProps, { fetchOrders })(Orders);
+export default connect(mapStateToProps, { fetchOrders })(OrderHistory);

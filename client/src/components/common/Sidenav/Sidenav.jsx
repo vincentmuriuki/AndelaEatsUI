@@ -56,7 +56,7 @@ class SideNav extends Component {
                   <li className={`side-nav-item order
                     ${homeActive('admin/orders') && "active"}`}
                   >
-                    <span>Orders</span>
+                    <span>Order History</span>
                   </li>
                 </Link>
                 

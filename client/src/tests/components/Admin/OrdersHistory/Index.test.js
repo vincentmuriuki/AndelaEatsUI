@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import React from 'react';
 import { mount } from 'enzyme';
-import { Orders } from '../../../../components/Admin/Orders/Orders';
+import { OrderHistory } from '../../../../components/Admin/OrderHistory/Index';
 import orders from '../../../__mocks__/mockOrders';
 
 const setup = (isLoading) => {
@@ -11,7 +11,7 @@ const setup = (isLoading) => {
     isLoading,
   };
 
-  return (mount(<Orders {...props} />));
+  return (mount(<OrderHistory {...props} />));
 };
 
 let wrapper;

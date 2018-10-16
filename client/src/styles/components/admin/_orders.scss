@@ -33,6 +33,8 @@ $filter-btn-style: (
   }
 
   .orders-header {
+    margin-bottom: 20px;
+
     .orders-header-title {
       font-family: $font-family-pro;
       font-weight: 600;
@@ -58,10 +60,18 @@ $filter-btn-style: (
       }
     }
 
-    .filter-btn {
+    .export-btn-2 {
+      margin-top: px-to-rem(10px);
+    }
+  
+    .filter-btn, .export-btn-2 {
       @include buttons($filter-btn-style...);
       transform: translateY(px-to-rem(-6px));
 
+      img {
+        margin-right: px-to-rem(10px); 
+      }
+  
       &.grayed {
         border-color: $color-light-grey;
         background-color: $color-light-grey;

@@ -1,19 +1,20 @@
 /* eslint-disable no-undef */
 import React from 'react';
 import { mount } from 'enzyme';
-import OrderCard from '../../../../components/Admin/Orders/OrderCard';
+import OrderCard from '../../../../components/Admin/OrderHistory/OrderCard';
 import orders from '../../../__mocks__/mockOrders';
 
-const setup = (status) => {
+const setup = (status, showStatus) => {
   const props = {
     order: orders[0],
     status,
+    showStatus
   };
 
   return (mount(<OrderCard {...props} />));
 };
 
-let wrapper = setup(true);
+let wrapper = setup(true, true);
 
 describe('OrderCard Component', () => {
   it('should render correctly', () => {
@@ -27,8 +28,14 @@ describe('OrderCard Component', () => {
   });
 
   it('should display "Not Collected" if order status is false', () => {
-    wrapper = setup(false);
+    wrapper = setup(false, true);
     const statusSpan = wrapper.find('.options-wrapper > span');
     expect(statusSpan.text()).toEqual('Not Collected');
+  });
+
+  it('should not have status column', () => {
+    wrapper = setup(false, false);
+    const statusSpan = wrapper.find('.options-wrapper > span');
+    expect(statusSpan.length).toEqual(0);
   });
 });
