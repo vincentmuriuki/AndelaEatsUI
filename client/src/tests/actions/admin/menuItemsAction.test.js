@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import moxios from 'moxios';
 import { formatCurrentDate } from '../../../helpers';
+import mockMenuList from '../../__mocks__/mockMenuList';
 
 import {
   FETCH_MENUS_SUCCESS,
@@ -8,12 +9,17 @@ import {
   FETCH_MENUS_LOADING,
   FETCH_VENDOR_ENGAGEMENT_SUCCESS,
   FETCH_VENDOR_ENGAGEMENT_FAILURE,
+  DELETE_MENU_ITEM_LOADING,
+  DELETE_MENU_ITEM_SUCCESS,
+  DELETE_MENU_ITEM_FAILURE
 } from '../../../actions/actionTypes';
 
 import {
   fetchMenus,
   baseUrl,
-  fetchVendorEngagements
+  fetchVendorEngagements,
+  deleteMenuItem,
+  mockMenu,
 } from '../../../actions/admin/menuItemsAction';
 
 import { engagements } from '../../__mocks__/mockMenuItems';
@@ -21,7 +27,7 @@ import { engagements } from '../../__mocks__/mockMenuItems';
 const menusPath = `admin/menu/lunch/${formatCurrentDate()}`;
 
 const menusFromApi = {
-  menus: {
+  payload: {
     dateOfMeal: '2018-09-09',
     mealPeriod: 'lunch',
     menuList: []
@@ -54,7 +60,7 @@ describe('Admin::Menu Items Action', () => {
 
       expectedActions[1] = {
         type: FETCH_MENUS_SUCCESS,
-        payload: { ...menusFromApi }
+        payload: { ...menusFromApi.payload }
       };
   
       const store = mockStore({});
@@ -89,6 +95,83 @@ describe('Admin::Menu Items Action', () => {
           expect(store.getActions()).toEqual(expectedActions);
         });
 
+      done();
+    });
+
+    it('delete menu item success', async (done) => {
+      moxios.stubRequest(`${baseUrl}/admin/menu/2`, {
+        status: 200,
+        response: {}
+      });
+
+      const store = mockStore({});
+
+      const expectedActions = [
+        {
+          type: DELETE_MENU_ITEM_LOADING,
+          payload: true,
+        },
+        {
+          type: DELETE_MENU_ITEM_SUCCESS,
+          payload: 2,
+        },
+        {
+          type: DELETE_MENU_ITEM_LOADING,
+          payload: false,
+        }
+      ];
+
+      await store.dispatch(deleteMenuItem(2))
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions);
+        });
+      done();
+    });
+
+    it('delete menu item failure', async (done) => {
+      moxios.stubRequest(`${baseUrl}/admin/menu/2`, {
+        status: 400,
+        response: {
+          msg: 'Access Error - Permission Denied'
+        }
+      });
+
+      const store = mockStore({});
+
+      const expectedActions = [
+        {
+          type: DELETE_MENU_ITEM_LOADING,
+          payload: true,
+        },
+        {
+          type: DELETE_MENU_ITEM_FAILURE,
+          payload: 'Access Error - Permission Denied',
+        },
+        {
+          type: DELETE_MENU_ITEM_LOADING,
+          payload: false,
+        }
+      ];
+
+      await store.dispatch(deleteMenuItem(2))
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedActions);
+        });
+      done();
+    });
+
+    it('mock menu item ', async (done) => {
+      const store = mockStore({});
+
+      const expectedActions = [
+        {
+          type: 'MOCK_MENU_LIST',
+          payload: mockMenuList,
+        }
+      ];
+
+      await store.dispatch(mockMenu(mockMenuList));
+      expect(store.getActions()).toEqual(expectedActions);
       done();
     });
   });

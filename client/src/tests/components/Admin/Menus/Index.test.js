@@ -5,7 +5,6 @@ import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import Menus from '../../../../components/Admin/Menus/Index';
-import { mockMenuItem } from '../../../__mocks__/mockMenuItems';
 
 import Loader from '../../../../components/common/Loader/Loader';
 
@@ -17,6 +16,7 @@ const menusState = {
   isLoading: false,
   menuList: [],
   vendorEngagements: [],
+  isDeleting: false,
 };
 
 const mountComponent = () => {
@@ -60,11 +60,11 @@ describe('Admin: Menu Component', () => {
   it.only('should render menus items', () => {
     menusState.menuList = [{
       mealId: 1,
-      mainMealName: 'Rice',
-      sideItemsAvailable: [{ mealDescription: 'Plantain' }],
-      proteinItemsAvailable: [{ mealDescription: 'Fish' }],
-      sideOptionsCanPick: 1,
-      proteinOptionsCanPick: 1
+      mainMeal: 'Rice',
+      sideItems: ['Plantain'],
+      proteinItems: ['Fish'],
+      allowedSide: 1,
+      allowedProtein: 1
     }];
     const wrapper = mountComponent();
 
@@ -88,7 +88,6 @@ describe('Admin: Menu Component', () => {
     wrapper.instance().closeModal();
     expect(closeModalSpy).toHaveBeenCalled();
   });
-
 
   it('should call handleSubmit method', () => {
     const handleSubmitSpy = jest.spyOn(wrapper.instance(), 'handleSubmit');

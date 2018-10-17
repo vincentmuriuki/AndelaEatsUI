@@ -4,14 +4,20 @@ import {
   func, shape, arrayOf, bool, any
 } from 'prop-types';
 import { connect } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
 
 import MenuModal from './MenuModal';
 import {
-  fetchMenus, fetchVendorEngagements
+  fetchMenus,
+  fetchVendorEngagements,
+  mockMenu,
+  deleteMenuItem
 } from '../../../actions/admin/menuItemsAction';
 import { formatMenuItemDate } from '../../../helpers/menusHelper';
 import EmptyContent from '../../common/EmptyContent';
 import Loader from '../../common/Loader/Loader';
+import DeleteMenuModal from './DeleteMenuModal';
+import mockMenuList from '../../../tests/__mocks__/mockMenuList';
 
 /**
  * 
@@ -25,8 +31,10 @@ class Menus extends Component {
   static initialState = () => ({
     menus: [],
     displayModal: false,
+    displayDeleteModal: false,
     modalTitle: '',
     modalButtontext: '',
+    menuDetails: {}
   })
 
   constructor(props) {
@@ -42,8 +50,9 @@ class Menus extends Component {
    * 
    * @returns { undefined }
    */
-  componentWillMount() {
-    this.props.fetchMenus();
+  componentDidMount() {
+    this.props.fetchMenus()
+      .then(() => this.props.mockMenu(mockMenuList));
     this.props.fetchVendorEngagements();
   }
 
@@ -59,8 +68,8 @@ class Menus extends Component {
    *
    * @memberof Menus
    */
-  commaJoinComplementryItems = (array, key) => (
-    array.map(item => item[key]).join(', ')
+  commaJoinComplementryItems = (array) => (
+    array.map(item => item).join(', ')
   );
 
   /**
@@ -116,11 +125,15 @@ class Menus extends Component {
    * @returns { JSX }
    */
   renderMenus = () => {
-    const { error, menuList, vendorEngagements } = this.props.menus;
+    const {
+      error, menuList, isDeleting, vendorEngagements
+    } = this.props.menus;
     const {
       displayModal,
       modalTitle,
       modalButtontext,
+      displayDeleteModal,
+      menuDetails
     } = this.state;
 
     return (
@@ -175,6 +188,15 @@ class Menus extends Component {
                 vendorEngagements={vendorEngagements}
                 handleSubmit={this.handleSubmit}
               />
+              <ToastContainer />
+              {displayDeleteModal && (
+              <DeleteMenuModal
+                display={displayDeleteModal}
+                deleteMenu={this.deleteMenu}
+                closeModal={this.closeModal}
+                deleting={isDeleting}
+                {...menuDetails}
+              />)}
             </Fragment>
           )
         }
@@ -194,30 +216,30 @@ class Menus extends Component {
 
     return menuList.map(menuItem => {
       const {
-        mealId,
-        mainMealName,
-        sideItemsAvailable,
-        proteinItemsAvailable,
-        sideOptionsCanPick,
-        proteinOptionsCanPick
+        mainMealId,
+        mainMeal,
+        sideItems,
+        proteinItems,
+        allowedSide,
+        allowedProtein
       } = menuItem;
 
       return (
-        <div key={mealId} className="ct-row">
+        <div key={mainMealId} className="ct-row">
           <div className="ct-wrap">
             <div className="custom-col-5">
               { formatMenuItemDate(dateOfMeal) }
             </div>
-            <div className="custom-col-4">{mainMealName}</div>
+            <div className="custom-col-4">{mainMeal}</div>
             
             { this.renderProteinSideItems(
-              proteinItemsAvailable,
-              proteinOptionsCanPick
+              proteinItems,
+              allowedProtein
             )}
 
             { this.renderProteinSideItems(
-              sideItemsAvailable,
-              sideOptionsCanPick
+              sideItems,
+              allowedSide
             )}
 
             <div className="custom-col-5">
@@ -225,7 +247,7 @@ class Menus extends Component {
                 <span>Edit</span>
               </Link>
 
-              <Link to="#">
+              <Link to="#" onClick={() => this.showDeleteModal(menuItem)}>
                 <span>Delete</span>
               </Link>
             </div>
@@ -234,6 +256,79 @@ class Menus extends Component {
       );
     });
   }
+
+  /**
+   * 
+   * @method showAddModal
+   * 
+   * @memberof Menus
+   * 
+   * @returns {void}
+   */
+  showAddModal = () => {
+    this.setState(prev => ({
+      displayModal: !prev.displayModal,
+      modalTitle: 'ADD MENU',
+      modalButtontext: 'Add Menu'
+    }));
+  }
+
+  /**
+   * 
+   * @method showDeleteModal
+   * 
+   * @memberof Menus
+   * 
+   * @param {object} menuDetails
+   * 
+   * @returns {void}
+   */
+  showDeleteModal = (menuDetails) => {
+    this.setState({
+      displayDeleteModal: true,
+      menuDetails
+    });
+  }
+
+  /**
+   * 
+   * @method deleteMenu
+   *
+   * @param {number} menuId
+   * 
+   * @memberof Menu
+   * 
+   * @returns {void}
+   */
+  deleteMenu = (menuId) => {
+    this.props.deleteMenuItem(menuId)
+      .then(() => this.closeModal());
+  }
+
+  /**
+   * 
+   * @method closeModal
+   *
+   * @param {object} vendor
+   * 
+   * @memberof Menu
+   * 
+   * @returns {void}
+   */
+  closeModal = () => {
+    this.setState(Menus.initialState());
+  }
+
+  /**
+   * Handles form submission
+   * 
+   * @param {object} menuDetails
+   * 
+   * @memberof Menu
+   * 
+   * @returns {void}
+   */
+  handleSubmit = () => {}
 
   /**
    * 
@@ -251,16 +346,12 @@ class Menus extends Component {
       <span className="side-pick-count">
         { optionsCanPick }
       </span>
-      { this.commaJoinComplementryItems(
-        itemsAvailable,
-        'mealDescription'
-      ) }
+      { this.commaJoinComplementryItems(itemsAvailable) }
     </div>
   );
-
+  
   render() {
     const { isLoading } = this.props.menus;
-
     return (
       <Fragment>
         { isLoading
@@ -275,8 +366,11 @@ class Menus extends Component {
 Menus.propTypes = {
   fetchMenus: func.isRequired,
   fetchVendorEngagements: func.isRequired,
+  deleteMenuItem: func.isRequired,
+  mockMenu: func,
   menus: shape({
     isLoading: bool.isRequired,
+    isDeleting: bool.isRequired,
     menuList: arrayOf(shape({})),
 
     dateOfMeal: any,
@@ -289,9 +383,11 @@ Menus.propTypes = {
 
 const mapStateToProps = ({ menus }) => ({ menus });
 
-export default connect(
-  mapStateToProps,
+export default connect(mapStateToProps,
   {
     fetchMenus,
+    mockMenu,
+    deleteMenuItem,
     fetchVendorEngagements
-  })(Menus);
+  }
+)(Menus);

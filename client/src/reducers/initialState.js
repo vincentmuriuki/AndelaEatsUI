@@ -58,12 +58,13 @@ export const initialMealItems = {
 
 export const initialAdminMenus = {
   isLoading: false,
-
+  isDeleting: false,
   dateOfMeal: null,
   mealPeriod: null,
   menuList: [],
   vendorEngagements: [],
 
+  meta: null,
   error: {
     status: false,
     message: null
