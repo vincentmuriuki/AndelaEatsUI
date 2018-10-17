@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import React, { Component } from 'react';
+import React from 'react';
 import { shallow } from 'enzyme';
 import MenuModal from '../../../../components/Admin/Menus/MenuModal';
 import { mockMenuItem } from '../../../__mocks__/mockMenuItems';
@@ -9,6 +9,14 @@ describe('MenuModal Component', () => {
     const props = {
       closeModal: jest.fn(),
       handleSubmit: jest.fn(),
+      vendorEngagements: [
+        {
+          vendorId: '',
+          vendor: { name: '' },
+          startDate: '',
+          endDate: ''
+        }
+      ]
     };
 
     return shallow(<MenuModal {...props} />);

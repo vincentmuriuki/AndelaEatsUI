@@ -13,14 +13,14 @@ jobs:
             - v1-dependencies-
       - run: 
           name: install dependencies 
-          command: cd client/ && yarn install
+          command: cd client/ && npm install
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "client/package.json" }}
       - run: 
           name: run tests
-          command: cd client && yarn test
+          command: cd client && npm test
   deploy:
     docker:
       - image: circleci/node:9.10.1
@@ -30,7 +30,7 @@ jobs:
           version: 17.11.0-ce
       - run: 
           name: install dependencies 
-          command: cd client/ && yarn install
+          command: cd client/ && npm install
       - run:
           name: Deploy application to environment
           command: |

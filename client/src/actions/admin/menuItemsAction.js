@@ -3,7 +3,9 @@ import axios from 'axios';
 import {
   FETCH_MENUS_LOADING,
   FETCH_MENUS_SUCCESS,
-  FETCH_MENUS_FAILURE
+  FETCH_MENUS_FAILURE,
+  FETCH_VENDOR_ENGAGEMENT_SUCCESS,
+  FETCH_VENDOR_ENGAGEMENT_FAILURE,
 } from '../actionTypes';
 
 import { formatCurrentDate } from '../../helpers';
@@ -46,3 +48,26 @@ export const fetchMenus = () => (dispatch) => {
       dispatch(fetchMenusLoading(false));
     });
 };
+
+const fetchVendorEngagementSuccess = engagements => ({
+  type: FETCH_VENDOR_ENGAGEMENT_SUCCESS,
+  payload: engagements
+});
+
+const fetchVendorEngagementFailure = payload => ({
+  type: FETCH_VENDOR_ENGAGEMENT_FAILURE,
+  payload
+});
+
+export const fetchVendorEngagements = () => dispatch => axios
+  .get(`${baseUrl}/engagements/`, {
+    headers: {
+      'X-Location': 1
+    }
+  })
+  .then((response) => {
+    const { payload } = response.data;
+    dispatch(fetchVendorEngagementSuccess(payload));
+  }).catch((error) => {
+    dispatch(fetchVendorEngagementFailure(error));
+  });

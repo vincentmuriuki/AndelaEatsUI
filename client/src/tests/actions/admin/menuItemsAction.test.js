@@ -6,12 +6,17 @@ import {
   FETCH_MENUS_SUCCESS,
   FETCH_MENUS_FAILURE,
   FETCH_MENUS_LOADING,
+  FETCH_VENDOR_ENGAGEMENT_SUCCESS,
+  FETCH_VENDOR_ENGAGEMENT_FAILURE,
 } from '../../../actions/actionTypes';
 
 import {
   fetchMenus,
-  baseUrl
+  baseUrl,
+  fetchVendorEngagements
 } from '../../../actions/admin/menuItemsAction';
+
+import { engagements } from '../../__mocks__/mockMenuItems';
 
 const menusPath = `admin/menu/lunch/${formatCurrentDate()}`;
 
@@ -84,6 +89,54 @@ describe('Admin::Menu Items Action', () => {
           expect(store.getActions()).toEqual(expectedActions);
         });
 
+      done();
+    });
+  });
+
+
+  describe('Fetch Vendor Engagements', () => {
+    beforeEach(() => moxios.install());
+    afterEach(() => moxios.uninstall());
+
+    it('fetch vendor engagements success', async (done) => {
+      moxios.stubRequest(`${baseUrl}/engagements/`, {
+        status: 200,
+        response: { payload: engagements }
+      });
+
+      const expectedAction = [{
+        type: FETCH_VENDOR_ENGAGEMENT_SUCCESS,
+        payload: engagements
+      }];
+
+      const store = mockStore({});
+
+      await store
+        .dispatch(fetchVendorEngagements())
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedAction);
+        });
+      done();
+    });
+
+    it('fetch vendor engagements failure', async (done) => {
+      moxios.stubRequest(`${baseUrl}/engagements/`, {
+        status: 401,
+        response: {}
+      });
+
+      const expectedAction = [{
+        type: FETCH_VENDOR_ENGAGEMENT_FAILURE,
+        payload: new Error('Request failed with status code 401')
+      }];
+  
+      const store = mockStore({});
+      
+      await store
+        .dispatch(fetchVendorEngagements())
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedAction);
+        });
       done();
     });
   });

@@ -7,6 +7,7 @@ import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import inputValidation from '../../../helpers/inputValidation';
+import formatDropdown from '../../../helpers/formatDropdown';
 import {
   mockMenuItem, mockProtein, secondaryItem, adminAllowed
 } from '../../../tests/__mocks__/mockMenuItems';
@@ -23,6 +24,7 @@ class MenuModal extends Component {
     menuItem: [],
     allowedSideMeal: [],
     allowedProtein: [],
+    vendorEngagementId: [],
     errors: {},
     collectionDate: moment()
   })
@@ -31,27 +33,6 @@ class MenuModal extends Component {
     super(props);
 
     this.state = MenuModal.initialState();
-  }
-
-
-  /**
-   * 
-   * @method formValidation
-   * 
-   * @memberof MenuModal
-   * 
-   * @param {object} event
-   * 
-   * @returns {void}
-   */
-  formValidation = (event) => {
-    event.preventDefault();
-    const err = inputValidation(this.state);
-    if (err.isEmpty) {
-      this.props.handleSubmit(this.state);
-    } else {
-      this.setState({ errors: err.errors });
-    }
   }
 
   /**
@@ -77,6 +58,27 @@ class MenuModal extends Component {
 
   /**
    * 
+   * @method formValidation
+   * 
+   * @memberof MenuModal
+   * 
+   * @param {object} event
+   * 
+   * @returns {void}
+   */
+  formValidation = (event) => {
+    event.preventDefault();
+    const err = inputValidation(this.state);
+    if (err.isEmpty) {
+      this.props.handleSubmit(this.state);
+    } else {
+      this.setState({ errors: err.errors });
+    }
+  }
+
+  
+  /**
+   * 
    * @method handleCloseModal
    * 
    * @memberof MenuModal
@@ -92,17 +94,19 @@ class MenuModal extends Component {
 
   render() {
     const {
-      modalTitle, modalButtontext, displayModal
+      modalTitle, modalButtontext, displayModal, vendorEngagements
     } = this.props;
     const {
       sideMeal,
       menuItem,
       protein,
+      vendorEngagementId,
       allowedSideMeal,
       allowedProtein,
       collectionDate,
       errors
     } = this.state;
+    const engagements = formatDropdown(vendorEngagements);
 
     return (
       <Fragment>
@@ -127,6 +131,20 @@ class MenuModal extends Component {
             </div>
             <form onSubmit={this.formValidation}>
               <div>
+                <div className="form-field-single">
+                  <label htmlFor="soup">Vendor Engagements&nbsp;
+                    <span>
+                      {errors.vendorEngagementId ? errors.vendorEngagementId : ""}
+                    </span>
+                  </label>
+                  <Select 
+                    onChange={(e) => this.onChange(e, 'vendorEngagementId')}
+                    isSearchable
+                    value={vendorEngagementId}
+                    options={engagements}
+                    placeholder="select vendor"
+                  />
+                </div>
                 <div className="form-field-double">
                   <div className="select-width">
                     <label htmlFor="menuItem">Main Item&nbsp;
@@ -249,6 +267,7 @@ MenuModal.propTypes = {
   modalButtontext: string,
   displayModal: bool,
   handleSubmit: func,
+  vendorEngagements: array
 };
 
 export default MenuModal;

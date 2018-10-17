@@ -1,10 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import {
+  func, shape, arrayOf, bool, any
+} from 'prop-types';
 import { connect } from 'react-redux';
 
 import MenuModal from './MenuModal';
-import { fetchMenus } from '../../../actions/admin/menuItemsAction';
+import {
+  fetchMenus, fetchVendorEngagements
+} from '../../../actions/admin/menuItemsAction';
 import { formatMenuItemDate } from '../../../helpers/menusHelper';
 import EmptyContent from '../../common/EmptyContent';
 import Loader from '../../common/Loader/Loader';
@@ -40,6 +44,7 @@ class Menus extends Component {
    */
   componentWillMount() {
     this.props.fetchMenus();
+    this.props.fetchVendorEngagements();
   }
 
   /**
@@ -59,6 +64,49 @@ class Menus extends Component {
   );
 
   /**
+   * 
+   * @method showAddModal
+   * 
+   * @memberof Menus
+   * 
+   * @returns {void}
+   */
+  showAddModal = () => {
+    this.setState(prev => ({
+      displayModal: !prev.displayModal,
+      modalTitle: 'ADD MENU',
+      modalButtontext: 'Add Menu'
+    }));
+  }
+
+  /**
+   * 
+   * @method closeModal
+   *
+   * @param {object} vendor
+   * 
+   * @memberof Menu
+   * 
+   * @returns {void}
+   */
+  closeModal = () => {
+    this.setState({
+      displayModal: false,
+    });
+  }
+
+  /**
+   * Handles form submission
+   * 
+   * @param {object} menuDetails
+   * 
+   * @memberof Menu
+   * 
+   * @returns {void}
+   */
+  handleSubmit = () => {}
+
+  /**
    *
    * 
    * @description render menus section
@@ -68,7 +116,7 @@ class Menus extends Component {
    * @returns { JSX }
    */
   renderMenus = () => {
-    const { error, menuList } = this.props.menus;
+    const { error, menuList, vendorEngagements } = this.props.menus;
     const {
       displayModal,
       modalTitle,
@@ -124,6 +172,7 @@ class Menus extends Component {
                 modalTitle={modalTitle}
                 modalButtontext={modalButtontext}
                 displayModal={displayModal}
+                vendorEngagements={vendorEngagements}
                 handleSubmit={this.handleSubmit}
               />
             </Fragment>
@@ -188,49 +237,6 @@ class Menus extends Component {
 
   /**
    * 
-   * @method showAddModal
-   * 
-   * @memberof Menus
-   * 
-   * @returns {void}
-   */
-  showAddModal = () => {
-    this.setState(prev => ({
-      displayModal: !prev.displayModal,
-      modalTitle: 'ADD MENU',
-      modalButtontext: 'Add Menu'
-    }));
-  }
-
-  /**
-   * 
-   * @method closeModal
-   *
-   * @param {object} vendor
-   * 
-   * @memberof Menu
-   * 
-   * @returns {void}
-   */
-  closeModal = () => {
-    this.setState({
-      displayModal: false,
-    });
-  }
-
-  /**
-   * Handles form submission
-   * 
-   * @param {object} menuDetails
-   * 
-   * @memberof Menu
-   * 
-   * @returns {void}
-   */
-  handleSubmit = () => {}
-
-  /**
-   * 
    * @description render side and protein listing
    *
    * @param { Array } itemsAvailable
@@ -267,20 +273,25 @@ class Menus extends Component {
 }
 
 Menus.propTypes = {
-  fetchMenus: PropTypes.func.isRequired,
+  fetchMenus: func.isRequired,
+  fetchVendorEngagements: func.isRequired,
+  menus: shape({
+    isLoading: bool.isRequired,
+    menuList: arrayOf(shape({})),
 
-  menus: PropTypes.shape({
-    isLoading: PropTypes.bool.isRequired,
-    menuList: PropTypes.arrayOf(PropTypes.shape({})),
-
-    dateOfMeal: PropTypes.any,
-    error: PropTypes.shape({
-      status: PropTypes.bool,
-      message: PropTypes.any
+    dateOfMeal: any,
+    error: shape({
+      status: bool,
+      message: any
     })
   })
 };
 
 const mapStateToProps = ({ menus }) => ({ menus });
 
-export default connect(mapStateToProps, { fetchMenus })(Menus);
+export default connect(
+  mapStateToProps,
+  {
+    fetchMenus,
+    fetchVendorEngagements
+  })(Menus);

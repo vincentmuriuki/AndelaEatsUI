@@ -15,7 +15,8 @@ const menusState = {
     message: null
   },
   isLoading: false,
-  menuList: []
+  menuList: [],
+  vendorEngagements: [],
 };
 
 const mountComponent = () => {

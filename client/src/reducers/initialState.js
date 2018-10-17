@@ -10,7 +10,7 @@ export const initialMenus = {
   acc1: '',
   acc2: '',
   mainMeal: '',
-  message: ''
+  message: '',
 };
 
 export const orders = {
@@ -62,6 +62,7 @@ export const initialAdminMenus = {
   dateOfMeal: null,
   mealPeriod: null,
   menuList: [],
+  vendorEngagements: [],
 
   error: {
     status: false,

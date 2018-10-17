@@ -87,6 +87,38 @@ export const adminAllowed = [
   { value: 3, label: 3 }
 ];
 
+export const engagements = [
+  {
+      endDate: "Sun, 11 Nov 2018 00:00:00 GMT",
+      id: 1,
+      isDeleted: false,
+      startDate: "Wed, 10 Oct 2018 00:00:00 GMT",
+      status: 1,
+      terminationReason: null,
+      timestamps: {
+          created_at: "Tue, 09 Oct 2018 16:34:40 GMT",
+          date_pretty: "October 09, 2018",
+          date_pretty_short: "Oct 09, 2018",
+          updated_at: "Tue, 09 Oct 2018 16:34:40 GMT"
+      },
+      vendor: {
+          address: "Ketu, Lagos",
+          contactPerson: "Yemi",
+          id: 1,
+          isDeleted: false,
+          name: "Spicy Chops",
+          tel: "12345678900",
+          timestamps: {
+              created_at: "Tue, 09 Oct 2018 16:34:40 GMT",
+              date_pretty: "October 09, 2018",
+              date_pretty_short: "Oct 09, 2018",
+              updated_at: "Tue, 09 Oct 2018 16:34:40 GMT"
+          }
+      },
+      vendorId: 1
+  }
+];
+
 export default {
   menuItemsUI
 };
