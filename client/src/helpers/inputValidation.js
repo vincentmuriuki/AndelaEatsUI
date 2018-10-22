@@ -2,7 +2,7 @@ const inputValidation = (formFields) => {
   const errors = {};
   Object.entries(formFields).forEach(([key, value]) => {
     if (value.toString().trim() === "" 
-      && key !== 'errors' && key !== 'id') {
+    && key !== 'errors' && key !== 'id') {
       errors[key] = '*required';
     }
   });

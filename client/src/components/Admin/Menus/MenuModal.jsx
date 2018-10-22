@@ -6,11 +6,11 @@ import {
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
+import Loader from '../../common/Loader/Loader';
 import inputValidation from '../../../helpers/inputValidation';
 import formatDropdown from '../../../helpers/formatDropdown';
-import {
-  mockMenuItem, mockProtein, secondaryItem, adminAllowed
-} from '../../../tests/__mocks__/mockMenuItems';
+import formatMealItems, { getIds } from '../../../helpers/formatMealItems';
+import { adminAllowed } from '../../../tests/__mocks__/mockMenuItems';
 
 /**
  * 
@@ -21,7 +21,7 @@ class MenuModal extends Component {
   static initialState = () => ({
     protein: [],
     sideMeal: [],
-    menuItem: [],
+    mainItem: [],
     allowedSideMeal: [],
     allowedProtein: [],
     vendorEngagementId: [],
@@ -51,9 +51,55 @@ class MenuModal extends Component {
     if (Object.entries(errors).length > 0) {
       this.setState({ errors: {} });
     }
+
     this.setState({
       [name]: selectOption
     });
+  }
+
+  /**
+   * 
+   * @method checkAllowedSelection
+   * 
+   * @memberof MenuModal
+   * 
+   * @returns {void}
+   */
+  checkAllowedSelection = () => {
+    const check = {};
+    const {
+      sideMeal,
+      allowedSideMeal,
+      protein,
+      allowedProtein,
+      mainItem,
+      collectionDate,
+      vendorEngagementId 
+    } = this.state;
+    if (sideMeal.length > allowedSideMeal.value 
+        || sideMeal.length !== allowedSideMeal.value) {
+      check.sideMeal = '*select exact allowed side meal';
+    }
+
+    if (protein.length > allowedProtein.value
+        || protein.length !== allowedProtein.value) {
+      check.protein = '*select exact allowed protein';
+    }
+
+    if (Object.keys(check).length !== 0) {
+      this.setState({ errors: check });
+    } else {
+      this.props.handleSubmit({
+        date: collectionDate.format("YYYY-MM-DD"), 
+        mealPeriod: "Lunch",
+        mainMealId: mainItem.value,
+        allowedSide: allowedSideMeal.value, 
+        allowedProtein: allowedProtein.value,
+        sideItems: getIds(sideMeal),
+        proteinItems: getIds(protein),
+        vendorEngagementId: vendorEngagementId.value
+      });
+    }
   }
 
   /**
@@ -70,7 +116,7 @@ class MenuModal extends Component {
     event.preventDefault();
     const err = inputValidation(this.state);
     if (err.isEmpty) {
-      this.props.handleSubmit(this.state);
+      this.checkAllowedSelection();
     } else {
       this.setState({ errors: err.errors });
     }
@@ -83,9 +129,9 @@ class MenuModal extends Component {
    * 
    * @memberof MenuModal
    * 
-   * @param {object} event
+   * @param { Object } event
    * 
-   * @returns {void}
+   * @returns { Void }
    */
   handleCloseModal = () => {
     this.setState(MenuModal.initialState());
@@ -94,11 +140,16 @@ class MenuModal extends Component {
 
   render() {
     const {
-      modalTitle, modalButtontext, displayModal, vendorEngagements
+      modalTitle,
+      modalButtontext,
+      displayModal,
+      vendorEngagements,
+      mealItems,
+      isCreating
     } = this.props;
     const {
       sideMeal,
-      menuItem,
+      mainItem,
       protein,
       vendorEngagementId,
       allowedSideMeal,
@@ -106,7 +157,9 @@ class MenuModal extends Component {
       collectionDate,
       errors
     } = this.state;
+
     const engagements = formatDropdown(vendorEngagements);
+    const formatedMealItems = formatMealItems(mealItems);
 
     return (
       <Fragment>
@@ -149,15 +202,15 @@ class MenuModal extends Component {
                   <div className="select-width">
                     <label htmlFor="menuItem">Main Item&nbsp;
                       <span>
-                        {errors.menuItem ? errors.menuItem : ""}
+                        {errors.mainItem ? errors.mainItem : ""}
                       </span>    
                     </label>
                     <Select 
-                      onChange={(e) => this.onChange(e, 'menuItem')}
-                      name="menuItem" 
-                      id="menuItem" 
-                      value={menuItem}
-                      options={mockMenuItem}
+                      onChange={(e) => this.onChange(e, 'mainItem')}
+                      name="mainItem" 
+                      id="mainItem" 
+                      value={mainItem}
+                      options={formatedMealItems.main}
                       isClearable
                       placeholder="select main meal"
                     />
@@ -217,7 +270,7 @@ class MenuModal extends Component {
                     onChange={(e) => this.onChange(e, 'sideMeal')}
                     isMulti
                     value={sideMeal}
-                    options={secondaryItem}
+                    options={formatedMealItems.side}
                     placeholder="select side meal"
                   />
                 </div>
@@ -232,25 +285,29 @@ class MenuModal extends Component {
                     isMulti
                     name="protein" 
                     value={protein}
-                    options={mockProtein}
+                    options={formatedMealItems.protein}
                     placeholder="select protein"
                   />
                 </div>
                 <div className="modal-footer">
-                  <div className="button-container">
-                    <button
-                      type="button"
-                      className="grayed" 
-                      onClick={this.handleCloseModal}
-                    >
-                      Cancel
-                    </button>
-                    <button 
-                      type="submit"
-                    >
-                      {modalButtontext}
-                    </button>
-                  </div>
+                  { isCreating
+                    ? <div className="modal-loader"><Loader /></div>
+                    : (
+                      <div className="button-container">
+                        <button
+                          type="button"
+                          className="grayed" 
+                          onClick={this.handleCloseModal}
+                        >
+                        Cancel
+                        </button>
+                        <button 
+                          type="submit"
+                        >
+                          {modalButtontext}
+                        </button>
+                      </div>
+                    )}
                 </div>
               </div>
             </form>
@@ -266,8 +323,10 @@ MenuModal.propTypes = {
   modalTitle: string,
   modalButtontext: string,
   displayModal: bool,
+  isCreating: bool,
   handleSubmit: func,
-  vendorEngagements: array
+  vendorEngagements: array,
+  mealItems: array
 };
 
 export default MenuModal;

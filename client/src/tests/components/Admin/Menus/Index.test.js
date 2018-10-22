@@ -73,25 +73,26 @@ describe('Admin: Menu Component', () => {
   });
 
   it('should call showAddModal method', () => {
-    const showDeleteModalSpy = jest
-      .spyOn(wrapper.instance(), 'showAddModal');
-    const modalContent = {
+    const spy = jest.spyOn(wrapper.instance(), 'showAddModal');
+    wrapper.setState({
       displayModal: true,
       modalTitle: 'ADD MENU',
       modalButtontext: 'Add Menu'
-    };
-    wrapper.instance().showAddModal(modalContent);
-    expect(showDeleteModalSpy).toHaveBeenCalled();
+    });
+    wrapper.instance().showAddModal();
+    expect(spy).toHaveBeenCalled();
   });
 
   it('should call closeModal method', () => {
     const closeModalSpy = jest.spyOn(wrapper.instance(), 'closeModal');
+    wrapper.update();
     wrapper.instance().closeModal();
     expect(closeModalSpy).toHaveBeenCalled();
   });
 
   it('should call handleSubmit method', () => {
     const handleSubmitSpy = jest.spyOn(wrapper.instance(), 'handleSubmit');
+    wrapper.update();
     wrapper.instance().handleSubmit();
     expect(handleSubmitSpy).toHaveBeenCalled();
   });

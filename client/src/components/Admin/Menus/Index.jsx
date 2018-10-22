@@ -11,7 +11,9 @@ import {
   fetchMenus,
   fetchVendorEngagements,
   mockMenu,
-  deleteMenuItem
+  deleteMenuItem,
+  fetchMealItems, 
+  createMenu
 } from '../../../actions/admin/menuItemsAction';
 import { formatMenuItemDate } from '../../../helpers/menusHelper';
 import EmptyContent from '../../common/EmptyContent';
@@ -54,6 +56,7 @@ class Menus extends Component {
     this.props.fetchMenus()
       .then(() => this.props.mockMenu(mockMenuList));
     this.props.fetchVendorEngagements();
+    this.props.fetchMealItems();
   }
 
   /**
@@ -78,7 +81,7 @@ class Menus extends Component {
    * 
    * @memberof Menus
    * 
-   * @returns {void}
+   * @returns { void }
    */
   showAddModal = () => {
     this.setState(prev => ({
@@ -86,6 +89,38 @@ class Menus extends Component {
       modalTitle: 'ADD MENU',
       modalButtontext: 'Add Menu'
     }));
+  }
+
+  /**
+   * 
+   * @method showDeleteModal
+   * 
+   * @memberof Menus
+   * 
+   * @param {object} menuDetails
+   * 
+   * @returns {void}
+   */
+  showDeleteModal = (menuDetails) => {
+    this.setState({
+      displayDeleteModal: true,
+      menuDetails
+    });
+  }
+
+  /**
+   * 
+   * @method deleteMenu
+   *
+   * @param {number} menuId
+   * 
+   * @memberof Menu
+   * 
+   * @returns {void}
+   */
+  deleteMenu = (menuId) => {
+    this.props.deleteMenuItem(menuId)
+      .then(() => this.closeModal());
   }
 
   /**
@@ -99,21 +134,24 @@ class Menus extends Component {
    * @returns {void}
    */
   closeModal = () => {
-    this.setState({
-      displayModal: false,
-    });
+    this.setState(Menus.initialState());
   }
 
   /**
    * Handles form submission
    * 
-   * @param {object} menuDetails
+   * @param {object} menu
    * 
    * @memberof Menu
    * 
    * @returns {void}
    */
-  handleSubmit = () => {}
+  handleSubmit = (menu) => {
+    this.props.createMenu(menu)
+      .then(() => {
+        this.closeModal();
+      });
+  }
 
   /**
    *
@@ -126,7 +164,12 @@ class Menus extends Component {
    */
   renderMenus = () => {
     const {
-      error, menuList, isDeleting, vendorEngagements
+      error,
+      menuList, 
+      isDeleting, 
+      vendorEngagements, 
+      mealItems,
+      isCreating
     } = this.props.menus;
     const {
       displayModal,
@@ -135,7 +178,7 @@ class Menus extends Component {
       displayDeleteModal,
       menuDetails
     } = this.state;
-
+    
     return (
       <div id="admin-menus">
         { error.status
@@ -150,6 +193,7 @@ class Menus extends Component {
                 <div>
                   <span className="title pull-left">Menu</span>
                   <button
+                    id="add-menu"
                     className="pull-right"
                     type="button"
                     onClick={this.showAddModal}
@@ -178,8 +222,9 @@ class Menus extends Component {
                         </div>
                       </div>
                     )
-                }
+                  }
               </main>
+              <ToastContainer />
               <MenuModal
                 closeModal={this.closeModal}
                 modalTitle={modalTitle}
@@ -187,8 +232,9 @@ class Menus extends Component {
                 displayModal={displayModal}
                 vendorEngagements={vendorEngagements}
                 handleSubmit={this.handleSubmit}
+                mealItems={mealItems}
+                isCreating={isCreating}
               />
-              <ToastContainer />
               {displayDeleteModal && (
               <DeleteMenuModal
                 display={displayDeleteModal}
@@ -259,79 +305,6 @@ class Menus extends Component {
 
   /**
    * 
-   * @method showAddModal
-   * 
-   * @memberof Menus
-   * 
-   * @returns {void}
-   */
-  showAddModal = () => {
-    this.setState(prev => ({
-      displayModal: !prev.displayModal,
-      modalTitle: 'ADD MENU',
-      modalButtontext: 'Add Menu'
-    }));
-  }
-
-  /**
-   * 
-   * @method showDeleteModal
-   * 
-   * @memberof Menus
-   * 
-   * @param {object} menuDetails
-   * 
-   * @returns {void}
-   */
-  showDeleteModal = (menuDetails) => {
-    this.setState({
-      displayDeleteModal: true,
-      menuDetails
-    });
-  }
-
-  /**
-   * 
-   * @method deleteMenu
-   *
-   * @param {number} menuId
-   * 
-   * @memberof Menu
-   * 
-   * @returns {void}
-   */
-  deleteMenu = (menuId) => {
-    this.props.deleteMenuItem(menuId)
-      .then(() => this.closeModal());
-  }
-
-  /**
-   * 
-   * @method closeModal
-   *
-   * @param {object} vendor
-   * 
-   * @memberof Menu
-   * 
-   * @returns {void}
-   */
-  closeModal = () => {
-    this.setState(Menus.initialState());
-  }
-
-  /**
-   * Handles form submission
-   * 
-   * @param {object} menuDetails
-   * 
-   * @memberof Menu
-   * 
-   * @returns {void}
-   */
-  handleSubmit = () => {}
-
-  /**
-   * 
    * @description render side and protein listing
    *
    * @param { Array } itemsAvailable
@@ -365,9 +338,12 @@ class Menus extends Component {
 
 Menus.propTypes = {
   fetchMenus: func.isRequired,
+  fetchMealItems: func.isRequired,
+  createMenu: func.isRequired,
   fetchVendorEngagements: func.isRequired,
   deleteMenuItem: func.isRequired,
   mockMenu: func,
+  isCreating: bool,
   menus: shape({
     isLoading: bool.isRequired,
     isDeleting: bool.isRequired,
@@ -388,6 +364,7 @@ export default connect(mapStateToProps,
     fetchMenus,
     mockMenu,
     deleteMenuItem,
-    fetchVendorEngagements
-  }
-)(Menus);
+    fetchVendorEngagements,
+    fetchMealItems,
+    createMenu
+  })(Menus);

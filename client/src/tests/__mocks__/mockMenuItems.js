@@ -89,35 +89,45 @@ export const adminAllowed = [
 
 export const engagements = [
   {
-      endDate: "Sun, 11 Nov 2018 00:00:00 GMT",
+    endDate: "Sun, 11 Nov 2018 00:00:00 GMT",
+    id: 1,
+    isDeleted: false,
+    startDate: "Wed, 10 Oct 2018 00:00:00 GMT",
+    status: 1,
+    terminationReason: null,
+    timestamps: {
+      created_at: "Tue, 09 Oct 2018 16:34:40 GMT",
+      date_pretty: "October 09, 2018",
+      date_pretty_short: "Oct 09, 2018",
+      updated_at: "Tue, 09 Oct 2018 16:34:40 GMT"
+    },
+    vendor: {
+      address: "Ketu, Lagos",
+      contactPerson: "Yemi",
       id: 1,
       isDeleted: false,
-      startDate: "Wed, 10 Oct 2018 00:00:00 GMT",
-      status: 1,
-      terminationReason: null,
+      name: "Spicy Chops",
+      tel: "12345678900",
       timestamps: {
-          created_at: "Tue, 09 Oct 2018 16:34:40 GMT",
-          date_pretty: "October 09, 2018",
-          date_pretty_short: "Oct 09, 2018",
-          updated_at: "Tue, 09 Oct 2018 16:34:40 GMT"
-      },
-      vendor: {
-          address: "Ketu, Lagos",
-          contactPerson: "Yemi",
-          id: 1,
-          isDeleted: false,
-          name: "Spicy Chops",
-          tel: "12345678900",
-          timestamps: {
-              created_at: "Tue, 09 Oct 2018 16:34:40 GMT",
-              date_pretty: "October 09, 2018",
-              date_pretty_short: "Oct 09, 2018",
-              updated_at: "Tue, 09 Oct 2018 16:34:40 GMT"
-          }
-      },
-      vendorId: 1
+        created_at: "Tue, 09 Oct 2018 16:34:40 GMT",
+        date_pretty: "October 09, 2018",
+        date_pretty_short: "Oct 09, 2018",
+        updated_at: "Tue, 09 Oct 2018 16:34:40 GMT"
+      }
+    },
+    vendorId: 1
   }
 ];
+
+export const menu = {
+  date: "2018-10-22", 
+  mealPeriod: "Lunch",
+  mainMealId: 1,
+  allowedSide: 2, 
+  allowedProtein: 1,
+  sideItems: [1],
+  proteinItems: [1, 2]
+};
 
 export default {
   menuItemsUI

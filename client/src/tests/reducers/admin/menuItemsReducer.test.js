@@ -5,8 +5,17 @@ import {
   FETCH_MENUS_LOADING,
   DELETE_MENU_ITEM_LOADING,
   DELETE_MENU_ITEM_SUCCESS,
-  DELETE_MENU_ITEM_FAILURE
+  DELETE_MENU_ITEM_FAILURE,
+  FETCH_MEALITEMS_SUCCESS,
+  FETCH_MEALITEMS_FAILURE,
+  FETCH_VENDOR_ENGAGEMENT_SUCCESS,
+  FETCH_VENDOR_ENGAGEMENT_FAILURE,
+  CREATE_MENU_LOADING,
+  CREATE_MENU_SUCCESS,
+  CREATE_MENU_FAILURE,
 } from '../../../actions/actionTypes';
+import { mealItems } from '../../__mocks__/mockMealItems';
+import { engagements, menu } from '../../__mocks__/mockMenuItems';
 
 import menusReducer from '../../../reducers/admin/menusReducer';
 
@@ -119,6 +128,87 @@ describe('Admin:: Menu Items Reducer', () => {
 
       newState = menusReducer(initialAdminMenus, action);
       expect(newState.menuList.length).toBe(4);
+    });
+  });
+
+  describe('FETCH_VENDOR_ENGAGEMENT_SUCCESS', () => {
+    it('should update state with vendor engagements', () => {
+      action = {
+        type: FETCH_VENDOR_ENGAGEMENT_SUCCESS,
+        payload: { engagements }
+      };
+
+      newState = menusReducer(initialAdminMenus, action);
+      expect(newState.vendorEngagements.length).toEqual(1);
+      expect(newState.vendorEngagements[0].id).toEqual(1);
+      expect(newState.vendorEngagements[0].vendor.name).toEqual('Spicy Chops');
+    });
+  });
+
+  describe('FETCH_VENDOR_ENGAGEMENT_FAILURE', () => {
+    it('should set error status and message', () => {
+      action = {
+        type: FETCH_VENDOR_ENGAGEMENT_FAILURE,
+        payload: "error message",
+      };
+
+      newState = menusReducer(initialAdminMenus, action);
+      expect(newState.error.status).toBe(true);
+      expect(newState.error.message).toBe("error message");
+    });
+  });
+
+  describe('FETCH_MEALITEMS_SUCCESS', () => {
+    it('should update state with meal-items', () => {
+      action = {
+        type: FETCH_MEALITEMS_SUCCESS,
+        payload: { mealItems }
+      };
+
+      newState = menusReducer(initialAdminMenus, action);
+      expect(newState.mealItems.length).toEqual(2);
+      expect(newState.mealItems[0].id).toEqual(1);
+      expect(newState.mealItems[0].mealType).toEqual('side');
+    });
+  });
+
+  describe('FETCH_MEALITEMS_FAILURE', () => {
+    it('should set error status and message', () => {
+      action = {
+        type: FETCH_MEALITEMS_FAILURE,
+        payload: "error message",
+      };
+
+      newState = menusReducer(initialAdminMenus, action);
+      expect(newState.error.status).toBe(true);
+      expect(newState.error.message).toBe("error message");
+    });
+  });
+
+  describe('CREATE_MENU_SUCCESS', () => {
+    it('should update state with meal-items', () => {
+      action = {
+        type: CREATE_MENU_SUCCESS,
+        payload: { menu }
+      };
+
+      newState = menusReducer(initialAdminMenus, action);
+      expect(newState.menuList.length).toEqual(1);
+      expect(newState.menuList[0].date).toEqual("2018-10-22");
+      expect(newState.menuList[0].mealPeriod).toEqual("Lunch");
+    });
+  });
+
+  describe('CREATE_MENU_FAILURE', () => {
+    it('should set error status and message', () => {
+      action = {
+        type: CREATE_MENU_FAILURE,
+        payload: "error message",
+      };
+
+      newState = menusReducer(initialAdminMenus, action);
+      expect(newState.error.status).toBe(true);
+      expect(newState.error.message).toBe("error message");
     });
   });
 });

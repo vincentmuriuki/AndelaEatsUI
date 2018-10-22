@@ -6,7 +6,12 @@ import {
   FETCH_VENDOR_ENGAGEMENT_FAILURE,
   DELETE_MENU_ITEM_LOADING,
   DELETE_MENU_ITEM_SUCCESS,
-  DELETE_MENU_ITEM_FAILURE
+  DELETE_MENU_ITEM_FAILURE,
+  FETCH_MEALITEMS_SUCCESS,
+  FETCH_MEALITEMS_FAILURE,
+  CREATE_MENU_LOADING,
+  CREATE_MENU_SUCCESS,
+  CREATE_MENU_FAILURE,
 } from '../../actions/actionTypes';
 import filter from '../../helpers/filter';
 
@@ -33,11 +38,31 @@ export default (state = initialAdminMenus, { type, payload }) => {
         vendorEngagements: payload.engagements 
       };
 
+    case FETCH_MEALITEMS_SUCCESS:
+      return {
+        ...state,
+        mealItems: payload.mealItems
+      };
+
+    case CREATE_MENU_LOADING:
+      return {
+        ...state,
+        isCreating: payload
+      };
+
+    case CREATE_MENU_SUCCESS:
+      return {
+        ...state,
+        menuList: [...state.menuList, payload.menu]
+      };
+
     case FETCH_VENDOR_ENGAGEMENT_FAILURE:
+    case FETCH_MEALITEMS_FAILURE:
+    case CREATE_MENU_FAILURE:
       return { 
         ...state, 
         error: {
-          status: false,
+          status: true,
           message: payload
         }
       };

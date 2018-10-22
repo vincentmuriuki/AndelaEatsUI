@@ -9,7 +9,12 @@ import {
   FETCH_VENDOR_ENGAGEMENT_FAILURE,
   DELETE_MENU_ITEM_LOADING,
   DELETE_MENU_ITEM_SUCCESS,
-  DELETE_MENU_ITEM_FAILURE
+  DELETE_MENU_ITEM_FAILURE,
+  FETCH_MEALITEMS_SUCCESS,
+  FETCH_MEALITEMS_FAILURE,
+  CREATE_MENU_LOADING,
+  CREATE_MENU_SUCCESS,
+  CREATE_MENU_FAILURE,
 } from '../actionTypes';
 
 import { formatCurrentDate } from '../../helpers';
@@ -104,9 +109,9 @@ const fetchVendorEngagementFailure = payload => ({
 });
 
 export const fetchVendorEngagements = () => dispatch => axios
-  .get(`${baseUrl}/engagements/`, {
-    headers: {
-      'X-Location': 1
+  .get(`${baseUrl}/engagements/`, { 
+    headers: { 
+      'X-Location': 1 
     }
   })
   .then((response) => {
@@ -115,3 +120,63 @@ export const fetchVendorEngagements = () => dispatch => axios
   }).catch((error) => {
     dispatch(fetchVendorEngagementFailure(error));
   });
+
+const fetchMealItemsSuccess = mealItems => ({
+  type: FETCH_MEALITEMS_SUCCESS,
+  payload: mealItems
+});
+
+const fetchMealItemsFailure = payload => ({
+  type: FETCH_MEALITEMS_FAILURE,
+  payload
+});
+
+export const fetchMealItems = () => dispatch => axios
+  .get(`${baseUrl}/meal-items/`, { 
+    headers: { 
+      'X-Location': 1 
+    } 
+  })
+  .then((response) => {
+    const { payload } = response.data;
+    dispatch(fetchMealItemsSuccess(payload));
+  })
+  .catch((error) => {
+    dispatch(fetchMealItemsFailure(error));
+  });
+
+const createMenuLoading = payload => ({
+  type: CREATE_MENU_LOADING,
+  payload
+});
+
+const createMenuSuccess = mealItems => ({
+  type: CREATE_MENU_SUCCESS,
+  payload: mealItems
+});
+
+const createMenuFailure = message => ({
+  type: CREATE_MENU_FAILURE,
+  payload: message
+});
+
+export const createMenu = (menu) => dispatch => {
+  dispatch(createMenuLoading(true));
+
+  return axios.post(`${baseUrl}/admin/menu/`, menu, { 
+    headers: { 
+      'X-Location': 1 
+    } 
+  })
+    .then((response) => {
+      const { msg, payload } = response.data;
+      toastSuccess(msg);
+      dispatch(createMenuSuccess(payload));
+      dispatch(createMenuLoading(false));
+    })
+    .catch((error) => {
+      toastError(error);
+      dispatch(createMenuFailure(error));
+      dispatch(createMenuLoading(false));
+    });
+};

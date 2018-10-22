@@ -2,6 +2,9 @@
 import moxios from 'moxios';
 import { formatCurrentDate } from '../../../helpers';
 import mockMenuList from '../../__mocks__/mockMenuList';
+import mealItems from '../../__mocks__/mockMealItems';
+import { engagements, menu } from '../../__mocks__/mockMenuItems';
+
 
 import {
   FETCH_MENUS_SUCCESS,
@@ -11,7 +14,12 @@ import {
   FETCH_VENDOR_ENGAGEMENT_FAILURE,
   DELETE_MENU_ITEM_LOADING,
   DELETE_MENU_ITEM_SUCCESS,
-  DELETE_MENU_ITEM_FAILURE
+  DELETE_MENU_ITEM_FAILURE,
+  FETCH_MEALITEMS_SUCCESS,
+  FETCH_MEALITEMS_FAILURE,
+  CREATE_MENU_SUCCESS,
+  CREATE_MENU_LOADING,
+  CREATE_MENU_FAILURE,
 } from '../../../actions/actionTypes';
 
 import {
@@ -20,9 +28,10 @@ import {
   fetchVendorEngagements,
   deleteMenuItem,
   mockMenu,
+  fetchMealItems,
+  createMenu
 } from '../../../actions/admin/menuItemsAction';
 
-import { engagements } from '../../__mocks__/mockMenuItems';
 
 const menusPath = `admin/menu/lunch/${formatCurrentDate()}`;
 
@@ -204,19 +213,133 @@ describe('Admin::Menu Items Action', () => {
 
     it('fetch vendor engagements failure', async (done) => {
       moxios.stubRequest(`${baseUrl}/engagements/`, {
-        status: 401,
+        status: 400,
         response: {}
       });
 
       const expectedAction = [{
         type: FETCH_VENDOR_ENGAGEMENT_FAILURE,
-        payload: new Error('Request failed with status code 401')
+        payload: new Error('Request failed with status code 400')
       }];
   
       const store = mockStore({});
       
       await store
         .dispatch(fetchVendorEngagements())
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedAction);
+        });
+      done();
+    });
+  });
+
+  describe('Fetch Meal Items', () => {
+    beforeEach(() => moxios.install());
+    afterEach(() => moxios.uninstall());
+
+    it('fetch meal item success', async (done) => {
+      moxios.stubRequest(`${baseUrl}/meal-items/`, {
+        status: 200,
+        response: { payload: { mealItems } }
+      });
+
+      const expectedAction = [{
+        type: FETCH_MEALITEMS_SUCCESS,
+        payload: { mealItems }
+      }];
+
+      const store = mockStore({});
+
+      await store
+        .dispatch(fetchMealItems())
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedAction);
+        });
+      done();
+    });
+
+    it('fetch meal items failure', async (done) => {
+      moxios.stubRequest(`${baseUrl}/meal-items/`, {
+        status: 400,
+        response: {}
+      });
+
+      const expectedAction = [{
+        type: FETCH_MEALITEMS_FAILURE,
+        payload: new Error('Request failed with status code 400')
+      }];
+  
+      const store = mockStore({});
+      
+      await store
+        .dispatch(fetchMealItems())
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedAction);
+        });
+      done();
+    });
+  });
+
+  describe('Create  Menu', () => {
+    beforeEach(() => moxios.install());
+    afterEach(() => moxios.uninstall());
+
+    it('create menu success', async (done) => {
+      moxios.stubRequest(`${baseUrl}/admin/menu/`, {
+        status: 201,
+        response: { payload: { menu } }
+      });
+
+      const expectedAction = [
+        {
+          type: CREATE_MENU_LOADING,
+          payload: true
+        },
+        {
+          type: CREATE_MENU_SUCCESS,
+          payload: { menu }
+        },
+        {
+          type: CREATE_MENU_LOADING,
+          payload: false
+        }
+      ];
+
+      const store = mockStore({});
+
+      await store
+        .dispatch(createMenu())
+        .then(() => {
+          expect(store.getActions()).toEqual(expectedAction);
+        });
+      done();
+    });
+
+    it('create menu failure', async (done) => {
+      moxios.stubRequest(`${baseUrl}/admin/menu/`, {
+        status: 400,
+        response: {}
+      });
+
+      const expectedAction = [
+        {
+          type: CREATE_MENU_LOADING,
+          payload: true
+        },
+        {
+          type: CREATE_MENU_FAILURE,
+          payload: new Error('Request failed with status code 400'),
+        },
+        {
+          type: CREATE_MENU_LOADING,
+          payload: false
+        }
+      ];
+  
+      const store = mockStore({});
+      
+      await store
+        .dispatch(createMenu())
         .then(() => {
           expect(store.getActions()).toEqual(expectedAction);
         });

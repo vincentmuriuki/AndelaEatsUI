@@ -16,6 +16,32 @@ describe('MenuModal Component', () => {
           startDate: '',
           endDate: ''
         }
+      ],
+      mealItems: [
+        {
+          description: "Jollof Rice",
+          id: 1,
+          image: "google.com",
+          isDeleted: false,
+          mealType: "main",
+          name: "Rice"
+        },
+        {
+          description: "Fried Chicken",
+          id: 3,
+          image: "google.com",
+          isDeleted: false,
+          mealType: "protein",
+          name: "Chicken",
+        },
+        {
+          description: "Baked beans",
+          id: 4,
+          image: "google.com",
+          isDeleted: false,
+          mealType: "side",
+          name: "Moi Moi",
+        }
       ]
     };
 
@@ -45,6 +71,12 @@ describe('MenuModal Component', () => {
     const spy = jest.spyOn(wrapper.instance(), 'handleCloseModal');
     const event = { preventDefault: jest.fn() };
     wrapper.instance().handleCloseModal(event);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should call checkAllowedSelection  method', () => {
+    const spy = jest.spyOn(wrapper.instance(), 'checkAllowedSelection');
+    wrapper.instance().checkAllowedSelection();
     expect(spy).toHaveBeenCalled();
   });
 });
