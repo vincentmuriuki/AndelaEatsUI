@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Pagination from 'rc-pagination/lib';
 import { ToastContainer } from 'react-toastify';
 import MealCard from './MealCard';
 import Loader from '../../common/Loader/Loader';
+
 import {
   fetchMealItems,
   showMealModal,
@@ -26,12 +28,15 @@ export class Meals extends Component {
     super(props);
     this.state = {
       displayDeleteModal: false,
-      modalContent: {}
+      modalContent: {},
+      page: 1,
+      pageSize: 20
     };
   }
 
   componentDidMount() {
-    this.props.fetchMealItems();
+    const { page } = this.state;
+    this.props.fetchMealItems(page);
   }
 
   /**
@@ -102,6 +107,22 @@ export class Meals extends Component {
   }
 
   /**
+   *
+   * 
+   * @description handle page change
+   *
+   * @param { Number } page
+   * 
+   * @memberof Meals
+   * 
+   * @returns { String }
+   */
+  pageChange = (page) => {
+    this.setState({ page });
+    this.props.fetchMealItems(page);
+  }
+
+  /**
    * @method renderMeal
    *
    * @memberof Meals
@@ -118,19 +139,19 @@ export class Meals extends Component {
       showEditModal={this.toggleAddModal}
     />
   );
-
-
+  
   render() {
     const {
       displayMealModal,
       isLoading,
       isDeleting,
-      meals 
+      meals,
+      pagination
     } = this.props;
     const {
-      displayDeleteModal, modalContent, mealDetails
+      displayDeleteModal, modalContent, mealDetails, pageSize
     } = this.state;
-
+  
     return (
       <Fragment>
         <ToastContainer />
@@ -143,13 +164,13 @@ export class Meals extends Component {
         <div className={`${isLoading && 'blurred'}`} id="admin-meals">
           <header>
             <div>
-              <span className="title pull-left">Meals</span>
+              <span className="title pull-left">Meal Items</span>
               <button
                 className="pull-right"
                 type="button"
                 onClick={() => this.toggleAddModal(null)}
               >
-                Add meal
+                Add meal item
               </button>
             </div>
           </header>
@@ -161,6 +182,19 @@ export class Meals extends Component {
                 <EmptyContent message="No meal has been added yet" />
               )}
             </div>
+
+            {
+              pagination && meals.length
+              && (
+                <Pagination
+                  onChange={this.pageChange}
+                  current={pagination.current_page}
+                  pageSize={pageSize}
+                  total={pagination.total_rows}
+                  className="pagination"
+                />
+              )
+            }
           </main>
         </div>
         <DeleteMealModal
@@ -175,12 +209,18 @@ export class Meals extends Component {
   }
 }
 
-const mapStateToProps = ({ mealItems }) => ({
-  meals: mealItems.meals,
-  isLoading: mealItems.isLoading,
-  displayMealModal: mealItems.mealModal.show,
-  isDeleting: mealItems.isDeleting
-});
+const mapStateToProps = ({ mealItems }) => {
+  const meals = [...mealItems.meals];
+  meals.reverse();
+
+  return ({
+    meals,
+    pagination: mealItems.pagination,
+    isLoading: mealItems.isLoading,
+    displayMealModal: mealItems.mealModal.show,
+    isDeleting: mealItems.isDeleting
+  });
+}
 
 const mapDispatchToProps = {
   fetchMealItems,
@@ -190,6 +230,7 @@ const mapDispatchToProps = {
 
 Meals.propTypes = {
   fetchMealItems: PropTypes.func.isRequired,
+  pagination: PropTypes.shape({}),
   isLoading: PropTypes.bool.isRequired,
   showMealModal: PropTypes.func.isRequired,
   deleteMealItem: PropTypes.func,

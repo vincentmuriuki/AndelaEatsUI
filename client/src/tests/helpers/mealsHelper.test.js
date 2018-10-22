@@ -14,9 +14,10 @@ const menu = { date: new Date('2/5/2018') };
 const today = new Date();
 const mealDetails = {
   name: 'Ugeli',
-  type: 'Side',
+  type: 'side',
   image: { 
-    file: new File([''], 'filename.jpg', { type: 'image/jpg' })
+    file: new File([''], 'filename.jpg', { type: 'image/jpg' }),
+    dataurl: 'data://path/to/image'
   },
   desc: 'Description for meals'
 };
@@ -41,7 +42,6 @@ test('canOrderMeal method', () => {
 test('returns an object of meal details', () => {
   const newMealDetails = { ...mealDetails };
   const result = generateFormData(newMealDetails, types);
-  
   expect(result.mealName).toBe(mealDetails.name);
   expect(result.mealType).toBe(mealDetails.type.toLowerCase());
   expect(result.description).toBe(mealDetails.desc);
@@ -54,9 +54,12 @@ test('returns array of image string error', () => {
 });
 
 test('returns no error if dataurl is valid for update', () => {
-  const updateMealDetails = { ...mealDetails, image: { dataurl: 'image' } };
+  const updateMealDetails = {
+    ...mealDetails,
+    dataurl: mealDetails.image.dataurl,
+  };
   const result = generateFormData(updateMealDetails, types);
-  expect(result.image).toBe('image');
+  expect(result.dataurl).toBe('data://path/to/image');
 });
 
 test('returns array of name string error', () => {

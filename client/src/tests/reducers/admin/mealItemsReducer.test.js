@@ -15,8 +15,8 @@ import {
   EDIT_MEAL_ITEM_FAILURE,
 } from '../../../actions/actionTypes';
 import mealItemsReducer from '../../../reducers/admin/mealItemsReducer';
-import initialState, { initialMealItems } from '../../../reducers/initialState';
-import { mealItems } from '../../__mocks__/mockMealItems';
+import { initialMealItems } from '../../../reducers/initialState';
+import { mealItems, pagination } from '../../__mocks__/mockMealItems';
 
 describe('Admin:: Meal Items Reducer', () => {
   let newState, action;
@@ -51,7 +51,7 @@ describe('Admin:: Meal Items Reducer', () => {
     it('should update the mealItems state in the store', () => {
       action = {
         type: FETCH_MEAL_ITEMS_SUCCESS,
-        payload: mealItems,
+        payload: { mealItems, pagination },
       };
 
       newState = mealItemsReducer(initialMealItems, action);

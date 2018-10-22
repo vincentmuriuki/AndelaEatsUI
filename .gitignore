@@ -13,3 +13,5 @@ __snapshots__
 **.snap
 coverage/
 pre-commit.old
+
+.env

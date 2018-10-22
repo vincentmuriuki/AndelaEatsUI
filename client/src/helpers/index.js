@@ -56,3 +56,7 @@ export const formatCurrentDate = () => {
 
   return `${date.year}-${month}-${day}`;
 };
+
+export const lowerCaseArray = (array) => (
+  array.map(item => item.toLowerCase())
+);

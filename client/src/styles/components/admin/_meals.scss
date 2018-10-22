@@ -157,6 +157,12 @@
   }
 
   main {
+    ul {
+      &.pagination {
+        margin-left: 24px;
+      }
+    }
+  
     div {
       display: block;
 
@@ -259,5 +265,11 @@
   .modal-content{
     width: 95%;
     max-width: px-to-rem(420px);
+  }
+  .modal-footer {
+    .loader-wheel {
+      display: inline-block;
+      margin: 5px 40px 0 0;
+    }
   }
 }

@@ -67,7 +67,7 @@ class SideNav extends Component {
                       ${homeActive('admin/meals') && "active"}`
                     }
                   >
-                    <span>Meals</span>
+                    <span>Meal Items</span>
                   </li>
                 </Link>
 

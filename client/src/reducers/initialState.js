@@ -46,6 +46,7 @@ export const initialMealItems = {
   isLoading: false,
   isDeleting: false,
   meals: [],
+  pagination: null,
 
   mealModal: {
     show: false,

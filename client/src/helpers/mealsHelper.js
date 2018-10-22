@@ -1,4 +1,6 @@
-import { title } from './index';
+import { title, lowerCaseArray } from './index';
+import defMealImage from '../assets/images/mealdef.gif';
+import { upload } from './cloudinary';
 
 export const canOrderMeal = (day) => {
   const todaysDate = new Date();
@@ -34,19 +36,11 @@ export const validateAddMealImage = (image) => {
   return true;
 };
 
-const validateFileUpload = (file, dataurl) => {
-  const errors = [];
-  if (!file && !dataurl) { errors.push('image'); }
-  if (file && !(file instanceof File)) { errors.push('image'); }
-
-  return errors;
-};
-
 const validateInputFields = (mealDetails) => {
   const errors = [];
 
   Object.entries(mealDetails).forEach(([key, value]) => {
-    if (key === 'image' || key === 'type') return false;
+    if (key === 'image' || key === 'type') return [];
     if (!value.toString().trim().length) { errors.push(key); }
   });
 
@@ -58,23 +52,20 @@ export const generateFormData = (mealDetails, types) => {
     name, desc, type, image: { file, dataurl }
   } = mealDetails;
   
-  let errors = [];
-
-  errors = [
-    ...errors,
+  const errors = [
     ...validateInputFields(mealDetails),
-    ...validateFileUpload(file, dataurl)
+    ...(!dataurl ? ['image'] : []),
+    ...(!lowerCaseArray(types).includes(type) ? ['type'] : [])
   ];
-  
-  if (!types.includes(type)) { errors.push('type'); }
-  if (errors.length) return errors;
 
-  return {
-    mealName: title(name),
-    mealType: type.toLowerCase(),
-    description: title(desc),
-    image: file || dataurl
-  };
+  return errors.length ? errors
+    : {
+      mealName: title(name),
+      mealType: type.toLowerCase(),
+      description: title(desc),
+      file,
+      dataurl
+    };
 };
 
 export const endDate = () => new Date(today.getFullYear(), 
@@ -83,3 +74,21 @@ export const endDate = () => new Date(today.getFullYear(),
 export const findUpdatedIndex = (prevState, updatedId) => (
   prevState.findIndex(item => item.id === updatedId)
 );
+
+export const setMealImage = (image) => (
+  image === 'google.com' || image.match(/^image.+$/)
+    ? defMealImage
+    : image
+);
+
+export const mealImageUpload = (file, dataurl, callback) => {
+  if (file instanceof File) {
+    return upload(dataurl)
+      .then(payload => callback(null, payload.secure_url))
+      .catch(error => callback(error, null));
+  }
+
+  return callback(null, dataurl);
+};
+
+export const defaultMealImage = defMealImage;

@@ -60,7 +60,7 @@ const AddMealFields = (props) => {
               { mealTypes.map(mealType => (
                 <option
                   key={mealType}
-                  value={mealType}
+                  value={mealType.toLowerCase()}
                 >
                   {mealType}
                 </option>

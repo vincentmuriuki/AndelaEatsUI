@@ -2,11 +2,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { setMealImage } from '../../../../helpers/mealsHelper';
 
 const ImageView = (props) => {
   const { openFileDialog, error, dataurl } = props;
 
-  if (!dataurl) {
+  if (!dataurl || dataurl === 'google.com') {
     return (
       <div className="image">
         <div className="control">
@@ -16,7 +17,7 @@ const ImageView = (props) => {
             onClick={openFileDialog}
           ><i className="fas fa-plus" />
           </button>
-          { error === null
+          { error === null || error === undefined
             ? <span>Upload image</span>
             : <span className="error">{ error }</span>
           }
@@ -27,7 +28,7 @@ const ImageView = (props) => {
 
   return (
     <div className="preview">
-      <img src={dataurl} alt="added meal image" />
+      <img src={setMealImage(dataurl)} alt="added meal image" />
     </div>
   );
 }

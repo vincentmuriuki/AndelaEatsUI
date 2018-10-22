@@ -60,6 +60,7 @@ describe('Admin: Menu Component', () => {
   it.only('should render menus items', () => {
     menusState.menuList = [{
       mealId: 1,
+      mainMealId: 1453,
       mainMeal: 'Rice',
       sideItems: ['Plantain'],
       proteinItems: ['Fish'],

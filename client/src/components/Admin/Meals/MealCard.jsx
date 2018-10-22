@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { setMealImage } from '../../../helpers/mealsHelper';
 
 /**
  * @function MealCard
@@ -20,7 +21,7 @@ const MealCard = ({
   <div className="meal-card">
     <div
       className="image"
-      style={{ backgroundImage: `url(${image})` }}
+      style={{ backgroundImage: `url(${setMealImage(image)})` }}
     />
 
     <div className="label-container">

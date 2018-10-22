@@ -22,7 +22,11 @@ const mealItemsReducer = (state = initialMealItems, action) => {
     case FETCH_MEAL_ITEMS_LOADING:
       return { ...state, isLoading: action.payload };
     case FETCH_MEAL_ITEMS_SUCCESS:
-      return { ...state, meals: action.payload };
+      return {
+        ...state,
+        meals: action.payload.mealItems,
+        pagination: action.payload.pagination
+      };
     case DELETE_MEAL_ITEM_LOADING:
       return { ...state, isDeleting: action.payload };
     case DELETE_MEAL_ITEM_SUCCESS:
@@ -63,7 +67,7 @@ const mealItemsReducer = (state = initialMealItems, action) => {
     case ADD_MEAL_ITEM_SUCCESS:
       return {
         ...state,
-        meals: [action.payload, ...state.meals]
+        meals: [...state.meals, action.payload]
       };
     case EDIT_MEAL_ITEM_LOADING:
       return {

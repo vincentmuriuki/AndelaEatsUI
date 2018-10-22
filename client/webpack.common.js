@@ -5,8 +5,11 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const { NODE_ENV } = process.env;
-const parseVariables = dotEnv.config().parsed;
-
+const {
+  CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET
+} = dotEnv.config().parsed;
 const outputPath = path.join(__dirname, "dist");
 const port = process.env.PORT || 3000;
 
@@ -21,6 +24,9 @@ module.exports = {
     path: path.join(__dirname, '/dist'),
     filename: 'js/bundle.js',
     publicPath: '/'
+  },
+  node: {
+    fs: 'empty'
   },
   resolve: {
     modules: ['node_modules', './src'],
@@ -57,7 +63,10 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
-          plugins: ['transform-class-properties', 'transform-object-rest-spread']
+          plugins: [
+            'transform-class-properties',
+            'transform-object-rest-spread'
+          ]
         }
       }
     ]
@@ -69,6 +78,9 @@ module.exports = {
       favicon: 'src/assets/images/favicon.ico'
     }),
     new webpack.DefinePlugin({
+      "process.env.CLOUDINARY_CLOUD_NAME": JSON.stringify(CLOUDINARY_CLOUD_NAME),
+      "process.env.CLOUDINARY_API_KEY": JSON.stringify(CLOUDINARY_API_KEY),
+      "process.env.CLOUDINARY_API_SECRET": JSON.stringify(CLOUDINARY_API_SECRET),
       "process.env": {
         ...NODE_ENV
       }

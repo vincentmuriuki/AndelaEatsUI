@@ -40,8 +40,7 @@ class MealModal extends Component {
     this.mealTypes = [
       'Main',
       'Side',
-      'Protein',
-      'Soup',
+      'Protein'
     ];
 
     this.state = {
@@ -85,6 +84,8 @@ class MealModal extends Component {
    * @returns { undefined }
    */
   onSubmit = (event) => {
+    const { edit, mealDetails } = this.props;
+
     event.preventDefault();
     const formData = generateFormData(
       this.state,
@@ -94,10 +95,10 @@ class MealModal extends Component {
     if (Array.isArray(formData)) {
       this.props.setAddMealErrors(formData);
     } else {
-      const { edit, mealDetails } = this.props;
       if (edit) {
         return this.props.editMealItem(mealDetails.id, formData);
       }
+      
       this.props.addMealItem(formData);
     }
   }
@@ -112,7 +113,9 @@ class MealModal extends Component {
         id,
         name,
         image: {
-          dataurl: image
+          dataurl: image,
+          file: null,
+          error: null
         },
         desc: description,
         type: mealType
@@ -202,7 +205,7 @@ class MealModal extends Component {
       >
         <div className="modal-content">
           <div className="modal-header">
-            <div className="header-title">{edit ? 'EDIT' : 'ADD'} MEAL</div>
+            <div className="header-title">{edit ? 'EDIT' : 'ADD'} MEAL ITEM</div>
             <div>
               <button
                 tabIndex={0}
@@ -271,7 +274,7 @@ class MealModal extends Component {
                 type="submit"
                 disabled={addBtnDisabled}
               >
-                {edit ? 'Update' : 'Add'} meal
+                {edit ? 'Update' : 'Add'} meal item
               </button>
             </div>
           </form>

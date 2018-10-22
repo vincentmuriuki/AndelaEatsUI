@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { toastSuccess, toastError } from '../../helpers/toast';
+import { config } from '../../config';
 import {
   FETCH_MEAL_ITEMS_LOADING,
   FETCH_MEAL_ITEMS_SUCCESS,
@@ -15,9 +16,9 @@ import {
   EDIT_MEAL_ITEM_SUCCESS,
   EDIT_MEAL_ITEM_LOADING
 } from '../actionTypes';
+import { mealImageUpload } from '../../helpers/mealsHelper';
 
-
-export const baseUrl = 'https://private-b7e73-andelaeats.apiary-mock.com';
+export const apiBaseUrl = config.ANDELAEATS_API_BASE_URL;
 
 export const fectchMealItemsLoading = isLoading => ({
   type: FETCH_MEAL_ITEMS_LOADING,
@@ -29,17 +30,21 @@ export const fetchMealItemsFailure = error => ({
   payload: error
 });
 
-export const fetchMealItemsSuccess = mealItems => ({
+export const fetchMealItemsSuccess = (mealItems, pagination) => ({
   type: FETCH_MEAL_ITEMS_SUCCESS,
-  payload: mealItems,
+  payload: { pagination, mealItems },
 });
 
-export const fetchMealItems = () => dispatch => {
+export const fetchMealItems = (page = 1) => dispatch => {
   dispatch(fectchMealItemsLoading(true));
-  return axios.get(`${baseUrl}/admin/meal-items`)
+  return axios.get(`${apiBaseUrl}/meal-items/?page=${page}`, {
+    headers: {
+      'X-Location': 1
+    }
+  })
     .then((response) => {
-      const { mealItems } = response.data;
-      dispatch(fetchMealItemsSuccess(mealItems));
+      const { meta: pagination, mealItems } = response.data.payload;
+      dispatch(fetchMealItemsSuccess(mealItems, pagination));
       dispatch(fectchMealItemsLoading(false));
     })
     .catch((error) => {
@@ -75,18 +80,30 @@ export const showMealModal = (show, edit) => dispatch => dispatch(
 export const addMealItem = formData => dispatch => {
   dispatch(setAddMealLoading(true));
 
-  return axios.post(`${baseUrl}/admin/meal-items`, formData, {
-    headers: { 'content-type': 'application/json' }
-  })
-    .then((response) => {
-      const { mealItem } = response.data;
-      dispatch(addMealItemSuccess(mealItem));
-      dispatch(showMealModalAction(false, false));
-      dispatch(setAddMealLoading(false));
-    })
-    .catch(() => {
-      dispatch(setAddMealLoading(false));
-    });
+  return mealImageUpload(formData.file, formData.dataurl, (error, url) => {
+    if (error) throw error;
+    else {
+      const { file, dataurl, ...rest } = formData;
+      const reqdata = { ...rest, image: url };
+
+      return (
+        axios.post(`${apiBaseUrl}/meal-items/`, reqdata, {
+          headers: {
+            'X-Location': 1
+          }
+        })
+          .then((response) => {
+            const { mealItem } = response.data.payload;
+            dispatch(addMealItemSuccess(mealItem));
+            dispatch(showMealModalAction(false, false));
+            dispatch(setAddMealLoading(false));
+          })
+          .catch(() => {
+            dispatch(setAddMealLoading(false));
+          })
+      );
+    }
+  });
 };
 
 export const deleteMealItemLoading = isDeleting => ({
@@ -106,7 +123,9 @@ export const deleteMealItemSuccess = mealItemId => ({
 
 export const deleteMealItem = (mealItemId) => dispatch => {
   dispatch(deleteMealItemLoading(true));
-  return axios.delete(`${baseUrl}/admin/meal-items/${mealItemId}`)
+  return axios.delete(`${apiBaseUrl}/meal-items/${mealItemId}/`, {
+    headers: { 'X-Location': 1 }
+  })
     .then(() => {
       toastSuccess("Deleted successfully");
       dispatch(deleteMealItemSuccess(mealItemId));
@@ -139,17 +158,27 @@ export const editMealItemSuccess = (mealItemId, mealItem) => ({
 
 export const editMealItem = (mealItemId, formData) => dispatch => {
   dispatch(editMealItemLoading(true));
-  return axios.put(`${baseUrl}/admin/meal-items/${mealItemId}`, formData)
-    .then(response => {
-      const { mealItem } = response.data;
-      toastSuccess("Meal item updated successfully");
-      dispatch(editMealItemSuccess(mealItemId, mealItem));
-      dispatch(showMealModalAction(false, false));
-      dispatch(editMealItemLoading(false));
-    })
-    .catch(error => {
-      toastError("Meal item update failed");
-      dispatch(editMealItemFailure(error));
-      dispatch(editMealItemLoading(false));
-    });
+  return mealImageUpload(formData.file, formData.dataurl, (error, url) => {
+    if (error) { throw error; } else {
+      const { file, dataurl, ...rest } = formData;
+      const reqdata = { ...rest, image: url };
+      return (
+        axios.put(`${apiBaseUrl}/meal-items/${mealItemId}/`, reqdata, { 
+          headers: { 'X-Location': 1 }
+        })
+          .then(response => {
+            const { mealItem } = response.data.payload;
+            toastSuccess("Meal item updated successfully");
+            dispatch(editMealItemSuccess(mealItemId, mealItem));
+            dispatch(showMealModalAction(false, false));
+            dispatch(editMealItemLoading(false));
+          })
+          .catch(err => {
+            toastError("Meal item update failed");
+            dispatch(editMealItemFailure(err));
+            dispatch(editMealItemLoading(false));
+          })
+      );
+    }
+  }); 
 };

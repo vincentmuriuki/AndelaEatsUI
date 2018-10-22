@@ -17,13 +17,12 @@ import {
 
 import {
   fetchMealItems,
-  baseUrl,
+  apiBaseUrl,
   deleteMealItem,
   addMealItem,
   editMealItem
 } from '../../../actions/admin/mealItemsAction';
-
-import { mealItems } from '../../__mocks__/mockMealItems';
+import { mealItems, pagination } from '../../__mocks__/mockMealItems';
 
 describe('Admin::Meal Items Action', () => {
   const formData = {
@@ -37,10 +36,13 @@ describe('Admin::Meal Items Action', () => {
     afterEach(() => moxios.uninstall());
 
     it('fetch meal items success', async (done) => {
-      moxios.stubRequest(`${baseUrl}/admin/meal-items`, {
+      moxios.stubRequest(`${apiBaseUrl}/meal-items/?page=1`, {
         status: 200,
         response: {
-          mealItems
+          payload: {
+            mealItems,
+            meta: pagination
+          }
         }
       });
 
@@ -51,7 +53,7 @@ describe('Admin::Meal Items Action', () => {
         },
         {
           type: FETCH_MEAL_ITEMS_SUCCESS,
-          payload: mealItems,
+          payload: { mealItems, pagination }
         },
         {
           type: FETCH_MEAL_ITEMS_LOADING,
@@ -70,7 +72,7 @@ describe('Admin::Meal Items Action', () => {
     });
 
     it('fetch meal items failure', async (done) => {
-      moxios.stubRequest(`${baseUrl}/admin/meal-items`, {
+      moxios.stubRequest(`${apiBaseUrl}/meal-items/?page=1`, {
         status: 401,
       });
   
@@ -112,50 +114,38 @@ describe('Admin::Meal Items Action', () => {
         payload: true
       },
       {
-        type: ADD_MEAL_ITEM_SUCCESS,
-        payload: mealItems[0]
-      },
-      {
-        type: SHOW_MEAL_MODAL,
-        payload: {
-          show: false,
-          edit: false
-        }
-      },
-      {
         type: SET_ADD_MEAL_LOADING,
         payload: false
       },
     ];
 
     it('should add a meal without error', async (done) => {
-      moxios.stubRequest(`${baseUrl}/admin/meal-items`, {
+      moxios.stubRequest(`${apiBaseUrl}/meal-items/`, {
         status: 201,
         response: {
-          mealItem: {
-            ...mealItems[0]
+          payload: {
+            mealItem: {
+              ...mealItems[0]
+            }
           }
         }
       });
 
-      await store
-        .dispatch(addMealItem(formData))
-        .then(() => {
-          expect(store.getActions()).toEqual(expectedActions);
-        });
-      done();
-    });
-
-    it('should add a meal with error', async (done) => {
-      moxios.stubRequest(`${baseUrl}/admin/meal-items`, {
-        status: 500,
-        error: {}
-      });
-
-      const newExpectedActions = expectedActions.concat([
+      const newExpectedActions = [
         expectedActions[0],
-        { ...expectedActions[0], payload: false }
-      ]);
+        {
+          type: ADD_MEAL_ITEM_SUCCESS,
+          payload: { ...mealItems[0] }
+        },
+        {
+          type: SHOW_MEAL_MODAL,
+          payload: {
+            edit: false,
+            show: false
+          }
+        },
+        expectedActions[1],
+      ];
 
       await store
         .dispatch(addMealItem(formData))
@@ -171,7 +161,7 @@ describe('Admin::Meal Items Action', () => {
     afterEach(() => moxios.uninstall());
 
     it('delete meal items success', async (done) => {
-      moxios.stubRequest(`${baseUrl}/admin/meal-items/${mealItems[0].id}`, {
+      moxios.stubRequest(`${apiBaseUrl}/meal-items/${mealItems[0].id}/`, {
         status: 200,
         response: {}
       });
@@ -202,7 +192,7 @@ describe('Admin::Meal Items Action', () => {
     });
   
     it('delete meal item failure', async (done) => {
-      moxios.stubRequest(`${baseUrl}/admin/meal-items/${mealItems[0].id}`, {
+      moxios.stubRequest(`${apiBaseUrl}/meal-items/${mealItems[0].id}/`, {
         status: 401,
       });
   
@@ -268,10 +258,12 @@ describe('Admin::Meal Items Action', () => {
         }
       });
 
-      moxios.stubRequest(`${baseUrl}/admin/meal-items/${mealItems[0].id}`, {
+      moxios.stubRequest(`${apiBaseUrl}/meal-items/${mealItems[0].id}/`, {
         status: 200,
         response: {
-          mealItem: mealItems[0]
+          payload: {
+            mealItem: mealItems[0]
+          }
         }
       });
 
@@ -300,7 +292,7 @@ describe('Admin::Meal Items Action', () => {
 
       const store = mockStore({});
 
-      moxios.stubRequest(`${baseUrl}/admin/meal-items/${mealItems[0].id}`, {
+      moxios.stubRequest(`${apiBaseUrl}/meal-items/${mealItems[0].id}/`, {
         status: 500
       });
       

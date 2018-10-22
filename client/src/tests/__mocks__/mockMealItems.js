@@ -30,3 +30,5 @@ export const mealItems = [
     }
   },
 ];
+
+export const pagination = {};
