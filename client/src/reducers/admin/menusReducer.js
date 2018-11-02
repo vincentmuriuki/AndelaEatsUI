@@ -12,10 +12,16 @@ import {
   CREATE_MENU_LOADING,
   CREATE_MENU_SUCCESS,
   CREATE_MENU_FAILURE,
+  UPDATE_MENU_LOADING,
+  UPDATE_MENU_SUCCESS,
+  UPDATE_MENU_FAILURE,
 } from '../../actions/actionTypes';
 import filter from '../../helpers/filter';
+import findIndex from '../../helpers/findindex';
 
 import { initialAdminMenus } from '../initialState';
+
+let index;
 
 export default (state = initialAdminMenus, { type, payload }) => {
   switch (type) {
@@ -56,9 +62,24 @@ export default (state = initialAdminMenus, { type, payload }) => {
         menuList: [...state.menuList, payload.menu]
       };
 
+    case UPDATE_MENU_LOADING:
+      return { ...state, isUpdating: payload };
+
+    case UPDATE_MENU_SUCCESS:
+      index = findIndex(state.menuList, payload.id);
+      return {
+        ...state,
+        menuList: [
+          ...state.menuList.slice(0, index),
+          payload, 
+          ...state.menuList.slice(index + 1)
+        ]
+      };  
+
     case FETCH_VENDOR_ENGAGEMENT_FAILURE:
     case FETCH_MEALITEMS_FAILURE:
     case CREATE_MENU_FAILURE:
+    case UPDATE_MENU_FAILURE:
       return { 
         ...state, 
         error: {

@@ -15,6 +15,9 @@ import {
   CREATE_MENU_LOADING,
   CREATE_MENU_SUCCESS,
   CREATE_MENU_FAILURE,
+  UPDATE_MENU_LOADING,
+  UPDATE_MENU_SUCCESS,
+  UPDATE_MENU_FAILURE,
 } from '../actionTypes';
 
 import { formatCurrentDate } from '../../helpers';
@@ -44,7 +47,7 @@ export const mockMenu = menuList => dispatch => dispatch({
 
 export const fetchMenus = (startDate, endDate) => (dispatch) => {
   dispatch(fetchMenusLoading(true));
-  return axios.get(`${baseUrl}/admin/menu/lunch/${startDate}/${endDate}`, {
+  return axios.get(`${baseUrl}/admin/menus/lunch/${startDate}/${endDate}`, {
     headers: {
       'X-Location': 1
     }
@@ -78,7 +81,7 @@ const deleteMenuItemSuccess = menuId => ({
 
 export const deleteMenuItem = menuId => dispatch => {
   dispatch(deleteMenuItemLoading(true));
-  return axios.delete(`${baseUrl}/admin/menu/${menuId}`, {
+  return axios.delete(`${baseUrl}/admin/menus/${menuId}`, {
     headers: {
       'X-Location': 1
     }
@@ -143,6 +146,43 @@ export const fetchMealItems = () => dispatch => axios
     dispatch(fetchMealItemsFailure(error));
   });
 
+const updateMenuLoading = payload => ({
+  type: UPDATE_MENU_LOADING,
+  payload
+});
+
+const updateMenuSuccess = mealItems => ({
+  type: UPDATE_MENU_SUCCESS,
+  payload: mealItems
+});
+
+const updateMenuFailure = message => ({
+  type: UPDATE_MENU_FAILURE,
+  payload: message
+});
+
+export const updateMenu = (id, menu) => dispatch => {
+  dispatch(updateMenuLoading(true));
+
+  return axios.put(`${baseUrl}/admin/menus/${id}`, menu, { 
+    headers: { 
+      'X-Location': 1 
+    } 
+  })
+    .then((response) => {
+      const { msg, payload } = response.data;
+      toastSuccess(msg);
+      dispatch(updateMenuSuccess(payload));
+      dispatch(updateMenuLoading(false));
+    })
+    .catch((error) => {
+      console.log({ error });
+      toastError(error);
+      dispatch(updateMenuFailure(error));
+      dispatch(updateMenuLoading(false));
+    });
+};
+
 const createMenuLoading = payload => ({
   type: CREATE_MENU_LOADING,
   payload
@@ -158,10 +198,10 @@ const createMenuFailure = message => ({
   payload: message
 });
 
-export const createMenu = (menu) => dispatch => {
+export const createMenu = menu => dispatch => {
   dispatch(createMenuLoading(true));
 
-  return axios.post(`${baseUrl}/admin/menu/`, menu, { 
+  return axios.post(`${baseUrl}/admin/menus/`, menu, { 
     headers: { 
       'X-Location': 1 
     } 

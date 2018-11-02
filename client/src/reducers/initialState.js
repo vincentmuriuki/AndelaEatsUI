@@ -61,6 +61,7 @@ export const initialAdminMenus = {
   isLoading: false,
   isDeleting: false,
   isCreating: false,
+  isUpdating: false,
 
   dateOfMeal: null,
   mealPeriod: null,

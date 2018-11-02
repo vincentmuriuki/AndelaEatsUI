@@ -1,12 +1,13 @@
 /* eslint-disable no-undef */
 import React from 'react';
 import { shallow } from 'enzyme';
-import MenuModal from '../../../../components/Admin/Menus/MenuModal';
-import { mockMenuItem } from '../../../__mocks__/mockMenuItems';
+import MenuModal from '../../../../../components/Admin/Menus/MenuModal/Index';
+import { mockMenuItem } from '../../../../__mocks__/mockMenuItems';
 
 describe('MenuModal Component', () => {
   const setup = () => {
     const props = {
+      modalTitle: 'EDIT MENU',
       closeModal: jest.fn(),
       handleSubmit: jest.fn(),
       vendorEngagements: [
@@ -77,6 +78,14 @@ describe('MenuModal Component', () => {
   it('should call checkAllowedSelection  method', () => {
     const spy = jest.spyOn(wrapper.instance(), 'checkAllowedSelection');
     wrapper.instance().checkAllowedSelection();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should call componentDidUpdate method', () => {
+    const spy = jest.spyOn(wrapper.instance(), 'componentDidUpdate');
+    wrapper.instance().componentDidUpdate({
+      prevProps: { modalTitle: ' ' },
+    });
     expect(spy).toHaveBeenCalled();
   });
 });

@@ -168,7 +168,7 @@ export const updateVendor = (id, vendorDetails) => dispatch => {
 
   return axios(options)
     .then((res) => {
-      const { msg: message, payload: { vendor }} = res.data;
+      const { msg: message, payload: { vendor } } = res.data;
       toastSuccess(message);
       dispatch(updateVendorSuccess(vendor));
       dispatch(updateVendorLoading(false));

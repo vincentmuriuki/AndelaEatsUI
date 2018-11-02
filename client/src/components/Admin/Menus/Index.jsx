@@ -8,17 +8,25 @@ import { ToastContainer } from 'react-toastify';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 
-import MenuModal from './MenuModal';
+
+import MenuModal from './MenuModal/Index';
 import {
   fetchMenus,
   fetchVendorEngagements,
   mockMenu,
   deleteMenuItem,
   fetchMealItems, 
-  createMenu
+  createMenu,
+  updateMenu
 } from '../../../actions/admin/menuItemsAction';
 import { formatMenuItemDate } from '../../../helpers/menusHelper';
-import formatMealItems, { formatDate } from '../../../helpers/formatMealItems';
+import formatMealItems, { 
+  formatDate,
+  formatSingleSelection,
+  formatMutipleSelection,
+  formatMealitem,
+  formatEngagement
+} from '../../../helpers/formatMealItems';
 
 import EmptyContent from '../../common/EmptyContent';
 import Loader from '../../common/Loader/Loader';
@@ -33,7 +41,7 @@ import mockMenuList from '../../../tests/__mocks__/mockMenuList';
  * @class Menus
  * @extends Component
  */
-class Menus extends Component {
+export class Menus extends Component {
   static initialState = () => ({
     menus: [],
     displayModal: false,
@@ -42,7 +50,8 @@ class Menus extends Component {
     modalButtontext: '',
     menuDetails: {},
     startDate: moment(),
-    endDate: moment()
+    endDate: moment(),
+    forEdit: {}
   })
 
   constructor(props) {
@@ -125,6 +134,44 @@ class Menus extends Component {
 
   /**
    * 
+   * @method showEditModal
+   * 
+   * @memberof Menus
+   * 
+   * @param { Object } menuItem
+   * 
+   * @returns { void }
+   */
+  showEditModal = (menuItem) => {
+    const { vendorEngagements } = this.props.menus;
+    const {
+      id,
+      vendorEngagementId,
+      date,
+      mainMeal,
+      allowedSide,
+      allowedProtein,
+      proteinItems,
+      sideItems
+    } = menuItem;
+    this.setState(prev => ({
+      modalTitle: 'EDIT MENU',
+      modalButtontext: 'Update Menu',
+      displayModal: !prev.displayModal,
+      forEdit: {
+        id,
+        vendorEngagementId: formatEngagement(vendorEngagements, vendorEngagementId)[0],
+        mainItem: formatMealitem(mainMeal),
+        allowedSide: formatSingleSelection(allowedSide),
+        allowedProtein: formatSingleSelection(allowedProtein),
+        protein: formatMutipleSelection(proteinItems),
+        sideMeal: formatMutipleSelection(sideItems),
+      },
+    }));
+  }
+
+  /**
+   * 
    * @method showDeleteModal
    * 
    * @memberof Menus
@@ -172,17 +219,25 @@ class Menus extends Component {
   /**
    * Handles form submission
    * 
-   * @param {object} menu
+   * @param { Integer } id
+   * @param { Object } menu
    * 
    * @memberof Menu
    * 
    * @returns {void}
    */
-  handleSubmit = (menu) => {
-    this.props.createMenu(menu)
-      .then(() => {
-        this.closeModal();
-      });
+  handleSubmit = (id, menu) => {
+    if (id === '') {
+      this.props.createMenu(menu)
+        .then(() => {
+          this.closeModal();
+        });
+    } else {
+      this.props.updateMenu(id, menu)
+        .then(() => {
+          this.closeModal();
+        });
+    }
   }
 
   /**
@@ -201,7 +256,8 @@ class Menus extends Component {
       isDeleting, 
       vendorEngagements, 
       mealItems,
-      isCreating
+      isCreating,
+      isUpdating
     } = this.props.menus;
     const {
       displayModal,
@@ -210,7 +266,8 @@ class Menus extends Component {
       displayDeleteModal,
       menuDetails,
       startDate,
-      endDate
+      endDate,
+      forEdit
     } = this.state;
     
     return (
@@ -289,7 +346,9 @@ class Menus extends Component {
                 vendorEngagements={vendorEngagements}
                 handleSubmit={this.handleSubmit}
                 mealItems={mealItems}
+                forEdit={forEdit}
                 isCreating={isCreating}
+                isUpdating={isUpdating}
               />
               {displayDeleteModal && (
               <DeleteMenuModal
@@ -319,6 +378,7 @@ class Menus extends Component {
       const {
         mainMealId,
         id,
+        date,
         mainMeal,
         mealPeriod,
         sideItems,
@@ -331,7 +391,7 @@ class Menus extends Component {
         <div key={id} className="ct-row">
           <div className="ct-wrap">
             <div className="custom-col-5">
-              { formatMenuItemDate(dateOfMeal) }
+              { moment(date).format("YYYY-MM-DD")}
             </div>
             <div className="custom-col-4">{mainMeal.name}</div>
             
@@ -346,7 +406,7 @@ class Menus extends Component {
             )}
 
             <div className="custom-col-5">
-              <Link to="#">
+              <Link to="#" onClick={() => this.showEditModal(menuItem)}>
                 <span>Edit</span>
               </Link>
 
@@ -399,10 +459,12 @@ Menus.propTypes = {
   fetchMenus: func.isRequired,
   fetchMealItems: func.isRequired,
   createMenu: func.isRequired,
+  updateMenu: func.isRequired,
   fetchVendorEngagements: func.isRequired,
   deleteMenuItem: func.isRequired,
   mockMenu: func,
   isCreating: bool,
+  isUpdating: bool,
   menus: shape({
     isLoading: bool.isRequired,
     isDeleting: bool.isRequired,
@@ -425,5 +487,6 @@ export default connect(mapStateToProps,
     deleteMenuItem,
     fetchVendorEngagements,
     fetchMealItems,
-    createMenu
+    createMenu,
+    updateMenu
   })(Menus);

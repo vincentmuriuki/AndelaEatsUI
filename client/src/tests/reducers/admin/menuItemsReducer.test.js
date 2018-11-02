@@ -13,6 +13,9 @@ import {
   CREATE_MENU_LOADING,
   CREATE_MENU_SUCCESS,
   CREATE_MENU_FAILURE,
+  UPDATE_MENU_LOADING,
+  UPDATE_MENU_SUCCESS,
+  UPDATE_MENU_FAILURE,
 } from '../../../actions/actionTypes';
 import { mealItems } from '../../__mocks__/mockMealItems';
 import { engagements, menu } from '../../__mocks__/mockMenuItems';
@@ -203,6 +206,45 @@ describe('Admin:: Menu Items Reducer', () => {
     it('should set error status and message', () => {
       action = {
         type: CREATE_MENU_FAILURE,
+        payload: "error message",
+      };
+
+      newState = menusReducer(initialAdminMenus, action);
+      expect(newState.error.status).toBe(true);
+      expect(newState.error.message).toBe("error message");
+    });
+  });
+
+  describe('UPDATE_MENU_LOADING', () => {
+    it('should set isUpdating state to true when updating a menu', () => {
+      action = {
+        type: UPDATE_MENU_LOADING,
+        payload: true
+      };
+
+      newState = menusReducer(initialAdminMenus, action);
+      expect(newState.isUpdating).toEqual(true);
+    });
+  });
+
+  describe('UPDATE_MENU_SUCCESS', () => {
+    it('should update state with meal-items', () => {
+      action = {
+        type: UPDATE_MENU_SUCCESS,
+        payload: menu
+      };
+
+      newState = menusReducer(initialAdminMenus, action);
+      expect(newState.menuList.length).toEqual(1);
+      expect(newState.menuList[0].date).toEqual("2018-10-22");
+      expect(newState.menuList[0].mealPeriod).toEqual("Lunch");
+    });
+  });
+
+  describe('UPDATE_MENU_FAILURE', () => {
+    it('should set error status and message', () => {
+      action = {
+        type: UPDATE_MENU_FAILURE,
         payload: "error message",
       };
 

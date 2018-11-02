@@ -35,7 +35,7 @@ import {
 } from '../../../actions/admin/menuItemsAction';
 
 
-const menusPath = `admin/menu/lunch/${formatDate(moment())}/${formatDate(moment())}`;
+const menusPath = `admin/menus/lunch/${formatDate(moment())}/${formatDate(moment())}`;
 
 const menusFromApi = {
   payload: {
@@ -110,7 +110,7 @@ describe('Admin::Menu Items Action', () => {
     });
 
     it('delete menu item success', async (done) => {
-      moxios.stubRequest(`${baseUrl}/admin/menu/2`, {
+      moxios.stubRequest(`${baseUrl}/admin/menus/2`, {
         status: 200,
         response: {}
       });
@@ -140,7 +140,7 @@ describe('Admin::Menu Items Action', () => {
     });
 
     it('delete menu item failure', async (done) => {
-      moxios.stubRequest(`${baseUrl}/admin/menu/2`, {
+      moxios.stubRequest(`${baseUrl}/admin/menus/2`, {
         status: 400,
         response: {
           msg: 'Access Error - Permission Denied'
@@ -287,7 +287,7 @@ describe('Admin::Menu Items Action', () => {
     afterEach(() => moxios.uninstall());
 
     it('create menu success', async (done) => {
-      moxios.stubRequest(`${baseUrl}/admin/menu/`, {
+      moxios.stubRequest(`${baseUrl}/admin/menus/`, {
         status: 201,
         response: { payload: { menu } }
       });
@@ -318,7 +318,7 @@ describe('Admin::Menu Items Action', () => {
     });
 
     it('create menu failure', async (done) => {
-      moxios.stubRequest(`${baseUrl}/admin/menu/`, {
+      moxios.stubRequest(`${baseUrl}/admin/menus/`, {
         status: 400,
         response: {}
       });

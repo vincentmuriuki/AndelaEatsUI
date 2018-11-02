@@ -122,11 +122,45 @@ export const engagements = [
 export const menu = {
   date: "2018-10-22", 
   mealPeriod: "Lunch",
+  id: 1,
   mainMealId: 1,
   allowedSide: 2, 
   allowedProtein: 1,
   sideItems: [1],
   proteinItems: [1, 2]
+};
+
+export const menuItem = {
+  allowedProtein: 1,
+  allowedSide: 1,
+  date: "Wed, 07 Nov 2018 00:00:00 GMT",
+  id: 21,
+  isDeleted: false,
+  mainMeal: {
+    description: "Orion food for chibueze",
+    id: 55,
+    image: "https://res.cloudinary.com/dunnio1id/image/upload/v1540381196/gpuo1eipbzivzx89wem3.jpg",
+    isDeleted: false,
+    mealType: "main",
+    name: "Orion"
+  },
+  proteinItems: [{
+    description: "Fried meat",
+    id: 51,
+    image: "https://res.cloudinary.com/dunnio1id/image/upload/v1540877218/pqpbl7wdlphwqxlzp1wy.png",
+    isDeleted: false,
+    mealType: "protein",
+    name: "Meat"
+  }],
+  sideItems: [{
+    description: "Beans",
+    id: 41,
+    image: "image.jpg",
+    isDeleted: true,
+    mealType: "side",
+    name: "Beans230"
+  }],
+  vendorEngagementId: 1
 };
 
 export default {
