@@ -9,19 +9,15 @@
   header {
     all: unset;
 
-    div {
-      display: block;
+    .menu-header-content {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
       overflow: hidden;
       width: 96.3%;
-      margin: 0 0 px-to-rem(30px) 1.7%;
+      margin: 0 0 px-to-rem(5px) 1.7%;
 
-      .title {
-        @include title-text(
-          px-to-rem(6px) 0 0
-        );
-      }
-
-      button {
+      .button {
         @include buttons(
           $color-white,
           $color-blue,
@@ -32,6 +28,37 @@
 
         font-family: 'Open Sans', $font-family-pro;
         font-weight: 300;
+        height: 36px !important;
+      }
+
+      .title-date-range {
+        width: 75%;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        
+        .title, .date-range, {
+          @include title-text(
+            px-to-rem(6px) 0 0
+          );
+        }
+
+        .date-range, #view-menu {
+          margin-left: 10px;
+          margin-right: 10px;
+        }
+
+        .date-input {
+          display: flex;
+          flex-direction: row;
+          width: 50%;
+          height: 50px;
+          input {
+            @include field-input();
+            padding: 8px !important;
+          }
+        }
+
       }
     }
   }

@@ -9,7 +9,7 @@ import moment from 'moment';
 import Loader from '../../common/Loader/Loader';
 import inputValidation from '../../../helpers/inputValidation';
 import formatDropdown from '../../../helpers/formatDropdown';
-import formatMealItems, { getIds } from '../../../helpers/formatMealItems';
+import formatMealItems, { getIds, formatDate } from '../../../helpers/formatMealItems';
 import { adminAllowed } from '../../../tests/__mocks__/mockMenuItems';
 
 /**
@@ -90,7 +90,7 @@ class MenuModal extends Component {
       this.setState({ errors: check });
     } else {
       this.props.handleSubmit({
-        date: collectionDate.format("YYYY-MM-DD"), 
+        date: formatDate(collectionDate), 
         mealPeriod: "Lunch",
         mainMealId: mainItem.value,
         allowedSide: allowedSideMeal.value, 

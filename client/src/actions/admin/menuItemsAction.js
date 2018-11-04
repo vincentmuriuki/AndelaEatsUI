@@ -42,11 +42,9 @@ export const mockMenu = menuList => dispatch => dispatch({
   payload: menuList
 });
 
-export const fetchMenus = () => (dispatch) => {
-  const date = formatCurrentDate();
-
+export const fetchMenus = (startDate, endDate) => (dispatch) => {
   dispatch(fetchMenusLoading(true));
-  return axios.get(`${baseUrl}/admin/menu/lunch/${date}`, {
+  return axios.get(`${baseUrl}/admin/menu/lunch/${startDate}/${endDate}`, {
     headers: {
       'X-Location': 1
     }

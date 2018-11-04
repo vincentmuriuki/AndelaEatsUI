@@ -5,6 +5,8 @@ import {
 } from 'prop-types';
 import { connect } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
 
 import MenuModal from './MenuModal';
 import {
@@ -16,6 +18,8 @@ import {
   createMenu
 } from '../../../actions/admin/menuItemsAction';
 import { formatMenuItemDate } from '../../../helpers/menusHelper';
+import formatMealItems, { formatDate } from '../../../helpers/formatMealItems';
+
 import EmptyContent from '../../common/EmptyContent';
 import Loader from '../../common/Loader/Loader';
 import DeleteMenuModal from './DeleteMenuModal';
@@ -36,7 +40,9 @@ class Menus extends Component {
     displayDeleteModal: false,
     modalTitle: '',
     modalButtontext: '',
-    menuDetails: {}
+    menuDetails: {},
+    startDate: moment(),
+    endDate: moment()
   })
 
   constructor(props) {
@@ -53,10 +59,36 @@ class Menus extends Component {
    * @returns { undefined }
    */
   componentDidMount() {
-    this.props.fetchMenus()
-      .then(() => this.props.mockMenu(mockMenuList));
+    this.props.fetchMenus(formatDate(moment()), formatDate(moment()));
     this.props.fetchVendorEngagements();
     this.props.fetchMealItems();
+  }
+
+  /**
+   * @description fetch menu given date range
+   * 
+   * @memberof Menus
+   * 
+   * @returns { undefined }
+   */
+  handelViewMenu = () => {
+    const { startDate, endDate } = this.state;
+    this.props.fetchMenus(formatDate(startDate), formatDate(endDate));
+  }
+
+  /**
+   * @description handles date range change
+   * 
+   * @memberof Menus
+   * 
+   * @param { Object } selectOption
+   * @param { Object } name
+   * @returns { undefined }
+   */
+  onChange = (selectOption, name) => {
+    this.setState({
+      [name]: selectOption
+    });
   }
 
   /**
@@ -72,7 +104,7 @@ class Menus extends Component {
    * @memberof Menus
    */
   commaJoinComplementryItems = (array) => (
-    array.map(item => item).join(', ')
+    array.map(item => item.label).join(', ')
   );
 
   /**
@@ -176,7 +208,9 @@ class Menus extends Component {
       modalTitle,
       modalButtontext,
       displayDeleteModal,
-      menuDetails
+      menuDetails,
+      startDate,
+      endDate
     } = this.state;
     
     return (
@@ -190,11 +224,33 @@ class Menus extends Component {
           : (
             <Fragment>
               <header>
-                <div>
-                  <span className="title pull-left">Menu</span>
+                <div className="menu-header-content">
+                  <div className="title-date-range">
+                    <span className="title">Menu:</span>
+                    <span className="date-range">from</span>
+                    <div className="date-input">
+                      <DatePicker
+                        selected={startDate}
+                        onChange={(e) => this.onChange(e, 'startDate')}
+                      />
+                      <span className="date-range">to</span>
+                      <DatePicker
+                        selected={endDate}
+                        onChange={(e) => this.onChange(e, 'endDate')}
+                      />
+                    </div>
+                    <button
+                      id="view-menu"
+                      className="button"
+                      type="button"
+                      onClick={this.handelViewMenu}
+                    >
+                      View Menu
+                    </button>
+                  </div>
                   <button
                     id="add-menu"
-                    className="pull-right"
+                    className="button"
                     type="button"
                     onClick={this.showAddModal}
                   >
@@ -206,7 +262,7 @@ class Menus extends Component {
               <main>
                 {
                   !menuList.length
-                    ? <EmptyContent message="No menus has been added yet" />
+                    ? <EmptyContent message="No menus within the seleted date range" />
                     : (
                       <div className="custom-table">
                         <div className="ct-header">
@@ -259,11 +315,12 @@ class Menus extends Component {
    */
   renderRows = () => {
     const { menuList, dateOfMeal } = this.props.menus;
-
     return menuList.map(menuItem => {
       const {
         mainMealId,
+        id,
         mainMeal,
+        mealPeriod,
         sideItems,
         proteinItems,
         allowedSide,
@@ -271,12 +328,12 @@ class Menus extends Component {
       } = menuItem;
 
       return (
-        <div key={mainMealId} className="ct-row">
+        <div key={id} className="ct-row">
           <div className="ct-wrap">
             <div className="custom-col-5">
               { formatMenuItemDate(dateOfMeal) }
             </div>
-            <div className="custom-col-4">{mainMeal}</div>
+            <div className="custom-col-4">{mainMeal.name}</div>
             
             { this.renderProteinSideItems(
               proteinItems,
@@ -319,7 +376,9 @@ class Menus extends Component {
       <span className="side-pick-count">
         { optionsCanPick }
       </span>
-      { this.commaJoinComplementryItems(itemsAvailable) }
+      { this.commaJoinComplementryItems(itemsAvailable.map(item => ({
+        value: item.id, label: item.name 
+      }))) }
     </div>
   );
   

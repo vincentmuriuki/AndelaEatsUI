@@ -1,9 +1,11 @@
 /* eslint-disable no-undef */
 import moxios from 'moxios';
+import moment from 'moment';
 import { formatCurrentDate } from '../../../helpers';
 import mockMenuList from '../../__mocks__/mockMenuList';
 import mealItems from '../../__mocks__/mockMealItems';
 import { engagements, menu } from '../../__mocks__/mockMenuItems';
+import { formatDate } from '../../../helpers/formatMealItems';
 
 
 import {
@@ -33,7 +35,7 @@ import {
 } from '../../../actions/admin/menuItemsAction';
 
 
-const menusPath = `admin/menu/lunch/${formatCurrentDate()}`;
+const menusPath = `admin/menu/lunch/${formatDate(moment())}/${formatDate(moment())}`;
 
 const menusFromApi = {
   payload: {
@@ -75,7 +77,7 @@ describe('Admin::Menu Items Action', () => {
       const store = mockStore({});
       
       await store
-        .dispatch(fetchMenus())
+        .dispatch(fetchMenus(formatDate(moment()), formatDate(moment())))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions);
         });
@@ -99,7 +101,7 @@ describe('Admin::Menu Items Action', () => {
       const store = mockStore({});
       
       await store
-        .dispatch(fetchMenus())
+        .dispatch(fetchMenus(formatDate(moment()), formatDate(moment())))
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions);
         });
