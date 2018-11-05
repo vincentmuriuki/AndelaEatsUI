@@ -35,15 +35,12 @@ describe('Vendors Action', () => {
     afterEach(() => moxios.uninstall());
 
     it('fetch vendors success', async (done) => {
-      moxios.stubRequest(`${baseUrl}/user/token`, {
-        status: 200,
-        response: {}
-      });
-
-      moxios.stubRequest(`${baseUrl}/admin/vendors`, {
+      moxios.stubRequest(`${baseUrl}/vendors/`, {
         status: 200,
         response: {
-          vendors
+          payload: {
+            vendors
+          }
         }
       });
 
@@ -72,12 +69,7 @@ describe('Vendors Action', () => {
     });
 
     it('fetch vendors failure', async (done) => {
-      moxios.stubRequest(`${baseUrl}/user/token`, {
-        status: 200,
-        response: {}
-      });
-
-      moxios.stubRequest(`${baseUrl}/admin/vendors`, {
+      moxios.stubRequest(`${baseUrl}/vendors/`, {
         status: 401,
       });
 
@@ -111,15 +103,12 @@ describe('Vendors Action', () => {
     afterEach(() => moxios.uninstall());
 
     it('create vendor success', async (done) => {
-      moxios.stubRequest(`${baseUrl}/user/token`, {
-        status: 200,
-        response: {}
-      });
-
-      moxios.stubRequest(`${baseUrl}/admin/vendor`, {
+      moxios.stubRequest(`${baseUrl}/vendors/`, {
         status: 201,
         response: {
-          vendor: [createdVendor]
+          payload: {
+            vendor: createdVendor
+          }
         }
       });
 
@@ -148,12 +137,7 @@ describe('Vendors Action', () => {
     });
 
     it('create vendor failure', async (done) => {
-      moxios.stubRequest(`${baseUrl}/user/token`, {
-        status: 200,
-        response: {}
-      });
-
-      moxios.stubRequest(`${baseUrl}/admin/vendor`, {
+      moxios.stubRequest(`${baseUrl}/vendors/`, {
         status: 401,
         response: {}
       });
@@ -187,12 +171,7 @@ describe('Vendors Action', () => {
     afterEach(() => moxios.uninstall());
 
     it('delete vendor success', async (done) => {
-      moxios.stubRequest(`${baseUrl}/user/token`, {
-        status: 200,
-        response: {}
-      });
-      
-      moxios.stubRequest(`${baseUrl}/admin/vendor/${vendors[0].id}`, {
+      moxios.stubRequest(`${baseUrl}/vendors/${vendors[0].id}`, {
         status: 200,
         response: {}
       });
@@ -220,12 +199,7 @@ describe('Vendors Action', () => {
       done();
     });
     it('return vendor failure', async (done) => {
-      moxios.stubRequest(`${baseUrl}/user/token`, {
-        status: 200,
-        response: {}
-      });
-
-      moxios.stubRequest(`${baseUrl}/admin/vendor/${vendors[0].id}`, {
+      moxios.stubRequest(`${baseUrl}/vendors/${vendors[0].id}`, {
         status: 401,
         response: {}
       });
@@ -259,16 +233,13 @@ describe('Vendors Action', () => {
     beforeEach(() => moxios.install());
     afterEach(() => moxios.uninstall());
 
-    it('update vendor success', async (done) => {
-      moxios.stubRequest(`${baseUrl}/user/token`, {
-        status: 200,
-        response: {}
-      });
-      
-      moxios.stubRequest(`${baseUrl}/admin/vendor/${createdVendor.id}`, {
+    it('update vendor success', async (done) => {  
+      moxios.stubRequest(`${baseUrl}/vendors/${createdVendor.id}`, {
         status: 200,
         response: {
-          vendor: [createdVendor]
+          payload: {
+            vendor: createdVendor
+          }
         }
       });
 
@@ -295,12 +266,7 @@ describe('Vendors Action', () => {
       done();
     });
     it('return vendor failure', async (done) => {
-      moxios.stubRequest(`${baseUrl}/user/token`, {
-        status: 200,
-        response: {}
-      });
-
-      moxios.stubRequest(`${baseUrl}/admin/vendor/${createdVendor.id}`, {
+      moxios.stubRequest(`${baseUrl}/vendors/${createdVendor.id}`, {
         status: 401,
         response: {}
       });

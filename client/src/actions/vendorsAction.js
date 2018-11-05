@@ -37,23 +37,14 @@ export const fetchVendorsFailure = error => ({
 export const fetchVendors = () => dispatch => {
   dispatch(fetchVendorsLoading(true));
 
-  return axios.post(`${baseUrl}/user/token`, {
-    userEmail: "admin@andela.com",
-    userRole: "Admin"
+  return axios.get(`${baseUrl}/vendors/`, {
+    headers: {
+      'X-Location': 1
+    }
   })
     .then((res) => {
-      const { token } = res.data;
-      axios.defaults.headers.Authorization = `Bearer ${token}`;
-  
-      return axios.get(`${baseUrl}/admin/vendors`)
-        .then((res) => {
-          dispatch(fetchVendorsSuccess(res.data.vendors));
-          dispatch(fetchVendorsLoading(false));
-        })
-        .catch((error) => {
-          dispatch(fetchVendorsFailure(error));
-          dispatch(fetchVendorsLoading(false));
-        });
+      dispatch(fetchVendorsSuccess(res.data.payload.vendors));
+      dispatch(fetchVendorsLoading(false));
     })
     .catch((error) => {
       dispatch(fetchVendorsFailure(error));
@@ -80,29 +71,26 @@ export const createVendorFailure = error => ({
 export const createVendor = (vendorDetails) => dispatch => {
   dispatch(createVendorLoading(true));
 
-  return axios.post(`${baseUrl}/user/token`, {
-    userEmail: "admin@andela.com",
-    userRole: "Admin"
-  })
+  const url = `${baseUrl}/vendors/`;
+
+  const options = {
+    method: 'POST',
+    headers: {
+      'X-Location': 1
+    },
+    data: vendorDetails,
+    url
+  };
+
+  return axios(options)
     .then((res) => {
-      const { token } = res.data;
-      axios.defaults.headers.Authorization = `Bearer ${token}`;
-      
-      return axios.post(`${baseUrl}/admin/vendor`, vendorDetails)
-        .then((res) => {
-          const { message, vendor } = res.data;
-          toastSuccess(message);
-          dispatch(createVendorSuccess(vendor[0]));
-          dispatch(createVendorLoading(false));
-        })
-        .catch((error) => {
-          toastError(error.response.data.message);
-          dispatch(createVendorFailure(error));
-          dispatch(createVendorLoading(false));
-        });
+      const { msg: message, payload: { vendor } } = res.data;
+      toastSuccess(message);
+      dispatch(createVendorSuccess(vendor));
+      dispatch(createVendorLoading(false));
     })
     .catch((error) => {
-      toastError(error.message);
+      toastError(error.response.data.message);
       dispatch(createVendorFailure(error));
       dispatch(createVendorLoading(false));
     });
@@ -129,28 +117,18 @@ export const deleteVendorFailure = error => ({
 export const deleteVendor = (vendorId) => dispatch => {
   dispatch(deleteVendorLoading(true));
 
-  return axios.post(`${baseUrl}/user/token`, {
-    userEmail: "admin@andela.com",
-    userRole: "Admin"
+  return axios.delete(`${baseUrl}/vendors/${vendorId}`, {
+    headers: {
+      'X-Location': 1
+    }
   })
     .then((res) => {
-      const { token } = res.data;
-      axios.defaults.headers.Authorization = `Bearer ${token}`;
-
-      return axios.delete(`${baseUrl}/admin/vendor/${vendorId}`)
-        .then((res) => {
-          toastSuccess(res.data.message);
-          dispatch(deleteVendorSuccess(vendorId));
-          dispatch(deleteVendorLoading(false));
-        })
-        .catch((error) => {
-          toastError(error.response.data.message);
-          dispatch(deleteVendorFailure(error));
-          dispatch(deleteVendorLoading(false));
-        });
+      toastSuccess(res.data.msg);
+      dispatch(deleteVendorSuccess(vendorId));
+      dispatch(deleteVendorLoading(false));
     })
     .catch((error) => {
-      toastError(error.message);
+      toastError(error.response.data.message);
       dispatch(deleteVendorFailure(error));
       dispatch(deleteVendorLoading(false));
     });
@@ -177,29 +155,26 @@ export const updateVendorFailure = error => ({
 export const updateVendor = (id, vendorDetails) => dispatch => {
   dispatch(updateVendorLoading(true));
 
-  return axios.post(`${baseUrl}/user/token`, {
-    userEmail: "admin@andela.com",
-    userRole: "Admin"
-  })
-    .then((res) => {
-      const { token } = res.data;
-      axios.defaults.headers.Authorization = `Bearer ${token}`;
+  const url = `${baseUrl}/vendors/${id}`;
 
-      return axios.put(`${baseUrl}/admin/vendor/${id}`, vendorDetails)
-        .then((res) => {
-          const { message, vendor } = res.data;
-          toastSuccess(message);
-          dispatch(updateVendorSuccess(vendor[0]));
-          dispatch(updateVendorLoading(false));
-        })
-        .catch((error) => {
-          toastError(error.response.data.message);
-          dispatch(updateVendorFailure(error));
-          dispatch(updateVendorLoading(false));
-        });
+  const options = {
+    method: 'PUT',
+    headers: {
+      'X-Location': 1
+    },
+    data: vendorDetails,
+    url
+  };
+
+  return axios(options)
+    .then((res) => {
+      const { msg: message, payload: { vendor }} = res.data;
+      toastSuccess(message);
+      dispatch(updateVendorSuccess(vendor));
+      dispatch(updateVendorLoading(false));
     })
     .catch((error) => {
-      toastError(error.message);
+      toastError(error.response.data.message);
       dispatch(updateVendorFailure(error));
       dispatch(updateVendorLoading(false));
     });

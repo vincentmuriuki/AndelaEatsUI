@@ -93,10 +93,10 @@ export class Vendors extends Component {
       modalTitle: "EDIT VENDOR",
       modalButtontext: "Update",
       id: vendor.id,
-      vendorName: vendor.vendorName,
-      vendorAddress: vendor.vendorAddress,
+      vendorName: vendor.name,
+      vendorAddress: vendor.address,
       contactPerson: vendor.contactPerson,
-      phoneNumber: vendor.phoneNumber,
+      phoneNumber: vendor.tel,
       displayModal: true,
     });
   }
@@ -114,10 +114,10 @@ export class Vendors extends Component {
   handleSubmit = () => {
     const { id } = this.state;
     const vendor = {
-      vendorName: this.state.vendorName,
-      vendorAddress: this.state.vendorAddress,
+      name: this.state.vendorName,
+      address: this.state.vendorAddress,
       contactPerson: this.state.contactPerson,
-      phoneNumber: this.state.phoneNumber
+      tel: this.state.phoneNumber
     };
     if (this.state.modalTitle === "ADD VENDOR") {
       this.props.createVendor(vendor)
@@ -127,7 +127,6 @@ export class Vendors extends Component {
         .then(() => this.closeModal());
     }
   }
-
   /**
    * Handles form validation
    * 

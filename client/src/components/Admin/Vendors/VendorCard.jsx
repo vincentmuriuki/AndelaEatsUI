@@ -21,12 +21,12 @@ export const VendorCard = ({
     <div className="table-row">
       <div className="custom-row">
         <div className="custom-col-4 row-content">
-          { vendor.vendorName }
-          <span>{ vendor.vendorAddress }</span>
+          { vendor.name }
+          <span>{ vendor.address }</span>
         </div>
-        <div className="custom-col-2">{ vendor.phoneNumber }</div>
-        <div className="custom-col-2">{dateFormatter(vendor.createdAt)}</div>
-        <div className="custom-col-2">{dateFormatter(vendor.updatedAt)}</div>
+        <div className="custom-col-2">{ vendor.tel }</div>
+        <div className="custom-col-2">{dateFormatter(vendor.timestamps.created_at)}</div>
+        <div className="custom-col-2">{dateFormatter(vendor.timestamps.updated_at)}</div>
         <div className="custom-col-3">
           <ReactStars
             value={rating}
@@ -57,11 +57,11 @@ export const VendorCard = ({
   </div>
 );
 
+
 VendorCard.propTypes = {
   vendor: PropTypes.shape({
     vendorName: PropTypes.string,
     phoneNumber: PropTypes.string,
-    id: PropTypes.string,
     contactPerson: PropTypes.string,
     vendorAddress: PropTypes.string,
     createdAt: PropTypes.string,
