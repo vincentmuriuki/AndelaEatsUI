@@ -60,12 +60,12 @@ export const VendorCard = ({
 
 VendorCard.propTypes = {
   vendor: PropTypes.shape({
-    vendorName: PropTypes.string,
-    phoneNumber: PropTypes.string,
+    name: PropTypes.string,
+    tel: PropTypes.string,
     contactPerson: PropTypes.string,
-    vendorAddress: PropTypes.string,
-    createdAt: PropTypes.string,
-    updatedAt: PropTypes.string,
+    address: PropTypes.string,
+    created_at: PropTypes.string,
+    updated_at: PropTypes.string,
   }),
   rating: PropTypes.number,
   showDeleteModal: PropTypes.func,

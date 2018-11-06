@@ -24,10 +24,10 @@ import EmptyContent from '../../common/EmptyContent';
 export class Vendors extends Component {
   static initialState = () => ({
     id: '',
-    vendorName: '',
-    vendorAddress: '',
+    name: '',
+    address: '',
     contactPerson: '',
-    phoneNumber: '',
+    tel: '',
     errors: {},
     displayModal: false,
     displayDeleteModal: false,
@@ -89,14 +89,17 @@ export class Vendors extends Component {
    * @returns {void}
    */
   showEditModal = (vendor) => {
+    const {
+      id, name, address, contactPerson, tel 
+    } = vendor
     this.setState({
       modalTitle: "EDIT VENDOR",
       modalButtontext: "Update",
-      id: vendor.id,
-      vendorName: vendor.name,
-      vendorAddress: vendor.address,
-      contactPerson: vendor.contactPerson,
-      phoneNumber: vendor.tel,
+      id,
+      name,
+      address,
+      contactPerson,
+      tel,
       displayModal: true,
     });
   }
@@ -112,12 +115,12 @@ export class Vendors extends Component {
    * @returns {void}
    */
   handleSubmit = () => {
-    const { id } = this.state;
+    const { id, name, address, contactPerson, tel } = this.state;
     const vendor = {
-      name: this.state.vendorName,
-      address: this.state.vendorAddress,
-      contactPerson: this.state.contactPerson,
-      tel: this.state.phoneNumber
+      name,
+      address,
+      contactPerson,
+      tel
     };
     if (this.state.modalTitle === "ADD VENDOR") {
       this.props.createVendor(vendor)
@@ -242,9 +245,9 @@ export class Vendors extends Component {
       displayModal,
       displayDeleteModal,
       modalContent,
-      vendorName, 
-      vendorAddress, 
-      phoneNumber, 
+      name, 
+      address, 
+      tel, 
       contactPerson,
       errors,
       modalTitle,
@@ -293,9 +296,9 @@ export class Vendors extends Component {
           isUpdating={isUpdating}
           handleSubmit={this.handleSubmit}
           onChange={this.onChange}
-          vendorName={vendorName}
-          vendorAddress={vendorAddress}
-          phoneNumber={phoneNumber}
+          name={name}
+          address={address}
+          tel={tel}
           contactPerson={contactPerson}
           formValidation={this.formValidation}
           errors={errors}

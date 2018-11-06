@@ -61,6 +61,7 @@ describe('Admin: Menu Component', () => {
     menusState.menuList = [{
       mealId: 1,
       mainMealId: 1453,
+      id: 1,
       mainMeal: 'Rice',
       sideItems: ['Plantain'],
       proteinItems: ['Fish'],

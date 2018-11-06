@@ -19,7 +19,7 @@ const DeleteVendorModal = ({
           <div className="modal-header">
             <div className="header-title">Delete Vendor</div>
           </div>
-          <h3>{`Permanently delete ${modalContent.vendorName}`}</h3>
+          <h3>{`Permanently delete ${modalContent.name}`}</h3>
           <span className="warning">This cannot be undone</span>
           <div className="modal-footer">
             <div className="">

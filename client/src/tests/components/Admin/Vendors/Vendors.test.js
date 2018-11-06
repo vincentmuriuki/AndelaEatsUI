@@ -6,12 +6,12 @@ import vendors from '../../../__mocks__/mockVendors';
 
 const modalContent = {
   contactPerson: "Chibueze",
-  createdAt: "Fri, 14 Sep 2018 06:52:30 GMT",
+  created_at: "Fri, 14 Sep 2018 06:52:30 GMT",
   id: "-LMLqYeE1Ubdy79p4Nwo",
-  phoneNumber: "01234567890",
-  updatedAt: "Fri, 14 Sep 2018 06:52:30 GMT",
-  vendorAddress: "No 233, Ikorodu road, Lagos",
-  vendorName: "Mr Medium"
+  tel: "01234567890",
+  updated_at: "Fri, 14 Sep 2018 06:52:30 GMT",
+  address: "No 233, Ikorodu road, Lagos",
+  name: "Mr Medium"
 };
 
 const setup = (isLoading, isCreating, isUpdating, isDeleting) => {

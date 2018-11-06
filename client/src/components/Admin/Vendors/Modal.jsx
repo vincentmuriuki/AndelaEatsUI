@@ -6,9 +6,9 @@ import Loader from '../../common/Loader/Loader';
 const Modal = ({
   onChange,
   closeModal,
-  vendorName, 
-  vendorAddress, 
-  phoneNumber, 
+  name, 
+  address, 
+  tel, 
   contactPerson, 
   errors,
   displayModal, 
@@ -41,48 +41,48 @@ const Modal = ({
       <form onSubmit={formValidation}>
         <div>
           <div className="form-field-set">
-            <label htmlFor="vendorName">Name
+            <label htmlFor="name">Name
               <input
-                id="vendorName"
+                id="name"
                 className="input"
-                name="vendorName"
+                name="name"
                 onChange={onChange}
                 onFocus={clearErrors}
-                value={vendorName}
+                value={name}
               />
             </label>
             <span className="form-error">
-              {errors.vendorName ? errors.vendorName : ""}
+              {errors.name ? errors.name : ""}
             </span>
           </div>
           <div className="form-field-set">
-            <label htmlFor="vendorAddress">Address
+            <label htmlFor="address">Address
               <input
-                id="vendorAddress"
+                id="address"
                 className="input"
-                name="vendorAddress"
+                name="address"
                 onChange={onChange}
                 onFocus={clearErrors}
-                value={vendorAddress}
+                value={address}
               />
             </label>
             <span className="form-error">
-              {errors.vendorAddress ? errors.vendorAddress : ""}
+              {errors.address ? errors.address : ""}
             </span>
           </div>
           <div className="form-field-set">
-            <label htmlFor="phoneNumber">Phone
+            <label htmlFor="tel">Phone
               <input
-                id="phoneNumber"
+                id="tel"
                 className="input"
-                name="phoneNumber"
+                name="tel"
                 onChange={onChange}
                 onFocus={clearErrors}
-                value={phoneNumber}
+                value={tel}
               />
             </label>
             <span className="form-error">
-              {errors.phoneNumber}
+              {errors.tel}
             </span>
           </div>
           <div className="form-field-set">
@@ -130,9 +130,9 @@ Modal.propTypes = {
   displayModal: PropTypes.bool.isRequired,
   onChange: PropTypes.func,
   closeModal: PropTypes.func,
-  vendorName: PropTypes.string,
-  vendorAddress: PropTypes.string, 
-  phoneNumber: PropTypes.string,
+  name: PropTypes.string,
+  address: PropTypes.string, 
+  tel: PropTypes.string,
   contactPerson: PropTypes.string,
   modalTitle: PropTypes.string,
   modalButtontext: PropTypes.string,
