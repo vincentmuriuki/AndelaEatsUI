@@ -55,6 +55,7 @@ export class ExportOrders extends Component {
             type={2}
             ordersCount={orders.length}
             redirectToExport={this.redirectToExport}
+            orders={orders}
             svg={svg}
           />
 
