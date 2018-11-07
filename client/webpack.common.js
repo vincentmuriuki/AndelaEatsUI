@@ -1,15 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
-const dotEnv = require('dotenv');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const { NODE_ENV } = process.env;
-const {
-  CLOUDINARY_CLOUD_NAME,
-  CLOUDINARY_API_KEY,
-  CLOUDINARY_API_SECRET
-} = dotEnv.config().parsed;
+
 const outputPath = path.join(__dirname, "dist");
 const port = process.env.PORT || 3000;
 
@@ -78,9 +73,9 @@ module.exports = {
       favicon: 'src/assets/images/favicon.ico'
     }),
     new webpack.DefinePlugin({
-      "process.env.CLOUDINARY_CLOUD_NAME": JSON.stringify(CLOUDINARY_CLOUD_NAME),
-      "process.env.CLOUDINARY_API_KEY": JSON.stringify(CLOUDINARY_API_KEY),
-      "process.env.CLOUDINARY_API_SECRET": JSON.stringify(CLOUDINARY_API_SECRET),
+      "process.env.CLOUDINARY_CLOUD_NAME": JSON.stringify(process.env.CLOUDINARY_CLOUD_NAME),
+      "process.env.CLOUDINARY_API_KEY": JSON.stringify(process.env.CLOUDINARY_API_KEY),
+      "process.env.CLOUDINARY_API_SECRET": JSON.stringify(process.env.CLOUDINARY_API_SECRET),
       "process.env": {
         ...NODE_ENV
       }

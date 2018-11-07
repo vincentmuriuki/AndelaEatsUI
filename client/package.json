@@ -47,6 +47,7 @@
     "prop-types": "^15.6.2",
     "rc-pagination": "^1.16.5",
     "react": "^16.4.1",
+    "react-csv": "^1.0.18",
     "react-date-picker": "^6.10.4",
     "react-datepicker": "^1.6.0",
     "react-day-picker": "^7.1.10",
