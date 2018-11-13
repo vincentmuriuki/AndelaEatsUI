@@ -44,7 +44,7 @@ export const mockMenu = menuList => dispatch => dispatch({
 
 export const fetchMenus = (startDate, endDate) => (dispatch) => {
   dispatch(fetchMenusLoading(true));
-  return axios.get(`${baseUrl}/admin/menu/lunch/${startDate}/${endDate}`, {
+  return axios.get(`${baseUrl}/admin/menus/lunch/${startDate}/${endDate}`, {
     headers: {
       'X-Location': 1
     }
@@ -161,7 +161,7 @@ const createMenuFailure = message => ({
 export const createMenu = (menu) => dispatch => {
   dispatch(createMenuLoading(true));
 
-  return axios.post(`${baseUrl}/admin/menu/`, menu, { 
+  return axios.post(`${baseUrl}/admin/menus/`, menu, { 
     headers: { 
       'X-Location': 1 
     } 

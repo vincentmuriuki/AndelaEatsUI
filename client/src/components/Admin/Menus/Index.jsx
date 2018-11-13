@@ -42,7 +42,7 @@ class Menus extends Component {
     modalButtontext: '',
     menuDetails: {},
     startDate: moment(),
-    endDate: moment()
+    endDate: moment().add(1, 'days')
   })
 
   constructor(props) {
@@ -59,7 +59,8 @@ class Menus extends Component {
    * @returns { undefined }
    */
   componentDidMount() {
-    this.props.fetchMenus(formatDate(moment()), formatDate(moment()));
+    const { startDate, endDate } = this.state;
+    this.props.fetchMenus(formatDate(startDate), formatDate(endDate));
     this.props.fetchVendorEngagements();
     this.props.fetchMealItems();
   }

@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const { NODE_ENV } = process.env;
 
 const outputPath = path.join(__dirname, "dist");
 const port = process.env.PORT || 3000;
@@ -72,14 +71,7 @@ module.exports = {
       inject: 'body',
       favicon: 'src/assets/images/favicon.ico'
     }),
-    new webpack.DefinePlugin({
-      "process.env.CLOUDINARY_CLOUD_NAME": JSON.stringify(process.env.CLOUDINARY_CLOUD_NAME),
-      "process.env.CLOUDINARY_API_KEY": JSON.stringify(process.env.CLOUDINARY_API_KEY),
-      "process.env.CLOUDINARY_API_SECRET": JSON.stringify(process.env.CLOUDINARY_API_SECRET),
-      "process.env": {
-        ...NODE_ENV
-      }
-    }),
+    
     new ExtractTextPlugin("css/bundle.css")
   ],
 };
