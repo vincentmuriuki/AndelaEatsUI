@@ -161,7 +161,7 @@ describe('Admin::Meal Items Action', () => {
     afterEach(() => moxios.uninstall());
 
     it('delete meal items success', async (done) => {
-      moxios.stubRequest(`${apiBaseUrl}/meal-items/${mealItems[0].id}/`, {
+      moxios.stubRequest(`${apiBaseUrl}/meal-items/${mealItems[0].id}`, {
         status: 200,
         response: {}
       });
@@ -192,7 +192,7 @@ describe('Admin::Meal Items Action', () => {
     });
   
     it('delete meal item failure', async (done) => {
-      moxios.stubRequest(`${apiBaseUrl}/meal-items/${mealItems[0].id}/`, {
+      moxios.stubRequest(`${apiBaseUrl}/meal-items/${mealItems[0].id}`, {
         status: 401,
       });
   
@@ -258,7 +258,7 @@ describe('Admin::Meal Items Action', () => {
         }
       });
 
-      moxios.stubRequest(`${apiBaseUrl}/meal-items/${mealItems[0].id}/`, {
+      moxios.stubRequest(`${apiBaseUrl}/meal-items/${mealItems[0].id}`, {
         status: 200,
         response: {
           payload: {
@@ -292,7 +292,7 @@ describe('Admin::Meal Items Action', () => {
 
       const store = mockStore({});
 
-      moxios.stubRequest(`${apiBaseUrl}/meal-items/${mealItems[0].id}/`, {
+      moxios.stubRequest(`${apiBaseUrl}/meal-items/${mealItems[0].id}`, {
         status: 500
       });
       

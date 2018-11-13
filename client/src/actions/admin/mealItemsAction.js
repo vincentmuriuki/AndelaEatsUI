@@ -98,7 +98,7 @@ export const addMealItem = formData => dispatch => {
             dispatch(showMealModalAction(false, false));
             dispatch(setAddMealLoading(false));
           })
-          .catch(() => {
+          .catch((error) => {
             dispatch(setAddMealLoading(false));
           })
       );
@@ -123,7 +123,7 @@ export const deleteMealItemSuccess = mealItemId => ({
 
 export const deleteMealItem = (mealItemId) => dispatch => {
   dispatch(deleteMealItemLoading(true));
-  return axios.delete(`${apiBaseUrl}/meal-items/${mealItemId}/`, {
+  return axios.delete(`${apiBaseUrl}/meal-items/${mealItemId}`, {
     headers: { 'X-Location': 1 }
   })
     .then(() => {
@@ -163,7 +163,7 @@ export const editMealItem = (mealItemId, formData) => dispatch => {
       const { file, dataurl, ...rest } = formData;
       const reqdata = { ...rest, image: url };
       return (
-        axios.put(`${apiBaseUrl}/meal-items/${mealItemId}/`, reqdata, { 
+        axios.put(`${apiBaseUrl}/meal-items/${mealItemId}`, reqdata, { 
           headers: { 'X-Location': 1 }
         })
           .then(response => {
