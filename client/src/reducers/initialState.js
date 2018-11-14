@@ -74,3 +74,8 @@ export const initialAdminMenus = {
     message: null
   }
 };
+
+export const initialEngagements = {
+  isLoading: false,
+  engagements: [],
+};

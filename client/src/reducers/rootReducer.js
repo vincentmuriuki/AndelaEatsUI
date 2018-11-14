@@ -7,6 +7,7 @@ import vendorsReducer from './vendorsReducer';
 import mealOrdersReducer from './admin/ordersReducer';
 import mealItemsReducer from './admin/mealItemsReducer';
 import adminMenusReducer from './admin/menusReducer';
+import engagementsReducer from './admin/engagementsReducer';
 
 export default combineReducers({
   userReducer,
@@ -15,5 +16,6 @@ export default combineReducers({
   allVendors: vendorsReducer,
   mealOrders: mealOrdersReducer,
   mealItems: mealItemsReducer,
-  menus: adminMenusReducer
+  menus: adminMenusReducer,
+  allEngagements: engagementsReducer
 });
