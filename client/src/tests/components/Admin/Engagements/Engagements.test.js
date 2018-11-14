@@ -33,4 +33,16 @@ describe('Engagements Component', () => {
     expect(renderEngagementSpy).toBeCalled();
     expect(renderEngagementSpy).toHaveBeenCalledWith(engagements[0]);
   });
+
+  it('should call showAddModal method', () => {
+    const showAddModalSpy = jest.spyOn(wrapper.instance(), 'showAddModal');
+    wrapper.instance().showAddModal();
+    expect(showAddModalSpy).toHaveBeenCalled();
+  });
+
+  it('should call closeModal method', () => {
+    const closeModalSpy = jest.spyOn(wrapper.instance(), 'closeModal');
+    wrapper.instance().closeModal();
+    expect(closeModalSpy).toHaveBeenCalled();
+  });
 });

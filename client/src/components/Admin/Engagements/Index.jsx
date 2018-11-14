@@ -4,6 +4,7 @@ import PropType from 'prop-types';
 import Loader from '../../common/Loader/Loader';
 
 import { EngagementCard } from './EngagementCard';
+import Modal from './Modal';
 import { fetchEngagements } from '../../../actions/admin/engagementsAction';
 import EmptyContent from '../../common/EmptyContent';
 
@@ -15,10 +16,47 @@ import EmptyContent from '../../common/EmptyContent';
  * @extends {Component}
  */
 export class Engagements extends Component {
+  state = {
+    displayModal: false,
+    modalTitle: '',
+    modalButtontext: ''
+  }
 
   componentDidMount() {
     this.props.fetchEngagements();
   }
+  
+  /**
+   * 
+   * @method showAddModal
+   *
+   * 
+   * @memberof Engagements
+   * 
+   * @returns {void}
+   */
+  showAddModal = () => {
+    this.setState({
+      displayModal: true,
+      modalTitle: 'ADD ENGAGEMENT',
+      modalButtontext: 'Add Engagement'
+    })
+  }
+
+  /**
+   * 
+   * @method closeModal
+   * 
+   * @memberof Engagements
+   * 
+   * @returns {void}
+   */
+  closeModal = () => {
+    this.setState({
+      displayModal: false
+    })
+  }
+
   
   renderEngagement = engagement => {
     return (
@@ -31,6 +69,12 @@ export class Engagements extends Component {
 
   render() {
     const { isLoading, engagements } = this.props;
+
+    const { 
+      displayModal,
+      modalTitle, 
+      modalButtontext
+    } = this.state;
     
     return (
       <Fragment>
@@ -38,6 +82,14 @@ export class Engagements extends Component {
         <div className={`${isLoading && 'blurred'} table-wrapper`}>
           <div className="vendors-header">
             <h3 className="vendor-menu">Vendors Engagement</h3>
+            <button
+              type="button"
+              name="addEngagement"
+              className="engagement-button"
+              onClick={this.showAddModal}
+            >
+              Add Engagements
+            </button>
           </div>
           
           { engagements.length > 0 && (
@@ -56,6 +108,13 @@ export class Engagements extends Component {
           )}
           
         </div>
+
+        <Modal 
+            displayModal={displayModal}
+            closeModal={this.closeModal}
+            modalTitle={modalTitle}
+            modalButtontext={modalButtontext}
+        />
       </Fragment>
     );
   }
