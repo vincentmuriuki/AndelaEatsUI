@@ -89,6 +89,14 @@ class SideNav extends Component {
                     <span>Vendors</span>
                   </li>
                 </Link>
+
+                <Link to="/admin/engagements">
+                  <li className={`side-nav-item engagements
+                    ${homeActive('admin/engagements') && "active"}`}
+                  >
+                    <span>Engagements</span>
+                  </li>
+                </Link>
               </ul>
             )}
             {/* { sideBarComponent } */}

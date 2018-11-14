@@ -13,6 +13,7 @@ import ExportOrders from './Admin/OrderHistory/ExportOrders';
 import Vendors from './Admin/Vendors/Vendors';
 import Meals from './Admin/Meals/Index';
 import Menus from './Admin/Menus/Index';
+import Engagements from './Admin/Engagements/Index';
 
 
 export const NotFound = () => (
@@ -33,6 +34,7 @@ const Root = () => (
           <Route exact path="/admin/vendors" component={Vendors} />
           <Route exact path="/admin/meals" component={Meals} />
           <Route exact path="/admin/menus" component={Menus} />
+          <Route exact path="/admin/engagements" component={Engagements} />
           <Route component={NotFound} />
         </Switch>
       </SideNav>

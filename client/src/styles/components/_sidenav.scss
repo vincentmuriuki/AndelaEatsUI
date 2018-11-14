@@ -101,6 +101,19 @@
   }
 }
 
+.engagements {
+  background-image: url('../assets/images/handshake.png');
+  background-repeat: no-repeat;
+  background-size: 30px;
+  background-position: center; 
+  &.active {
+    background-image: url('../assets/images/handshake.png');
+  }
+  &:hover {
+    background-image: url('../assets/images/handshake.png');
+  }
+}
+
 .meals {
   background-image: url('../assets/images/meals.svg');
   background-repeat: no-repeat;
