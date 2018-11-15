@@ -6,6 +6,7 @@ import moment from 'moment';
 import Loader from '../../common/Loader/Loader';
 import { ToastContainer } from 'react-toastify';
 import { EngagementCard } from './EngagementCard';
+import DeleteEngagementModal from './DeleteEngagementModal';
 import Modal from './Modal';
 import { fetchEngagements, fetchVendors, createEngagement } from '../../../actions/admin/engagementsAction';
 import EmptyContent from '../../common/EmptyContent';
@@ -25,6 +26,7 @@ export class Engagements extends Component {
     selectedOption: null,
     datePicker: moment(),
     displayModal: false,
+    displayDeleteModal: false,
     modalTitle: '',
     modalButtontext: ''
   }
@@ -90,6 +92,22 @@ export class Engagements extends Component {
 
   /**
    * 
+   * @method showDeleteModal
+   *
+   * @param {object} engagement
+   * 
+   * @memberof Engagements
+   * 
+   * @returns {void}
+   */
+  showDeleteModal = (engagement) => {
+    this.setState({
+      displayDeleteModal: true
+    });
+  }
+
+  /**
+   * 
    * @method closeModal
    * 
    * @memberof Engagements
@@ -98,7 +116,8 @@ export class Engagements extends Component {
    */
   closeModal = () => {
     this.setState({
-      displayModal: false
+      displayModal: false,
+      displayDeleteModal: false
     })
   }
 
@@ -108,6 +127,7 @@ export class Engagements extends Component {
       <EngagementCard 
         key={key}
         engagement={engagement}
+        showDeleteModal={this.showDeleteModal}
       />
     ))
   };
@@ -124,6 +144,7 @@ export class Engagements extends Component {
       endDate, 
       selectedOption,
       displayModal,
+      displayDeleteModal,
       modalTitle, 
       modalButtontext
     } = this.state;
@@ -146,9 +167,10 @@ export class Engagements extends Component {
           
           { engagements.length > 0 && (
           <div className="table-header custom-row">
-            <div className="custom-col-6">Name</div>
+            <div className="custom-col-4">Name</div>
             <div className="custom-col-3">Start Date</div>
             <div className="custom-col-3">End Date</div>
+            <div className="custom-col-2">Options</div>
           </div>)}
       
           { this.renderEngagements(engagements)}
@@ -170,6 +192,10 @@ export class Engagements extends Component {
             closeModal={this.closeModal}
             modalTitle={modalTitle}
             modalButtontext={modalButtontext}
+        />
+        <DeleteEngagementModal
+            displayDeleteModal={displayDeleteModal}
+            closeModal={this.closeModal}
         />
       </Fragment>
     );
