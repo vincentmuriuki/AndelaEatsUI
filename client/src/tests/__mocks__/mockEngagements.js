@@ -4,6 +4,7 @@ const engagements = [];
 
 do {
   engagements.push({
+    id: faker.random.uuid(),
     endDate: faker.date.recent().toString(),
     startDate: faker.date.recent().toString(),
     vendor: {

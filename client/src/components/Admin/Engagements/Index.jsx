@@ -8,7 +8,12 @@ import { ToastContainer } from 'react-toastify';
 import { EngagementCard } from './EngagementCard';
 import DeleteEngagementModal from './DeleteEngagementModal';
 import Modal from './Modal';
-import { fetchEngagements, fetchVendors, createEngagement } from '../../../actions/admin/engagementsAction';
+import { 
+  fetchEngagements, 
+  fetchVendors, 
+  createEngagement,
+  deleteEngagement 
+} from '../../../actions/admin/engagementsAction';
 import EmptyContent from '../../common/EmptyContent';
 import { formatDate } from '../../../helpers/formatMealItems';
 
@@ -27,6 +32,7 @@ export class Engagements extends Component {
     datePicker: moment(),
     displayModal: false,
     displayDeleteModal: false,
+    modalContent: {},
     modalTitle: '',
     modalButtontext: ''
   }
@@ -90,6 +96,21 @@ export class Engagements extends Component {
     })
   }
 
+   /**
+   * 
+   * @method deleteVendor
+   * 
+   * @param {Object} vendorId
+   * 
+   * @memberof vendors
+   * 
+   * @returns {void}
+   */
+  deleteEngagement = engagementId => {
+    this.props.deleteEngagement(engagementId)
+      .then(() => this.closeModal());
+  }
+
   /**
    * 
    * @method showDeleteModal
@@ -102,7 +123,8 @@ export class Engagements extends Component {
    */
   showDeleteModal = (engagement) => {
     this.setState({
-      displayDeleteModal: true
+      displayDeleteModal: true,
+      modalContent: engagement
     });
   }
 
@@ -133,7 +155,7 @@ export class Engagements extends Component {
   };
 
   render() {
-    const { isLoading, engagements, vendors } = this.props;
+    const { isLoading, engagements, vendors, isDeleting } = this.props;
 
     const vendorsResult = vendors.map(result => (
       { value: result.name, label: result.name, vendorId: result.id }
@@ -145,6 +167,7 @@ export class Engagements extends Component {
       selectedOption,
       displayModal,
       displayDeleteModal,
+      modalContent,
       modalTitle, 
       modalButtontext
     } = this.state;
@@ -194,8 +217,11 @@ export class Engagements extends Component {
             modalButtontext={modalButtontext}
         />
         <DeleteEngagementModal
+            isDeleting={isDeleting}
+            deleteEngagement={this.deleteEngagement}
             displayDeleteModal={displayDeleteModal}
             closeModal={this.closeModal}
+            modalContent={modalContent}
         />
       </Fragment>
     );
@@ -211,7 +237,8 @@ const mapStateToProps = ({ allEngagements }) => ({
 Engagements.propTypes = {
   fetchEngagements: PropType.func.isRequired,
   fetchVendors: PropType.func.isRequired,
-  createEngagement: PropType.func.isRequired
+  createEngagement: PropType.func.isRequired,
+  deleteEngagement: PropType.func.isRequired
 };
 
 export default connect(
@@ -219,6 +246,7 @@ export default connect(
   { 
     fetchEngagements, 
     fetchVendors, 
-    createEngagement 
+    createEngagement,
+    deleteEngagement 
   }
 )(Engagements);

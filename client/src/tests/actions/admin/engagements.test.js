@@ -7,13 +7,17 @@ import {
   FETCH_VENDOR_ENGAGEMENT_FAILURE,
   CREATE_VENDOR_ENGAGEMENT_LOADING,
   CREATE_VENDOR_ENGAGEMENT_SUCCESS,
-  CREATE_VENDOR_ENGAGEMENT_FAILURE
+  CREATE_VENDOR_ENGAGEMENT_FAILURE,
+  DELETE_VENDOR_ENGAGEMENT_LOADING,
+  DELETE_VENDOR_ENGAGEMENT_SUCCESS,
+  DELETE_VENDOR_ENGAGEMENT_FAILURE
 } from '../../../actions/actionTypes';
 
 import { 
   baseUrl, 
   fetchEngagements,
-  createEngagement 
+  createEngagement,
+  deleteEngagement 
 } from '../../../actions/admin/engagementsAction';
 
 import engagements from '../../__mocks__/mockEngagements';
@@ -58,7 +62,7 @@ describe('Engagements Action', () => {
       done();
     });
 
-    it('fetch vendors failure', async (done) => {
+    it('fetch engagement failure', async (done) => {
       moxios.stubRequest(`${baseUrl}/engagements/`, {
         status: 401
       });
@@ -153,6 +157,68 @@ describe('Create Engagement', () => {
     const store = mockStore({});
     await store
       .dispatch(createEngagement(newEngagement))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    done();
+  });
+});
+
+describe('Delete Engagement', () => {
+  beforeEach(() => moxios.install());
+  afterEach(() => moxios.uninstall());
+
+  it('delete engagement success', async (done) => {
+    moxios.stubRequest(`${baseUrl}/engagements/${engagements[0].id}`, {
+      status: 200,
+      response: {}
+    });
+
+    const expectedActions = [
+      {
+        type: DELETE_VENDOR_ENGAGEMENT_LOADING,
+        payload: true,
+      },
+      {
+        type: DELETE_VENDOR_ENGAGEMENT_SUCCESS,
+        payload: engagements[0].id
+      },
+      {
+        type: DELETE_VENDOR_ENGAGEMENT_LOADING,
+        payload: false,
+      }
+    ];
+    const store = mockStore({});
+    await store
+      .dispatch(deleteEngagement(engagements[0].id))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    done();
+  });
+  it('return engagement failure', async (done) => {
+    moxios.stubRequest(`${baseUrl}/engagements/${engagements[0].id}`, {
+      status: 401,
+      response: {}
+    });
+
+    const expectedActions = [
+      {
+        type: DELETE_VENDOR_ENGAGEMENT_LOADING,
+        payload: true,
+      },
+      {
+        type: DELETE_VENDOR_ENGAGEMENT_FAILURE,
+        payload: new Error('Request failed with status code 401'),
+      },
+      {
+        type: DELETE_VENDOR_ENGAGEMENT_LOADING,
+        payload: false,
+      }
+    ];
+    const store = mockStore({});
+    await store
+      .dispatch(deleteEngagement(engagements[0].id))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });

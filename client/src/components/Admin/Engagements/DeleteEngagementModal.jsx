@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 
 const DeleteEngagementModal = ({
   closeModal,
-  displayDeleteModal
+  isDeleting,
+  displayDeleteModal,
+  deleteEngagement,
+  modalContent
 }) => (
   <div 
     className="modal" 
@@ -23,6 +26,7 @@ const DeleteEngagementModal = ({
               <button 
                 className="grayed upper" 
                 type="button"
+                disabled={isDeleting}
                 onClick={closeModal}
               >
                 Cancel
@@ -30,6 +34,9 @@ const DeleteEngagementModal = ({
               <button
                 className="fill upper delete-vendor" 
                 type="button" 
+                tabIndex={0}
+                disabled={isDeleting}
+                onClick={() => deleteEngagement(modalContent.id)}
               >
                 Suspend
               </button>
@@ -44,7 +51,10 @@ const DeleteEngagementModal = ({
 
 DeleteEngagementModal.propTypes = {
   closeModal: PropTypes.func,
-  displayDeleteModal: PropTypes.bool
+  displayDeleteModal: PropTypes.bool,
+  deleteEngagement: PropTypes.func,
+  modalContent: PropTypes.shape({}),
+  isDeleting: PropTypes.bool
 };
 
 export default DeleteEngagementModal;

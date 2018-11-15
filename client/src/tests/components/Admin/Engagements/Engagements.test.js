@@ -11,7 +11,7 @@ const setup = () => {
     selectedOption: {
       vendorId: 1
     }
-  }
+  };
 
   const props = {
     engagements,
@@ -19,7 +19,8 @@ const setup = () => {
     isLoading: false,
     fetchEngagements: jest.fn(),
     fetchVendors: jest.fn(),
-    createEngagement: jest.fn().mockImplementation(() => Promise.resolve())
+    createEngagement: jest.fn().mockImplementation(() => Promise.resolve()),
+    deleteEngagement: jest.fn().mockImplementation(() => Promise.resolve())
   };
   
   return mount(<Engagements {...state} {...props} />);
@@ -57,8 +58,8 @@ describe('Engagements Component', () => {
 
   it('should call handleSubmit method', () => {
     const handleSubmitSpy = jest.spyOn(wrapper.instance(), 'handleSubmit');
-    const event = { preventDefault: jest.fn() }
-    wrapper.instance().handleSubmit(event)
+    const event = { preventDefault: jest.fn() };
+    wrapper.instance().handleSubmit(event);
     expect(handleSubmitSpy).toHaveBeenCalled();
   });
 
@@ -67,5 +68,18 @@ describe('Engagements Component', () => {
     const onChangeSpy = jest.spyOn(wrapper.instance(), 'onChange');    
     wrapper.instance().onChange(3, "selectedOption");
     expect(onChangeSpy).toHaveBeenCalled();
+  });
+  
+  it('should call deleteEngagement method', () => {
+    const deleteEngagementSpy = jest.spyOn(wrapper.instance(), 'deleteEngagement');
+    wrapper.instance().deleteEngagement();
+    expect(deleteEngagementSpy).toHaveBeenCalled();
+  });
+
+  it('should call showDeleteModal method', () => {
+    const showDeleteModalSpy = jest
+      .spyOn(wrapper.instance(), 'showDeleteModal');
+    wrapper.instance().showDeleteModal();
+    expect(showDeleteModalSpy).toHaveBeenCalled();
   });
 });

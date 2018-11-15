@@ -11,7 +11,7 @@ import dateFormatter from '../../../helpers/dateFormatter';
  * @returns {JSX}
  */
 export const EngagementCard = ({ 
-  engagement: { endDate, startDate, vendor: { name } }, showDeleteModal 
+  engagement: { endDate, startDate, vendor: { name } }, showDeleteModal, engagement 
 }) => (
   <div className="table-body">
     <div className="table-row">
@@ -29,7 +29,7 @@ export const EngagementCard = ({
             Edit
           </span>
           <span
-            onClick={showDeleteModal}
+            onClick={() => showDeleteModal(engagement)}
             className="option-color"
           >
             Suspend
@@ -44,7 +44,7 @@ EngagementCard.propTypes = {
   engagement: PropTypes.shape({
     endDate: PropTypes.string,
     startDate: PropTypes.string,
-    vendor: PropTypes.object,
-    showDeleteModal: PropTypes.func
-  })
+    vendor: PropTypes.object
+  }),
+  showDeleteModal: PropTypes.func
 };

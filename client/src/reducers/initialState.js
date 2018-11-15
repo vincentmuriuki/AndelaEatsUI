@@ -78,6 +78,7 @@ export const initialAdminMenus = {
 export const initialEngagements = {
   isLoading: false,
   isCreating: false,
+  isDeleting: false,
   engagements: [],
   vendors: []
 };

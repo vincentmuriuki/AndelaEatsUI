@@ -8,7 +8,10 @@ import {
   CREATE_VENDOR_ENGAGEMENT_FAILURE,
   CREATE_VENDOR_ENGAGEMENT_LOADING,
   FETCH_VENDORS_SUCCESS,
-  FETCH_VENDORS_FAILURE
+  FETCH_VENDORS_FAILURE,
+  DELETE_VENDOR_ENGAGEMENT_LOADING,
+  DELETE_VENDOR_ENGAGEMENT_SUCCESS,
+  DELETE_VENDOR_ENGAGEMENT_FAILURE
 } from "../actionTypes";
 
 import { config } from '../../config';
@@ -112,5 +115,42 @@ export const createEngagement = engagementDetails => dispatch => {
       toastError(error);
       dispatch(createEngagementFailure(error));
       dispatch(createEngagementsLoading(false));
+    });
+};
+
+
+export const deleteEngagementsLoading = isLoading => ({
+  type: DELETE_VENDOR_ENGAGEMENT_LOADING,
+  payload: isLoading
+});
+
+export const deleteEngagementsSuccess = engagement => ({
+  type: DELETE_VENDOR_ENGAGEMENT_SUCCESS,
+  payload: engagement
+});
+
+export const deleteEngagementFailure = error => ({
+  type: DELETE_VENDOR_ENGAGEMENT_FAILURE,
+  payload: error
+});
+
+
+export const deleteEngagement = (engagementId) => dispatch => {
+  dispatch(deleteEngagementsLoading(true));
+
+  return axios.delete(`${baseUrl}/engagements/${engagementId}`, {
+    headers: {
+      'X-Location': 1
+    }
+  })
+    .then((res) => {
+      toastSuccess(res.data.msg);
+      dispatch(deleteEngagementsSuccess(engagementId));
+      dispatch(deleteEngagementsLoading(false));
+    })
+    .catch((error) => {
+      toastError(error);
+      dispatch(deleteEngagementFailure(error));
+      dispatch(deleteEngagementsLoading(false));
     });
 };
