@@ -96,6 +96,25 @@ export class Engagements extends Component {
     })
   }
 
+  /**
+   * 
+   * @method showEditModal
+   *
+   * @param {object} engagement
+   * 
+   * @memberof Engagements
+   * 
+   * @returns {void}
+   */
+  showEditModal = engagement => {
+    const { startDate, endDate, selectedOption } = engagement;
+    this.setState({
+      displayModal: true,
+      modalTitle: "EDIT ENGAGEMENT",
+      modalButtontext: "Update"
+    });
+  }
+
    /**
    * 
    * @method deleteVendor
@@ -150,6 +169,7 @@ export class Engagements extends Component {
         key={key}
         engagement={engagement}
         showDeleteModal={this.showDeleteModal}
+        showEditModal={this.showEditModal}
       />
     ))
   };

@@ -15,7 +15,7 @@ const NotCollectedAction = ({
       <div className="button-group">
         <Link
           to={{
-            pathname: `${baseUrl}/edit/${id}`,
+            pathname: `${baseUrl}`,
             query: { mainMeal: meal.name.main, protein: meal.name.protein }
           }}
           className="button"

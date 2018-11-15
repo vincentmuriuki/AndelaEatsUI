@@ -11,7 +11,10 @@ import dateFormatter from '../../../helpers/dateFormatter';
  * @returns {JSX}
  */
 export const EngagementCard = ({ 
-  engagement: { endDate, startDate, vendor: { name } }, showDeleteModal, engagement 
+  engagement: { endDate, startDate, vendor: { name } },
+  showDeleteModal, 
+  engagement,
+  showEditModal 
 }) => (
   <div className="table-body">
     <div className="table-row">
@@ -23,7 +26,7 @@ export const EngagementCard = ({
         <div className="custom-col-3">{dateFormatter(endDate)}</div>
         <div className="custom-col-2">
           <span
-            onClick={() => console.log("Clicked")}
+            onClick={() => showEditModal(engagement)}
             className="option-color edit-spacing"
           >
             Edit
@@ -46,5 +49,6 @@ EngagementCard.propTypes = {
     startDate: PropTypes.string,
     vendor: PropTypes.object
   }),
-  showDeleteModal: PropTypes.func
+  showDeleteModal: PropTypes.func,
+  showEditModal: PropTypes.func
 };
