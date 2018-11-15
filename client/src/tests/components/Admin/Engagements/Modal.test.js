@@ -5,6 +5,7 @@ import Modal from '../../../../components/Admin/Engagements/Modal';
 
 const setup = () => {
   const props = {
+    selectOption: null,
     displayModal: true,
     modalTitle: '',
     modalButtontext: ''

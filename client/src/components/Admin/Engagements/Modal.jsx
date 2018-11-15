@@ -1,9 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Loader from '../../common/Loader/Loader';
+import Select from 'react-select';
+import DatePicker from 'react-datepicker';
 
-const Modal = ({ 
-  displayModal, modalTitle, modalButtontext, closeModal 
+
+const Modal = ({
+  startDate,
+  endDate, 
+  onChange,
+  handleSubmit,
+  selectedOption,
+  vendorsResult,
+  displayModal, 
+  modalTitle, 
+  modalButtontext, 
+  closeModal 
 }) => (
   <div 
     className="modal"
@@ -24,32 +35,30 @@ const Modal = ({
           </button>
         </div>
       </div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div>
           <div className="form-field-set">
-            <label htmlFor="vendor">Vendor
-              <input
-                id="vendor"
-                className="input"
-                name="vendor"
+            <label htmlFor="vendorId">Vendor
+              <Select 
+                value={selectedOption}
+                onChange={(data) => onChange(data, "selectedOption")}
+                options={vendorsResult}
               />
             </label>
           </div>
           <div className="form-field-set">
             <label htmlFor="startDate">Start Date
-              <input
-                id="startDate"
-                className="input"
-                name="startDate"
+              <DatePicker
+                selected={startDate}
+                onChange={(data) => onChange(data, "startDate")}
               />
             </label>
           </div>
           <div className="form-field-set">
             <label htmlFor="endDate">End Date
-              <input
-                id="endDate"
-                className="input"
-                name="endDate"
+              <DatePicker 
+                selected={endDate}
+                onChange={(data) => onChange(data, "endDate")}
               />
             </label>
           </div>
@@ -76,6 +85,12 @@ const Modal = ({
 );
 
 Modal.propTypes = {
+  startDate: PropTypes.object,
+  endDate: PropTypes.object,
+  onChange: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  selectedOption: PropTypes.number,
+  vendorsResult: PropTypes.array,
   displayModal: PropTypes.bool,
   modalTitle: PropTypes.string,
   modalButtontext: PropTypes.string,

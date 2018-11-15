@@ -2,12 +2,16 @@
 import { 
   FETCH_VENDOR_ENGAGEMENT_LOADING, 
   FETCH_VENDOR_ENGAGEMENT_SUCCESS, 
-  FETCH_VENDOR_ENGAGEMENT_FAILURE
+  FETCH_VENDOR_ENGAGEMENT_FAILURE,
+  CREATE_VENDOR_ENGAGEMENT_LOADING,
+  CREATE_VENDOR_ENGAGEMENT_SUCCESS,
+  CREATE_VENDOR_ENGAGEMENT_FAILURE
 } from '../../../actions/actionTypes';
 
 import { initialEngagements } from '../../../reducers/initialState';
 import engagementReducer from '../../../reducers/admin/engagementsReducer';
 import engagements from '../../__mocks__/mockEngagements';
+import { newEngagement } from '../../__mocks__/mockEngagements';
 
 describe('Engagement Reducer', () => {
   it('should return initial state', () => {
@@ -47,6 +51,52 @@ describe('Engagement Reducer', () => {
         const newState = engagementReducer(initialEngagements, actions);
         expect(newState.engagements).toEqual([]);
       });
+    });
+  });
+
+  describe('CREATE_VENDOR_ENGAGEMENT_LOADING', () => {
+    it('should set isCreating state to true when creating engagements', () => {
+      const action = {
+        type: CREATE_VENDOR_ENGAGEMENT_LOADING,
+        payload: true,
+      };
+
+      const newState = engagementReducer(initialEngagements, action);
+      expect(newState.isCreating).toEqual(true);
+    });
+
+    it('should set isCreating state to false when request is resolved', () => {
+      const action = {
+        type: CREATE_VENDOR_ENGAGEMENT_LOADING,
+        payload: false,
+      };
+
+      const newState = engagementReducer(initialEngagements, action);
+      expect(newState.isCreating).toEqual(false);
+    });
+  });
+
+  describe('CREATE_VENDOR_ENGAGEMENT_SUCCESS', () => {
+    it('should update engagements in the store', () => {
+      const action = {
+        type: CREATE_VENDOR_ENGAGEMENT_SUCCESS,
+        payload: newEngagement,
+      };
+
+      const newState = engagementReducer(initialEngagements, action);
+      expect(newState.engagements).toEqual([newEngagement]);
+    });
+  });
+
+  describe('CREATE_VENDOR_ENGAGEMENT_FAILURE', () => {
+    it('should return the previous state', () => {
+      const action = {
+        type: CREATE_VENDOR_ENGAGEMENT_FAILURE,
+        payload: {},
+      };
+
+      const newState = engagementReducer(initialEngagements, action);
+      expect(newState.engagements).toEqual([]);
     });
   });
 });

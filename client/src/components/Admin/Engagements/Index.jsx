@@ -1,12 +1,15 @@
 import React, { Component, Fragment } from "react";
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
-import Loader from '../../common/Loader/Loader';
+import moment from 'moment';
 
+import Loader from '../../common/Loader/Loader';
+import { ToastContainer } from 'react-toastify';
 import { EngagementCard } from './EngagementCard';
 import Modal from './Modal';
-import { fetchEngagements } from '../../../actions/admin/engagementsAction';
+import { fetchEngagements, fetchVendors, createEngagement } from '../../../actions/admin/engagementsAction';
 import EmptyContent from '../../common/EmptyContent';
+import { formatDate } from '../../../helpers/formatMealItems';
 
 
 /**
@@ -17,6 +20,10 @@ import EmptyContent from '../../common/EmptyContent';
  */
 export class Engagements extends Component {
   state = {
+    startDate: moment(),
+    endDate: moment().add(7, 'days'),
+    selectedOption: null,
+    datePicker: moment(),
     displayModal: false,
     modalTitle: '',
     modalButtontext: ''
@@ -24,9 +31,47 @@ export class Engagements extends Component {
 
   componentDidMount() {
     this.props.fetchEngagements();
+    this.props.fetchVendors();
+  }
+  
+  
+  /**
+   * Handles input fields text changes
+   *
+   * @param {object} event
+   *
+   * @memberof Engagements
+   * 
+   * @returns {void}
+   */
+  onChange = (data, selectedOption) => {
+    this.setState({
+      [selectedOption]: data
+    })
   }
   
   /**
+   * Handles form submission
+   * 
+   * @memberof Engagements
+   * 
+   * @returns {void}
+   */
+  handleSubmit = event => {
+    event.preventDefault();
+    const { selectedOption, startDate, endDate, modalTitle } = this.state;
+
+    if (selectedOption && modalTitle === "ADD ENGAGEMENT") {
+      this.props.createEngagement({
+        vendorId: selectedOption.vendorId,
+        startDate: formatDate(startDate),
+        endDate: formatDate(endDate)
+      })
+        .then(() => this.closeModal());
+    }
+  }
+
+   /**
    * 
    * @method showAddModal
    *
@@ -58,19 +103,26 @@ export class Engagements extends Component {
   }
 
   
-  renderEngagement = engagement => {
-    return (
+  renderEngagements = engagements => {
+    return engagements.map((engagement, key) => (
       <EngagementCard 
-        key={engagement.id}
+        key={key}
         engagement={engagement}
       />
-    )
-  }
+    ))
+  };
 
   render() {
-    const { isLoading, engagements } = this.props;
+    const { isLoading, engagements, vendors } = this.props;
 
-    const { 
+    const vendorsResult = vendors.map(result => (
+      { value: result.name, label: result.name, vendorId: result.id }
+    ));
+
+    const {
+      startDate,
+      endDate, 
+      selectedOption,
       displayModal,
       modalTitle, 
       modalButtontext
@@ -99,17 +151,21 @@ export class Engagements extends Component {
             <div className="custom-col-3">End Date</div>
           </div>)}
       
-          { engagements.map(engagement => (
-              this.renderEngagement(engagement))
-          )}
+          { this.renderEngagements(engagements)}
 
           { !isLoading && !engagements.length && (
             <EmptyContent message= "No engagement has been added yet" />
           )}
           
         </div>
-
+        <ToastContainer />
         <Modal 
+            startDate={startDate}
+            endDate={endDate}
+            onChange={this.onChange} 
+            handleSubmit={this.handleSubmit}
+            selectedOption={selectedOption}
+            vendorsResult={vendorsResult}
             displayModal={displayModal}
             closeModal={this.closeModal}
             modalTitle={modalTitle}
@@ -122,11 +178,21 @@ export class Engagements extends Component {
 
 const mapStateToProps = ({ allEngagements }) => ({
   isLoading: allEngagements.isLoading,
-  engagements: allEngagements.engagements
+  engagements: allEngagements.engagements,
+  vendors: allEngagements.vendors
 });
 
 Engagements.propTypes = {
-  fetchEngagements: PropType.func.isRequired
+  fetchEngagements: PropType.func.isRequired,
+  fetchVendors: PropType.func.isRequired,
+  createEngagement: PropType.func.isRequired
 };
 
-export default connect(mapStateToProps, { fetchEngagements })(Engagements);
+export default connect(
+  mapStateToProps, 
+  { 
+    fetchEngagements, 
+    fetchVendors, 
+    createEngagement 
+  }
+)(Engagements);

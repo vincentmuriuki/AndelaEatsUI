@@ -7,13 +7,22 @@ import engagements from '../../../__mocks__/mockEngagements';
 
 
 const setup = () => {
+  const state = {
+    selectedOption: {
+      vendorId: 1
+    }
+  }
+
   const props = {
     engagements,
+    vendors: [],
     isLoading: false,
-    fetchEngagements: jest.fn()
+    fetchEngagements: jest.fn(),
+    fetchVendors: jest.fn(),
+    createEngagement: jest.fn().mockImplementation(() => Promise.resolve())
   };
   
-  return mount(<Engagements {...props} />);
+  return mount(<Engagements {...state} {...props} />);
 };
 
 const wrapper = setup();
@@ -27,11 +36,11 @@ describe('Engagements Component', () => {
     expect(wrapper.find('EngagementCard').exists()).toBe(true);
   });
 
-  it('should call renderEngagement method', () => {
-    const renderEngagementSpy = jest.spyOn(wrapper.instance(), 'renderEngagement');
-    wrapper.instance().renderEngagement(engagements[0]);
+  it('should call renderEngagements method', () => {
+    const renderEngagementSpy = jest.spyOn(wrapper.instance(), 'renderEngagements');
+    wrapper.instance().renderEngagements(engagements);
     expect(renderEngagementSpy).toBeCalled();
-    expect(renderEngagementSpy).toHaveBeenCalledWith(engagements[0]);
+    expect(renderEngagementSpy).toHaveBeenCalledWith(engagements);
   });
 
   it('should call showAddModal method', () => {
@@ -44,5 +53,19 @@ describe('Engagements Component', () => {
     const closeModalSpy = jest.spyOn(wrapper.instance(), 'closeModal');
     wrapper.instance().closeModal();
     expect(closeModalSpy).toHaveBeenCalled();
+  });
+
+  it('should call handleSubmit method', () => {
+    const handleSubmitSpy = jest.spyOn(wrapper.instance(), 'handleSubmit');
+    const event = { preventDefault: jest.fn() }
+    wrapper.instance().handleSubmit(event)
+    expect(handleSubmitSpy).toHaveBeenCalled();
+  });
+
+  
+  it('should call onChange method', () => {
+    const onChangeSpy = jest.spyOn(wrapper.instance(), 'onChange');    
+    wrapper.instance().onChange(3, "selectedOption");
+    expect(onChangeSpy).toHaveBeenCalled();
   });
 });
