@@ -1,5 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { 
+  func, number, string, array, bool, object, oneOfType
+} from 'prop-types';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 
@@ -85,15 +87,19 @@ const Modal = ({
 );
 
 Modal.propTypes = {
-  startDate: PropTypes.object,
-  endDate: PropTypes.object,
-  onChange: PropTypes.func,
-  handleSubmit: PropTypes.func,
-  vendorsResult: PropTypes.array,
-  displayModal: PropTypes.bool,
-  modalTitle: PropTypes.string,
-  modalButtontext: PropTypes.string,
-  closeModal: PropTypes.func
+  startDate: object,
+  endDate: object,
+  onChange: func,
+  selectedOption: oneOfType([
+    number,
+    object
+  ]),
+  handleSubmit: func,
+  vendorsResult: array,
+  displayModal: bool,
+  modalTitle: string,
+  modalButtontext: string,
+  closeModal: func
 };
 
 export default Modal;

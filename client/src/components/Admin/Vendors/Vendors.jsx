@@ -120,7 +120,8 @@ export class Vendors extends Component {
       name,
       address,
       contactPerson,
-      tel
+      tel,
+      isActive: true
     };
     if (this.state.modalTitle === "ADD VENDOR") {
       this.props.createVendor(vendor)

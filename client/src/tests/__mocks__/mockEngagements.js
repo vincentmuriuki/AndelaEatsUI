@@ -17,7 +17,8 @@ do {
 export const newEngagement = {
   vendorId: 44,
   startDate: "2018-12-01",
-  endDate: "2018-12-20"
+  endDate: "2018-12-20",
+  isActive: true
 };
 
 export default engagements;
