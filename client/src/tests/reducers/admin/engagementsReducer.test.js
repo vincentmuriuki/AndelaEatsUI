@@ -8,7 +8,10 @@ import {
   CREATE_VENDOR_ENGAGEMENT_FAILURE,
   DELETE_VENDOR_ENGAGEMENT_LOADING,
   DELETE_VENDOR_ENGAGEMENT_SUCCESS,
-  DELETE_VENDOR_ENGAGEMENT_FAILURE
+  DELETE_VENDOR_ENGAGEMENT_FAILURE,
+  EDIT_VENDOR_ENGAGEMENT_LOADING,
+  EDIT_VENDOR_ENGAGEMENT_SUCCESS,
+  EDIT_VENDOR_ENGAGEMENT_FAILURE
 } from '../../../actions/actionTypes';
 
 import { initialEngagements } from '../../../reducers/initialState';
@@ -102,47 +105,91 @@ describe('Engagement Reducer', () => {
       expect(newState.engagements).toEqual([]);
     });
   });
-});
 
-describe('DELETE_VENDOR_ENGAGEMENT_LOADING', () => {
-  it('should set isDeleting state to true when deleting engagements', () => {
-    const action = {
-      type: DELETE_VENDOR_ENGAGEMENT_LOADING,
-      payload: true,
-    };
-    const newState = engagementReducer(initialEngagements, action);
-    expect(newState.isDeleting).toEqual(true);
+  describe('DELETE_VENDOR_ENGAGEMENT_LOADING', () => {
+    it('should set isDeleting state to true when deleting engagements', () => {
+      const action = {
+        type: DELETE_VENDOR_ENGAGEMENT_LOADING,
+        payload: true,
+      };
+      const newState = engagementReducer(initialEngagements, action);
+      expect(newState.isDeleting).toEqual(true);
+    });
+
+    it('should set isDeleting state to false when request is resolved', () => {
+      const action = {
+        type: DELETE_VENDOR_ENGAGEMENT_LOADING,
+        payload: false,
+      };
+      const newState = engagementReducer(initialEngagements, action);
+      expect(newState.isDeleting).toEqual(false);
+    });
   });
 
-  it('should set isDeleting state to false when request is resolved', () => {
-    const action = {
-      type: DELETE_VENDOR_ENGAGEMENT_LOADING,
-      payload: false,
-    };
-    const newState = engagementReducer(initialEngagements, action);
-    expect(newState.isDeleting).toEqual(false);
+  describe('DELETE_VENDOR_ENGAGEMENT_SUCCESS', () => {
+    it('should update engagements in the store', () => {
+      const action = {
+        type: DELETE_VENDOR_ENGAGEMENT_SUCCESS,
+        payload: engagements[0].id,
+      };
+
+      const newState = engagementReducer(initialEngagements, action);
+      expect(newState.engagements).toEqual([]);
+    });
   });
-});
 
-describe('DELETE_VENDOR_ENGAGEMENT_SUCCESS', () => {
-  it('should update engagements in the store', () => {
-    const action = {
-      type: DELETE_VENDOR_ENGAGEMENT_SUCCESS,
-      payload: engagements[0].id,
-    };
-
-    const newState = engagementReducer(initialEngagements, action);
-    expect(newState.engagements).toEqual([]);
+  describe('DELETE_VENDOR_ENGAGEMENT_FAILURE', () => {
+    it('should return the previous state', () => {
+      const action = {
+        type: DELETE_VENDOR_ENGAGEMENT_FAILURE,
+        payload: {},
+      };
+      const newState = engagementReducer(initialEngagements, action);
+      expect(newState.engagements).toEqual([]);
+    });
   });
-});
 
-describe('DELETE_VENDOR_ENGAGEMENT_FAILURE', () => {
-  it('should return the previous state', () => {
-    const action = {
-      type: DELETE_VENDOR_ENGAGEMENT_FAILURE,
-      payload: {},
-    };
-    const newState = engagementReducer(initialEngagements, action);
-    expect(newState.engagements).toEqual([]);
+
+  describe('EDIT_VENDOR_ENGAGEMENT_LOADING', () => {
+    it('should set isUpdating state to true when deleting engagement', () => {
+      const action = {
+        type: EDIT_VENDOR_ENGAGEMENT_LOADING,
+        payload: true,
+      };
+      const newState = engagementReducer(initialEngagements, action);
+      expect(newState.isUpdating).toEqual(true);
+    });
+    
+    it('should set isUpdating state to false when request is resolved', () => {
+      const action = {
+        type: EDIT_VENDOR_ENGAGEMENT_LOADING,
+        payload: false,
+      };
+      const newState = engagementReducer(initialEngagements, action);
+      expect(newState.isUpdating).toEqual(false);
+    });
+  });
+
+  describe('EDIT_VENDOR_ENGAGEMENT_SUCCESS', () => {
+    it('should update vendors in the store', () => {
+      const action = {
+        type: EDIT_VENDOR_ENGAGEMENT_SUCCESS,
+        payload: engagements[0],
+      };
+
+      const newState = engagementReducer(initialEngagements, action);
+      expect(newState.engagements).toEqual([engagements[0]]);
+    });
+  });
+
+  describe('EDIT_VENDOR_ENGAGEMENT_FAILURE', () => {
+    it('should return the previous state', () => {
+      const action = {
+        type: EDIT_VENDOR_ENGAGEMENT_FAILURE,
+        payload: {},
+      };
+      const newState = engagementReducer(initialEngagements, action);
+      expect(newState.engagements).toEqual([]);
+    });
   });
 });

@@ -12,7 +12,8 @@ import {
   fetchEngagements, 
   fetchVendors, 
   createEngagement,
-  deleteEngagement 
+  deleteEngagement,
+  editEngagement 
 } from '../../../actions/admin/engagementsAction';
 import EmptyContent from '../../common/EmptyContent';
 import { formatDate } from '../../../helpers/formatMealItems';
@@ -26,9 +27,14 @@ import { formatDate } from '../../../helpers/formatMealItems';
  */
 export class Engagements extends Component {
   state = {
+    engagementId: '',
     startDate: moment(),
     endDate: moment().add(7, 'days'),
-    selectedOption: null,
+    selectedOption: { 
+      value: '', 
+      label: '', 
+      vendorId: 0
+    },
     datePicker: moment(),
     displayModal: false,
     displayDeleteModal: false,
@@ -67,15 +73,21 @@ export class Engagements extends Component {
    */
   handleSubmit = event => {
     event.preventDefault();
-    const { selectedOption, startDate, endDate, modalTitle } = this.state;
+    const { engagementId, selectedOption, startDate, endDate, modalTitle } = this.state;
 
-    if (selectedOption && modalTitle === "ADD ENGAGEMENT") {
-      this.props.createEngagement({
+    if (selectedOption) {
+      const engagement= {
         vendorId: selectedOption.vendorId,
         startDate: formatDate(startDate),
         endDate: formatDate(endDate)
-      })
+      } 
+      if(modalTitle === "ADD ENGAGEMENT") {
+        this.props.createEngagement(engagement)
         .then(() => this.closeModal());
+      } else {
+        this.props.editEngagement(engagementId, engagement)
+        .then(() => this.closeModal())
+      }
     }
   }
 
@@ -107,8 +119,14 @@ export class Engagements extends Component {
    * @returns {void}
    */
   showEditModal = engagement => {
-    const { startDate, endDate, selectedOption } = engagement;
+    const {id, vendor } = engagement;
     this.setState({
+      engagementId: id,
+      selectedOption: {
+        value: vendor.name,
+        label: vendor.name,
+        vendorId: vendor.id
+      },
       displayModal: true,
       modalTitle: "EDIT ENGAGEMENT",
       modalButtontext: "Update"
@@ -258,7 +276,8 @@ Engagements.propTypes = {
   fetchEngagements: PropType.func.isRequired,
   fetchVendors: PropType.func.isRequired,
   createEngagement: PropType.func.isRequired,
-  deleteEngagement: PropType.func.isRequired
+  deleteEngagement: PropType.func.isRequired,
+  editEngagement: PropType.func.isRequired
 };
 
 export default connect(
@@ -267,6 +286,7 @@ export default connect(
     fetchEngagements, 
     fetchVendors, 
     createEngagement,
-    deleteEngagement 
+    deleteEngagement,
+    editEngagement 
   }
 )(Engagements);

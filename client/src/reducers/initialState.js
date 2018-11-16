@@ -79,6 +79,7 @@ export const initialEngagements = {
   isLoading: false,
   isCreating: false,
   isDeleting: false,
+  isUpdating: false,
   engagements: [],
   vendors: []
 };

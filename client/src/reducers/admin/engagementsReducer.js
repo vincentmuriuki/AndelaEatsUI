@@ -9,11 +9,17 @@ import {
   CREATE_VENDOR_ENGAGEMENT_FAILURE,
   DELETE_VENDOR_ENGAGEMENT_LOADING,
   DELETE_VENDOR_ENGAGEMENT_SUCCESS,
-  DELETE_VENDOR_ENGAGEMENT_FAILURE
+  DELETE_VENDOR_ENGAGEMENT_FAILURE,
+  EDIT_VENDOR_ENGAGEMENT_LOADING,
+  EDIT_VENDOR_ENGAGEMENT_SUCCESS,
+  EDIT_VENDOR_ENGAGEMENT_FAILURE
 } from '../../actions/actionTypes';
 
 import { initialEngagements } from '../initialState';
 import filter from '../../helpers/filter';
+import findIndex from '../../helpers/findindex';
+
+let index;
 
 const engagementsReducer = (state = initialEngagements, action) => {
   switch (action.type) {
@@ -34,10 +40,24 @@ const engagementsReducer = (state = initialEngagements, action) => {
         ...state,
         engagements: filter(state.engagements, action.payload)
       };
+    case EDIT_VENDOR_ENGAGEMENT_LOADING:
+      return { ...state, isUpdating: action.payload };
+    case EDIT_VENDOR_ENGAGEMENT_SUCCESS:
+      index = findIndex(state.engagements, action.payload.id);
+      
+      return {
+        ...state,
+        engagements: [
+          ...state.engagements.slice(0, index),
+          action.payload, 
+          ...state.engagements.slice(index + 1)
+        ]
+      };
     case FETCH_VENDOR_ENGAGEMENT_FAILURE:
     case FETCH_VENDORS_FAILURE:
     case CREATE_VENDOR_ENGAGEMENT_FAILURE:
     case DELETE_VENDOR_ENGAGEMENT_FAILURE:
+    case EDIT_VENDOR_ENGAGEMENT_FAILURE:
       return state;
     default:
       return state;

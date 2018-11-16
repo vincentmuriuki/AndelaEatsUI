@@ -11,7 +11,10 @@ import {
   FETCH_VENDORS_FAILURE,
   DELETE_VENDOR_ENGAGEMENT_LOADING,
   DELETE_VENDOR_ENGAGEMENT_SUCCESS,
-  DELETE_VENDOR_ENGAGEMENT_FAILURE
+  DELETE_VENDOR_ENGAGEMENT_FAILURE,
+  EDIT_VENDOR_ENGAGEMENT_LOADING,
+  EDIT_VENDOR_ENGAGEMENT_SUCCESS,
+  EDIT_VENDOR_ENGAGEMENT_FAILURE
 } from "../actionTypes";
 
 import { config } from '../../config';
@@ -152,5 +155,49 @@ export const deleteEngagement = (engagementId) => dispatch => {
       toastError(error);
       dispatch(deleteEngagementFailure(error));
       dispatch(deleteEngagementsLoading(false));
+    });
+};
+
+
+export const editEngagementsLoading = isLoading => ({
+  type: EDIT_VENDOR_ENGAGEMENT_LOADING,
+  payload: isLoading
+});
+
+export const editEngagementsSuccess = engagement => ({
+  type: EDIT_VENDOR_ENGAGEMENT_SUCCESS,
+  payload: engagement
+});
+
+export const editEngagementFailure = error => ({
+  type: EDIT_VENDOR_ENGAGEMENT_FAILURE,
+  payload: error
+});
+
+export const editEngagement = (engagementId, engagementDetails) => dispatch => {
+  dispatch(editEngagementsLoading(true));
+
+  const url = `${baseUrl}/engagements/${engagementId}`;
+
+  const options = {
+    method: 'PATCH',
+    headers: {
+      'X-Location': 1
+    },
+    data: engagementDetails,
+    url
+  };
+
+  return axios(options)
+    .then(response => {
+      const { msg: message, payload: { engagement } } = response.data;
+      toastSuccess(message);
+      dispatch(editEngagementsSuccess(engagement));
+      dispatch(editEngagementsLoading(false));
+    })
+    .catch(error => {
+      toastError(error);
+      dispatch(editEngagementFailure(error));
+      dispatch(editEngagementsLoading(false));
     });
 };

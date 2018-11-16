@@ -89,7 +89,6 @@ Modal.propTypes = {
   endDate: PropTypes.object,
   onChange: PropTypes.func,
   handleSubmit: PropTypes.func,
-  selectedOption: PropTypes.number,
   vendorsResult: PropTypes.array,
   displayModal: PropTypes.bool,
   modalTitle: PropTypes.string,

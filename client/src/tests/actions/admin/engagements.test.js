@@ -10,14 +10,18 @@ import {
   CREATE_VENDOR_ENGAGEMENT_FAILURE,
   DELETE_VENDOR_ENGAGEMENT_LOADING,
   DELETE_VENDOR_ENGAGEMENT_SUCCESS,
-  DELETE_VENDOR_ENGAGEMENT_FAILURE
+  DELETE_VENDOR_ENGAGEMENT_FAILURE,
+  EDIT_VENDOR_ENGAGEMENT_LOADING,
+  EDIT_VENDOR_ENGAGEMENT_SUCCESS,
+  EDIT_VENDOR_ENGAGEMENT_FAILURE
 } from '../../../actions/actionTypes';
 
 import { 
   baseUrl, 
   fetchEngagements,
   createEngagement,
-  deleteEngagement 
+  deleteEngagement,
+  editEngagement 
 } from '../../../actions/admin/engagementsAction';
 
 import engagements from '../../__mocks__/mockEngagements';
@@ -219,6 +223,76 @@ describe('Delete Engagement', () => {
     const store = mockStore({});
     await store
       .dispatch(deleteEngagement(engagements[0].id))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    done();
+  });
+});
+
+describe('Update Engagement', () => {
+  beforeEach(() => moxios.install());
+  afterEach(() => moxios.uninstall());
+
+  it('update engagement success', async (done) => {
+    moxios.stubRequest(`${baseUrl}/engagements/${engagements[0].id}`, {
+      status: 200,
+      response: {
+        payload: {
+          engagement: newEngagement
+        }
+      }
+    });
+    
+
+    const expectedActions = [
+      {
+        type: EDIT_VENDOR_ENGAGEMENT_LOADING,
+        payload: true,
+      },
+      {
+        type: EDIT_VENDOR_ENGAGEMENT_SUCCESS,
+        payload: newEngagement,
+      },
+      {
+        type: EDIT_VENDOR_ENGAGEMENT_LOADING,
+        payload: false,
+      }
+    ];
+
+    const store = mockStore({});
+    await store
+      .dispatch(editEngagement(engagements[0].id, engagements[0]))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    done();
+  });
+
+  it('update engagement failure', async (done) => {
+    moxios.stubRequest(`${baseUrl}/engagements/${engagements[0].id}`, {
+      status: 401,
+      response: {}
+    });
+
+    const expectedActions = [
+      {
+        type: EDIT_VENDOR_ENGAGEMENT_LOADING,
+        payload: true,
+      },
+      {
+        type: EDIT_VENDOR_ENGAGEMENT_FAILURE,
+        payload: new Error('Request failed with status code 401'),
+      },
+      {
+        type: EDIT_VENDOR_ENGAGEMENT_LOADING,
+        payload: false,
+      }
+    ];
+
+    const store = mockStore({});
+    await store
+      .dispatch(editEngagement(engagements[0].id, engagements[0]))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });

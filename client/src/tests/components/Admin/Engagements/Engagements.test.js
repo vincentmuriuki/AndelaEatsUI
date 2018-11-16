@@ -8,9 +8,11 @@ import engagements from '../../../__mocks__/mockEngagements';
 
 const setup = () => {
   const state = {
-    selectedOption: {
-      vendorId: 1
-    }
+    selectedOption: { 
+      value: '', 
+      label: '', 
+      vendorId: 0
+    },
   };
 
   const props = {
@@ -20,7 +22,8 @@ const setup = () => {
     fetchEngagements: jest.fn(),
     fetchVendors: jest.fn(),
     createEngagement: jest.fn().mockImplementation(() => Promise.resolve()),
-    deleteEngagement: jest.fn().mockImplementation(() => Promise.resolve())
+    deleteEngagement: jest.fn().mockImplementation(() => Promise.resolve()),
+    editEngagement: jest.fn().mockImplementation(() => Promise.resolve())
   };
   
   return mount(<Engagements {...state} {...props} />);
@@ -56,7 +59,15 @@ describe('Engagements Component', () => {
     expect(closeModalSpy).toHaveBeenCalled();
   });
 
-  it('should call handleSubmit method', () => {
+  it('should call handleSubmit and createEngagement method', () => {
+    const handleSubmitSpy = jest.spyOn(wrapper.instance(), 'handleSubmit');
+    const event = { preventDefault: jest.fn() };
+    wrapper.setState({ modalTitle: "ADD ENGAGEMENT" })
+    wrapper.instance().handleSubmit(event);
+    expect(handleSubmitSpy).toHaveBeenCalled();
+  });
+
+  it('should call handleSubmit and editEngagement method', () => {
     const handleSubmitSpy = jest.spyOn(wrapper.instance(), 'handleSubmit');
     const event = { preventDefault: jest.fn() };
     wrapper.instance().handleSubmit(event);
@@ -81,5 +92,11 @@ describe('Engagements Component', () => {
       .spyOn(wrapper.instance(), 'showDeleteModal');
     wrapper.instance().showDeleteModal();
     expect(showDeleteModalSpy).toHaveBeenCalled();
+  });
+
+  it('should call showEditModal method', () => {
+    const showEditModalSpy = jest.spyOn(wrapper.instance(), 'showEditModal');
+    wrapper.instance().showEditModal(engagements[0]);
+    expect(showEditModalSpy).toHaveBeenCalled();
   });
 });
