@@ -49,7 +49,7 @@ export const VendorCard = ({
             role="button"
             tabIndex={0}
           >
-            Delete
+            Suspend
           </span>
         </div>
       </div>

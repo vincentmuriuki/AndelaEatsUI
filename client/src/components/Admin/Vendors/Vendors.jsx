@@ -260,7 +260,7 @@ export class Vendors extends Component {
         { isLoading && <Loader /> }
         <div className={`${isLoading && 'blurred'} table-wrapper`}>
           <div className="vendors-header">
-            <h3 className="vendor-menu">Menu</h3>
+            <h3 className="vendor-menu">Vendors</h3>
             <button 
               type="button"
               name="addVendor" 

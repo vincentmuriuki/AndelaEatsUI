@@ -35,7 +35,7 @@ export const EngagementCard = ({
             onClick={() => showDeleteModal(engagement)}
             className="option-color"
           >
-            Suspend
+            Delete
           </span>
         </div>
       </div>
