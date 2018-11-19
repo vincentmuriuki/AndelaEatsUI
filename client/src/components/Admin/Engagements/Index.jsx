@@ -4,7 +4,7 @@ import PropType from 'prop-types';
 import moment from 'moment';
 
 import Loader from '../../common/Loader/Loader';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import { EngagementCard } from './EngagementCard';
 import DeleteEngagementModal from './DeleteEngagementModal';
 import Modal from './Modal';
@@ -16,7 +16,7 @@ import {
   editEngagement 
 } from '../../../actions/admin/engagementsAction';
 import EmptyContent from '../../common/EmptyContent';
-import { formatDate } from '../../../helpers/formatMealItems';
+import { formatDate, isStartgreaterThanEnd } from '../../../helpers/formatMealItems';
 
 
 /**
@@ -74,6 +74,12 @@ export class Engagements extends Component {
   handleSubmit = event => {
     event.preventDefault();
     const { engagementId, selectedOption, startDate, endDate, modalTitle } = this.state;
+
+    const result = isStartgreaterThanEnd(startDate, endDate);
+
+    if (result) {
+      return toast.error(result);
+    }
 
     if (selectedOption) {
       const engagement= {
@@ -234,7 +240,7 @@ export class Engagements extends Component {
             <div className="custom-col-2">Options</div>
           </div>)}
       
-          { this.renderEngagements(engagements)}
+          { engagements.length > 0 && this.renderEngagements(engagements)}
 
           { !isLoading && !engagements.length && (
             <EmptyContent message= "No engagement has been added yet" />

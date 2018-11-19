@@ -4,7 +4,7 @@ import {
   func, shape, arrayOf, bool, any
 } from 'prop-types';
 import { connect } from 'react-redux';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 
@@ -18,7 +18,9 @@ import {
   createMenu
 } from '../../../actions/admin/menuItemsAction';
 import { formatMenuItemDate } from '../../../helpers/menusHelper';
-import formatMealItems, { formatDate } from '../../../helpers/formatMealItems';
+import formatMealItems, { 
+  formatDate, isStartgreaterThanEnd
+ } from '../../../helpers/formatMealItems';
 
 import EmptyContent from '../../common/EmptyContent';
 import Loader from '../../common/Loader/Loader';
@@ -74,6 +76,11 @@ class Menus extends Component {
    */
   handelViewMenu = () => {
     const { startDate, endDate } = this.state;
+    const result = isStartgreaterThanEnd(startDate, endDate);
+
+    if (result) {
+      return toast.error(result);
+    }
     this.props.fetchMenus(formatDate(startDate), formatDate(endDate));
   }
 

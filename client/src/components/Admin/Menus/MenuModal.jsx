@@ -76,15 +76,6 @@ class MenuModal extends Component {
       collectionDate,
       vendorEngagementId 
     } = this.state;
-    if (sideMeal.length > allowedSideMeal.value 
-        || sideMeal.length !== allowedSideMeal.value) {
-      check.sideMeal = '*select exact allowed side meal';
-    }
-
-    if (protein.length > allowedProtein.value
-        || protein.length !== allowedProtein.value) {
-      check.protein = '*select exact allowed protein';
-    }
 
     if (Object.keys(check).length !== 0) {
       this.setState({ errors: check });

@@ -27,4 +27,11 @@ export const formatDate = (date) => (
   date.format("YYYY-MM-DD")
 );
 
+export const isStartgreaterThanEnd = (startDate, endDate) => {
+  if (startDate.diff(endDate, 'days') > -1) {
+    return "Start date must be greater than end date. Use a minimum range of 2 days.";
+  }
+};
+
+
 export default formatMealItems;
