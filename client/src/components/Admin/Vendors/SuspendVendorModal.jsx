@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-const DeleteVendorModal = ({
+const SuspendVendorModal = ({
   closeModal,
-  isDeleting,
-  deleteVendor,
-  displayDeleteModal,
+  isSuspending,
+  suspendVendor,
+  displaySuspendModal,
   modalContent
 }) => (
   <div 
     className="modal" 
     id="delete-vendor-modal"
-    style={(displayDeleteModal) ? { display: 'block' } : { display: 'none' }}
+    style={(displaySuspendModal) ? { display: 'block' } : { display: 'none' }}
   >
-    { displayDeleteModal 
+    { displaySuspendModal 
       ? (
         <div className="modal-content">
           <div className="modal-header">
-            <div className="header-title">Delete Vendor</div>
+            <div className="header-title">Suspend Vendor</div>
           </div>
           <h3>{`Permanently delete ${modalContent.name}`}</h3>
           <span className="warning">This cannot be undone</span>
@@ -26,7 +26,7 @@ const DeleteVendorModal = ({
               <button 
                 className="grayed upper" 
                 type="button"
-                disabled={isDeleting}
+                disabled={isSuspending}
                 onClick={closeModal}
               >
                 Cancel
@@ -35,10 +35,10 @@ const DeleteVendorModal = ({
                 className="fill upper delete-vendor" 
                 type="button" 
                 tabIndex={0}
-                disabled={isDeleting}
-                onClick={() => deleteVendor(modalContent.id)}
+                disabled={isSuspending}
+                onClick={() => suspendVendor(modalContent.id)}
               >
-                Delete
+                Suspend
               </button>
             </div>
           </div>
@@ -49,11 +49,11 @@ const DeleteVendorModal = ({
   </div>
 );
 
-DeleteVendorModal.propTypes = {
+SuspendVendorModal.propTypes = {
   closeModal: PropTypes.func,
-  displayDeleteModal: PropTypes.bool,
-  isDeleting: PropTypes.bool,
-  deleteVendor: PropTypes.func,
+  displaySuspendModal: PropTypes.bool,
+  isSuspending: PropTypes.bool,
+  suspendVendor: PropTypes.func,
   modalContent: PropTypes.shape({
     vendorName: PropTypes.string,
     vendorAddress: PropTypes.string,
@@ -62,4 +62,4 @@ DeleteVendorModal.propTypes = {
   })
 };
 
-export default DeleteVendorModal;
+export default SuspendVendorModal;

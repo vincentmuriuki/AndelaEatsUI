@@ -7,9 +7,9 @@ import {
   CREATE_VENDOR_SUCCESS,
   CREATE_VENDOR_FAILURE,
   CREATE_VENDOR_LOADING,
-  DELETE_VENDOR_SUCCESS,
-  DELETE_VENDOR_FAILURE,
-  DELETE_VENDOR_LOADING,
+  SUSPEND_VENDOR_SUCCESS,
+  SUSPEND_VENDOR_FAILURE,
+  SUSPEND_VENDOR_LOADING,
   UPDATE_VENDOR_SUCCESS,
   UPDATE_VENDOR_FAILURE,
   UPDATE_VENDOR_LOADING
@@ -97,40 +97,46 @@ export const createVendor = (vendorDetails) => dispatch => {
 };
 
 
-export const deleteVendorLoading = isDeleting => ({
-  type: DELETE_VENDOR_LOADING,
-  payload: isDeleting
+export const suspendVendorLoading = isSuspending => ({
+  type: SUSPEND_VENDOR_LOADING,
+  payload: isSuspending
 });
 
 
-export const deleteVendorSuccess = vendorId => ({
-  type: DELETE_VENDOR_SUCCESS,
+export const suspendVendorSuccess = vendorId => ({
+  type: SUSPEND_VENDOR_SUCCESS,
   payload: vendorId
 });
 
-export const deleteVendorFailure = error => ({
-  type: DELETE_VENDOR_FAILURE,
+export const suspendVendorFailure = error => ({
+  type: SUSPEND_VENDOR_FAILURE,
   payload: error
 });
 
 
-export const deleteVendor = (vendorId) => dispatch => {
-  dispatch(deleteVendorLoading(true));
+export const suspendVendor = (vendorId) => dispatch => {
+  dispatch(suspendVendorLoading(true));
 
-  return axios.delete(`${baseUrl}/vendors/${vendorId}`, {
+  const url = `${baseUrl}/vendors/suspend/${vendorId}`;
+
+  const options = {
+    method: 'PATCH',
     headers: {
       'X-Location': 1
-    }
-  })
+    },
+    url
+  };
+
+  return axios(options)
     .then((res) => {
       toastSuccess(res.data.msg);
-      dispatch(deleteVendorSuccess(vendorId));
-      dispatch(deleteVendorLoading(false));
+      dispatch(suspendVendorSuccess(vendorId));
+      dispatch(suspendVendorLoading(false));
     })
     .catch((error) => {
       toastError(error.response.data.message);
-      dispatch(deleteVendorFailure(error));
-      dispatch(deleteVendorLoading(false));
+      dispatch(suspendVendorFailure(error));
+      dispatch(suspendVendorLoading(false));
     });
 };
 
@@ -168,7 +174,7 @@ export const updateVendor = (id, vendorDetails) => dispatch => {
 
   return axios(options)
     .then((res) => {
-      const { msg: message, payload: { vendor }} = res.data;
+      const { msg: message, payload: { vendor } } = res.data;
       toastSuccess(message);
       dispatch(updateVendorSuccess(vendor));
       dispatch(updateVendorLoading(false));

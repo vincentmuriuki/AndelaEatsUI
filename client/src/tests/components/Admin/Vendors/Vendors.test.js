@@ -14,16 +14,16 @@ const modalContent = {
   name: "Mr Medium"
 };
 
-const setup = (isLoading, isCreating, isUpdating, isDeleting) => {
+const setup = (isLoading, isCreating, isUpdating, isSuspending) => {
   const props = {
     vendors,
     isLoading,
     isCreating,
     isUpdating,
-    isDeleting,
+    isSuspending,
     fetchVendors: jest.fn(),
     createVendor: jest.fn().mockImplementation(() => Promise.resolve()),
-    deleteVendor: jest.fn().mockImplementation(() => Promise.resolve()),
+    suspendVendor: jest.fn().mockImplementation(() => Promise.resolve()),
     updateVendor: jest.fn().mockImplementation(() => Promise.resolve()),
   };
 
@@ -61,10 +61,10 @@ describe('Vendors Component', () => {
     expect(handleSubmitSpy).toHaveBeenCalled();
   });
 
-  it('should call deleteVendor method', () => {
-    const deleteVendorSpy = jest.spyOn(wrapper.instance(), 'deleteVendor');
-    wrapper.instance().deleteVendor();
-    expect(deleteVendorSpy).toHaveBeenCalled();
+  it('should call suspendVendor method', () => {
+    const suspendVendorSpy = jest.spyOn(wrapper.instance(), 'suspendVendor');
+    wrapper.instance().suspendVendor();
+    expect(suspendVendorSpy).toHaveBeenCalled();
   });
 
   it('should call closeDeleteModal method', () => {
@@ -75,11 +75,11 @@ describe('Vendors Component', () => {
     expect(closeModalSpy).toHaveBeenCalled();
   });
 
-  it('should call showDeleteModal method', () => {
-    const showDeleteModalSpy = jest
-      .spyOn(wrapper.instance(), 'showDeleteModal');
-    wrapper.instance().showDeleteModal(modalContent);
-    expect(showDeleteModalSpy).toHaveBeenCalled();
+  it('should call showSuspendModal method', () => {
+    const showSuspendModalSpy = jest
+      .spyOn(wrapper.instance(), 'showSuspendModal');
+    wrapper.instance().showSuspendModal(modalContent);
+    expect(showSuspendModalSpy).toHaveBeenCalled();
   });
 
   it('should call clearErrors method', () => {
@@ -115,10 +115,10 @@ describe('Vendors Component', () => {
     expect(closeModalSpy).toHaveBeenCalled();
   });
 
-  it('should call deleteVendor method', () => {
-    const deleteVendorSpy = jest.spyOn(wrapper.instance(), 'deleteVendor');
-    wrapper.instance().deleteVendor(modalContent.id);
-    expect(deleteVendorSpy).toHaveBeenCalled();
+  it('should call suspendVendor method', () => {
+    const suspendVendorSpy = jest.spyOn(wrapper.instance(), 'suspendVendor');
+    wrapper.instance().suspendVendor(modalContent.id);
+    expect(suspendVendorSpy).toHaveBeenCalled();
   });
 
   it('should call showAddModal method', () => {

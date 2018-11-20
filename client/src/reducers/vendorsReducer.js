@@ -5,9 +5,9 @@ import {
   CREATE_VENDOR_LOADING,
   CREATE_VENDOR_SUCCESS,
   CREATE_VENDOR_FAILURE,
-  DELETE_VENDOR_SUCCESS,
-  DELETE_VENDOR_FAILURE,
-  DELETE_VENDOR_LOADING,
+  SUSPEND_VENDOR_SUCCESS,
+  SUSPEND_VENDOR_FAILURE,
+  SUSPEND_VENDOR_LOADING,
   UPDATE_VENDOR_SUCCESS,
   UPDATE_VENDOR_FAILURE,
   UPDATE_VENDOR_LOADING
@@ -29,9 +29,9 @@ const vendorsReducer = (state = initialVendors, action) => {
       return { ...state, isCreating: action.payload };
     case CREATE_VENDOR_SUCCESS:
       return { ...state, vendors: [...state.vendors, action.payload] };
-    case DELETE_VENDOR_LOADING:
-      return { ...state, isDeleting: action.payload };
-    case DELETE_VENDOR_SUCCESS:
+    case SUSPEND_VENDOR_LOADING:
+      return { ...state, isSuspending: action.payload };
+    case SUSPEND_VENDOR_SUCCESS:
       return {
         ...state,
         vendors: filter(state.vendors, action.payload)
@@ -50,7 +50,7 @@ const vendorsReducer = (state = initialVendors, action) => {
       return { ...state, isUpdating: action.payload };
     case FETCH_VENDORS_FAILURE:
     case CREATE_VENDOR_FAILURE:
-    case DELETE_VENDOR_FAILURE:
+    case SUSPEND_VENDOR_FAILURE:
     case UPDATE_VENDOR_FAILURE:
       return state;
     default:

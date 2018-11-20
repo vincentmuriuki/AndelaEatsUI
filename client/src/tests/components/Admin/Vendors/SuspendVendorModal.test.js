@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import React, { Component } from 'react';
 import { mount } from 'enzyme';
-import DeleteVendorModal from '../../../../components/Admin/Vendors/DeleteVendorModal';
+import SuspendVendorModal from '../../../../components/Admin/Vendors/SuspendVendorModal';
 
 const setup = (status) => {
   const props = {
@@ -14,23 +14,23 @@ const setup = (status) => {
       vendorAddress: "No 233, Ikorodu road, Lagos",
       vendorName: "Mr Medium"
     },
-    displayDeleteModal: status,
-    closeDeleteModal: jest.fn(),
-    deleteVendor: jest.fn(),
+    displaySuspendModal: status,
+    closeSuspendModal: jest.fn(),
+    suspendVendor: jest.fn(),
   };
 
-  return mount(<DeleteVendorModal {...props} />);
+  return mount(<SuspendVendorModal {...props} />);
 };
 
 const wrapper = setup(true);
 
-describe('DeleteVendorModal Component', () => {
+describe('SuspendVendorModal Component', () => {
   it('should render correctly', () => {
     expect(wrapper).toMatchSnapshot();
     expect(wrapper.length).toEqual(1);
   });
 
-  it('should simulate delete button click', () => {
+  it('should simulate suspend button click', () => {
     wrapper.find('.delete-vendor').simulate('click');
   });
 });

@@ -14,7 +14,7 @@ import dateFormatter from '../../../helpers/dateFormatter';
 export const VendorCard = ({
   vendor,
   rating,
-  showDeleteModal,
+  showSuspendModal,
   showEditModal
 }) => (
   <div className="table-body">
@@ -45,7 +45,7 @@ export const VendorCard = ({
             Edit
           </span>
           <span 
-            onClick={() => showDeleteModal(vendor)}
+            onClick={() => showSuspendModal(vendor)}
             role="button"
             tabIndex={0}
           >
@@ -68,6 +68,6 @@ VendorCard.propTypes = {
     updated_at: PropTypes.string,
   }),
   rating: PropTypes.number,
-  showDeleteModal: PropTypes.func,
+  showSuspendModal: PropTypes.func,
   showEditModal: PropTypes.func
 };

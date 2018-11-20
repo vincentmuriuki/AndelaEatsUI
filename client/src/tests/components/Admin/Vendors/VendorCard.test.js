@@ -10,7 +10,7 @@ const setup = () => {
   const props = {
     vendor: vendors[0],
     rating: 3,
-    showDeleteModal: jest.fn(),
+    showSuspendModal: jest.fn(),
     showEditModal: jest.fn()
   };
 

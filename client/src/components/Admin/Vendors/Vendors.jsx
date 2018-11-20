@@ -6,12 +6,12 @@ import { VendorCard } from './VendorCard';
 import Loader from '../../common/Loader/Loader';
 import {
   fetchVendors,
-  deleteVendor,
+  suspendVendor,
   createVendor,
   updateVendor
 } from '../../../actions/vendorsAction';
 import Modal from "./Modal";
-import DeleteVendorModal from "./DeleteVendorModal";
+import SuspendVendorModal from "./SuspendVendorModal";
 import inputValidation from '../../../helpers/inputValidation';
 import EmptyContent from '../../common/EmptyContent';
 
@@ -30,7 +30,7 @@ export class Vendors extends Component {
     tel: '',
     errors: {},
     displayModal: false,
-    displayDeleteModal: false,
+    displaySuspendModal: false,
     modalContent: {},
     modalTitle: '',
     modalButtontext: ''
@@ -167,7 +167,7 @@ export class Vendors extends Component {
   
   /**
    * 
-   * @method deleteVendor
+   * @method suspendVendor
    * 
    * @param {Object} vendorId
    * 
@@ -175,14 +175,14 @@ export class Vendors extends Component {
    * 
    * @returns {void}
    */
-  deleteVendor = (vendorId) => {
-    this.props.deleteVendor(vendorId)
+  suspendVendor = (vendorId) => {
+    this.props.suspendVendor(vendorId)
       .then(() => this.closeModal());
   }
 
   /**
    * 
-   * @method showDeleteModal
+   * @method showSuspendModal
    *
    * @param {object} vendor
    * 
@@ -190,9 +190,9 @@ export class Vendors extends Component {
    * 
    * @returns {void}
    */
-  showDeleteModal = (vendor) => {
+  showSuspendModal = (vendor) => {
     this.setState({
-      displayDeleteModal: true,
+      displaySuspendModal: true,
       modalContent: vendor
     });
   }
@@ -228,7 +228,7 @@ export class Vendors extends Component {
         key={vendor.id}
         vendor={vendor}
         rating={rating}
-        showDeleteModal={this.showDeleteModal}
+        showSuspendModal={this.showSuspendModal}
         showEditModal={this.showEditModal}
       />
     );
@@ -239,12 +239,12 @@ export class Vendors extends Component {
       isLoading,
       vendors,
       isCreating, 
-      isDeleting,
+      isSuspending,
       isUpdating
     } = this.props;
     const {
       displayModal,
-      displayDeleteModal,
+      displaySuspendModal,
       modalContent,
       name, 
       address, 
@@ -306,12 +306,12 @@ export class Vendors extends Component {
           modalTitle={modalTitle}
           modalButtontext={modalButtontext}
         />
-        <DeleteVendorModal
-          deleteVendor={this.deleteVendor}
-          isDeleting={isDeleting}
+        <SuspendVendorModal
+          suspendVendor={this.suspendVendor}
+          isSuspending={isSuspending}
           closeModal={this.closeModal}
           modalContent={modalContent}
-          displayDeleteModal={displayDeleteModal}
+          displaySuspendModal={displaySuspendModal}
         />
       </div>
     );
@@ -321,17 +321,17 @@ export class Vendors extends Component {
 const mapStateToProps = ({ allVendors }) => ({
   isLoading: allVendors.isLoading,
   isCreating: allVendors.isCreating,
-  isDeleting: allVendors.isDeleting,
+  isSuspending: allVendors.isSuspending,
   isUpdating: allVendors.isUpdating,
   vendors: allVendors.vendors
 });
    
 
 Vendors.propTypes = {
-  deleteVendor: PropTypes.func,
+  suspendVendor: PropTypes.func,
   isLoading: PropTypes.bool,
   isCreating: PropTypes.bool,
-  isDeleting: PropTypes.bool,
+  isSuspending: PropTypes.bool,
   isUpdating: PropTypes.bool,
   createVendor: PropTypes.func,
   updateVendor: PropTypes.func,
@@ -343,7 +343,7 @@ export default connect(
   mapStateToProps,
   {
     fetchVendors,
-    deleteVendor,
+    suspendVendor,
     createVendor,
     updateVendor
   }

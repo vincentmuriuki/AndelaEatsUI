@@ -32,7 +32,7 @@ export const orders = {
 export const initialVendors = {
   isLoading: false,
   isCreating: false,
-  isDeleting: false,
+  isSuspending: false,
   isUpdating: false,
   vendors: [],
 };
