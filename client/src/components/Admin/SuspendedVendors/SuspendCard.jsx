@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 
 
 /**
- * @function VendorCard
+ * @function SuspendCard
  * 
  * @param {object} { props }
  * 
  * @returns {JSX}
  */
-export const VendorCard = ({ 
+export const SuspendCard = ({ 
   vendor: {
     name, address, tel, contactPerson 
-  } 
+  }, showUnSuspendModal, vendor 
 }) => (
   <div className="table-body">
     <div className="table-row">
@@ -26,6 +26,7 @@ export const VendorCard = ({
         <div className="custom-col-3">
           <span
             className="option-color edit-spacing"
+            onClick={() => showUnSuspendModal(vendor)}
           >
             Reinstate
           </span>
@@ -40,11 +41,12 @@ export const VendorCard = ({
   </div>
 );
 
-VendorCard.propTypes = {
+SuspendCard.propTypes = {
   vendor: PropTypes.shape({
     name: PropTypes.string,
     address: PropTypes.string,
     tel: PropTypes.string,
     contactPerson: PropTypes.string
-  })
+  }),
+  showUnSuspendModal: PropTypes.func
 };

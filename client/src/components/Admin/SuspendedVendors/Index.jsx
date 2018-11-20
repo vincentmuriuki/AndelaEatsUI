@@ -1,15 +1,15 @@
 import React, { Component, Fragment } from "react";
 import { connect } from 'react-redux';
-import PropType from 'prop-types';
+import PropTypes from 'prop-types';
 
 import Loader from '../../common/Loader/Loader';
 import { ToastContainer, toast } from 'react-toastify';
-import { VendorCard } from './VendorCard';
+import { SuspendCard } from './SuspendCard';
 import { 
-  fetchSuspensions
+  fetchSuspensions, unsuspendVendor
 } from '../../../actions/admin/suspendedVendorAction';
 import EmptyContent from '../../common/EmptyContent';
-
+import UnSuspendModal from './UnSuspendModal';
 
 /**
  * @class SuspendedVendor
@@ -18,21 +18,76 @@ import EmptyContent from '../../common/EmptyContent';
  * @extends {Component}
  */
 export class SuspendedVendor extends Component {  
+  state = {
+    displayUnsuspendModal: false,
+    moadlContent: {}
+  }
+
   componentDidMount() {
     this.props.fetchSuspensions();
   }
+
+   /**
+   * 
+   * @method unsuspendVendor
+   * 
+   * @param {Object} vendorId
+   * 
+   * @memberof SuspendedVendor
+   * 
+   * @returns {void}
+   */
+  unsuspendVendor = (vendorId) => {
+    this.props.unsuspendVendor(vendorId)
+      .then(() => this.closeModal());
+  }
+
+  /**
+   * 
+   * @method unshowSuspendModal
+   *
+   * @param {object} vendor
+   * 
+   * @memberof SuspendedVendor
+   * 
+   * @returns {void}
+   */
+  showUnSuspendModal = (vendor) => {
+    this.setState({
+      displayUnsuspendModal: true,
+      modalContent: vendor
+    });
+  }
+
+  /**
+   * 
+   * @method closeModal
+   * 
+   * @memberof SuspendedVendor
+   * 
+   * @returns {void}
+   */
+  closeModal = () => {
+    this.setState({
+      displayUnsuspendModal: false
+    });
+  }
+
    
   renderVendors = vendors => {
     return vendors.map((vendor, key) => (
-      <VendorCard 
+      <SuspendCard 
         key={key}
         vendor={vendor}
+        showUnSuspendModal={this.showUnSuspendModal}
       />
     ))
   };
 
   render() {
     const { isLoading, vendors } = this.props;
+
+    const { displayUnsuspendModal, modalContent } = this.state;
 
     return (
       <Fragment>
@@ -59,6 +114,12 @@ export class SuspendedVendor extends Component {
           
         </div>
         <ToastContainer />
+        <UnSuspendModal 
+          unsuspendVendor={this.unsuspendVendor}
+          closeModal={this.closeModal}
+          modalContent={modalContent}
+          displayUnsuspendModal={displayUnsuspendModal}
+        />
       </Fragment>
     );
   }
@@ -70,12 +131,14 @@ const mapStateToProps = ({ suspendVendors }) => ({
 });
 
 SuspendedVendor.propTypes = {
-  fetchSuspensions: PropType.func.isRequired
+  fetchSuspensions: PropTypes.func.isRequired,
+  unsuspendVendor: PropTypes.func.isRequired
 };
 
 export default connect(
   mapStateToProps, 
   { 
-    fetchSuspensions 
+    fetchSuspensions,
+    unsuspendVendor 
   }
 )(SuspendedVendor);

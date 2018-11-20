@@ -2,7 +2,10 @@
 import { 
   FETCH_SUSPENDED_VENDOR_LOADING,
   FETCH_SUSPENDED_VENDOR_SUCCESS,
-  FETCH_SUSPENDED_VENDOR_FAILURE
+  FETCH_SUSPENDED_VENDOR_FAILURE,
+  UNSUSPEND_VENDOR_SUCCESS,
+  UNSUSPEND_VENDOR_FAILURE,
+  UNSUSPEND_VENDOR_LOADING
 } from '../../../actions/actionTypes';
 
 import { initialSuspendedVendors } from '../../../reducers/initialState';
@@ -48,5 +51,49 @@ describe('Suspended Vendor Reducer', () => {
         expect(newState.vendors).toEqual([]);
       });
     });
+  });
+});
+
+
+describe('UNSUSPEND_VENDOR_LOADING', () => {
+  it('should set isSuspending state to true when deleting vendor', () => {
+    const action = {
+      type: UNSUSPEND_VENDOR_LOADING,
+      payload: true,
+    };
+    const newState = vendorReducer(initialSuspendedVendors, action);
+    expect(newState.isSuspending).toEqual(true);
+  });
+
+  it('should set isSuspending state to false when request is resolved', () => {
+    const action = {
+      type: UNSUSPEND_VENDOR_LOADING,
+      payload: false,
+    };
+    const newState = vendorReducer(initialSuspendedVendors, action);
+    expect(newState.isSuspending).toEqual(false);
+  });
+});
+
+describe('UNSUSPEND_VENDOR_SUCCESS', () => {
+  it('should update vendors in the store', () => {
+    const action = {
+      type: UNSUSPEND_VENDOR_SUCCESS,
+      payload: vendors[0].id,
+    };
+
+    const newState = vendorReducer(initialSuspendedVendors, action);
+    expect(newState.vendors).toEqual([]);
+  });
+});
+
+describe('UNSUSPEND_VENDOR_FAILURE', () => {
+  it('should return the previous state', () => {
+    const action = {
+      type: UNSUSPEND_VENDOR_FAILURE,
+      payload: {},
+    };
+    const newState = vendorReducer(initialSuspendedVendors, action);
+    expect(newState.vendors).toEqual([]);
   });
 });

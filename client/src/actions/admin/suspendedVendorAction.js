@@ -1,8 +1,12 @@
 import axios from 'axios';
+import { toastSuccess, toastError } from '../../helpers/toast';
 import { 
   FETCH_SUSPENDED_VENDOR_LOADING, 
   FETCH_SUSPENDED_VENDOR_SUCCESS, 
-  FETCH_SUSPENDED_VENDOR_FAILURE
+  FETCH_SUSPENDED_VENDOR_FAILURE,
+  UNSUSPEND_VENDOR_LOADING,
+  UNSUSPEND_VENDOR_SUCCESS,
+  UNSUSPEND_VENDOR_FAILURE
 } from '../actionTypes';
 
 import { config } from '../../config';
@@ -42,3 +46,44 @@ export const fetchSuspensions = () => dispatch => {
     });
 };
 
+
+export const unsuspendVendorLoading = isLoading => ({
+  type: UNSUSPEND_VENDOR_LOADING,
+  payload: isLoading
+});
+
+export const unsuspendVendorSuccess = suspensions => ({
+  type: UNSUSPEND_VENDOR_SUCCESS,
+  payload: suspensions
+});
+
+export const unsuspendVendorFailure = error => ({
+  type: UNSUSPEND_VENDOR_FAILURE,
+  payload: error
+});
+
+export const unsuspendVendor = (vendorId) => dispatch => {
+  dispatch(unsuspendVendorLoading(true));
+
+  const url = `${baseUrl}/vendors/un_suspend/${vendorId}`;
+
+  const options = {
+    method: 'PATCH',
+    headers: {
+      'X-Location': 1
+    },
+    url
+  };
+
+  return axios(options)
+    .then((res) => {
+      toastSuccess(res.data.msg);
+      dispatch(unsuspendVendorSuccess(vendorId));
+      dispatch(unsuspendVendorLoading(false));
+    })
+    .catch((error) => {
+      toastError(error.response.data.message);
+      dispatch(unsuspendVendorFailure(error));
+      dispatch(unsuspendVendorLoading(false));
+    });
+};
