@@ -83,3 +83,8 @@ export const initialEngagements = {
   engagements: [],
   vendors: []
 };
+
+export const initialSuspendedVendors = {
+  isLoading: false,
+  vendors: [],
+};
