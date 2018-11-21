@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
-import PropType from 'prop-types';
+import React, { Component } from "react";
+import PropType from "prop-types";
 import { connect } from "react-redux";
-import Meal from './Meal';
-import Loader from '../common/Loader/Loader';
+import Meal from "./Meal";
+import MainMeal from "./MainMeal";
+import Loader from "../common/Loader/Loader";
 import { getOrderByDate } from "../../actions/ordersAction";
+import { log } from "util";
 
 /* eslint-disable */
 
@@ -15,24 +17,38 @@ export class MealOptions extends Component {
     super();
   }
 
-  onChange = (mealId, checked) => {
-    this.props.updateSelection(this.props.category, checked ? mealId : '');
-  }
+  onChange = (mealId, checked, id) => {
+    console.log(mealId, id);
+
+    this.props.updateSelection(this.props.category, checked ? mealId : "", id);
+  };
 
   render() {
-    const { mealOptions = [], title, selectedMealId } = this.props;
+    const { mealOptions = [], title, selectedMealId, category } = this.props;
+    console.log(mealOptions, "from meal optios");
+
     return (
       <div className="main-meal">
         <h3>{title}</h3>
         <ul>
           {mealOptions.map(meal =>
-            <Meal
-              meal={meal}
-              key={meal.id}
-              onChange={this.onChange}
-              selectedMealId={selectedMealId}
-              shouldHaveCheckBox={true}
-            />
+            category === "mainMeal" ? (
+              <MainMeal
+                meal={meal}
+                key={meal.id}
+                onChange={this.onChange}
+                selectedMealId={selectedMealId}
+                shouldHaveCheckBox={true}
+              />
+            ) : (
+              <Meal
+                meal={meal}
+                key={meal.id}
+                onChange={this.onChange}
+                selectedMealId={selectedMealId}
+                shouldHaveCheckBox={true}
+              />
+            )
           )}
         </ul>
       </div>
@@ -45,35 +61,36 @@ export class Menus extends Component {
     super();
     this.state = {
       isLoading: true,
-      updated: false
+      updated: false,
+      mainMealId: false,
+      menuId: ""
     };
   }
 
   queryEdit = (id, menus) => {
     const date = getMenu(menus, id) && getMenu(menus, id).date;
 
-    this.props.getOrderByDate(date)
-      .then(() => {
-        const foundId = this.props.menu.id;
+    this.props.getOrderByDate(date).then(() => {
+      const foundId = this.props.menu.id;
 
-        if (foundId) {
-          const { main, firstAccompaniment, secondAccompaniment } = this.props.menu.meal;
-          const selectedMain = findSelected(main);
-          const selectedAcc1 = findSelected(firstAccompaniment);
-          const selectedAcc2 = findSelected(secondAccompaniment);
+      if (foundId) {
+        const { main, proteinItems, sideItems } = this.props.menu.meal;
+        const selectedMain = findSelected(main);
+        const selectedAcc1 = findSelected(proteinItems);
+        const selectedsides = findSelected(sideItems);
 
-          this.updateSelection('mainMeal', selectedMain.id);
-          this.updateSelection('acc1', selectedAcc1.id);
-          this.updateSelection('acc2', selectedAcc2.id);
+        this.updateSelection("mainMeal", selectedMain.id);
+        this.updateSelection("acc1", selectedAcc1.id);
+        this.updateSelection("acc2", selectedAcc2.id);
 
-          this.setState({
-            mainMeal: selectedMain && selectedMain.id,
-            acc1: selectedAcc1 && selectedAcc1.id,
-            acc2: selectedAcc2 && selectedAcc2.id,
-            updated: false
-          });
-        }
-      });
+        this.setState({
+          mainMeal: selectedMain && selectedMain.id,
+          acc1: selectedAcc1 && selectedAcc1.id,
+          acc2: selectedAcc2 && selectedAcc2.id,
+          updated: false
+        });
+      }
+    });
   };
 
   /**
@@ -84,11 +101,12 @@ export class Menus extends Component {
   resetMenus = () => {
     this.props.resetMenu();
     this.setState({
-      mainMeal: '',
-      acc1: '',
-      acc2:''
+      selectedMainMealId: "",
+      mainMeal: "",
+      proteins: "",
+      sides: ""
     });
-  }
+  };
 
   componentDidMount() {
     const { id } = this.props.match.params;
@@ -105,70 +123,93 @@ export class Menus extends Component {
     }
   }
 
-  updateSelection = (mealCategory, mealId) => {
-    this.props.selectMeal({ prop: mealCategory, value: mealId });
-    this.setState({ [mealCategory]: mealId, updated: true });
-  }
+  updateSelection = (mealCategory, mealId, id) => {
+    console.log(mealCategory, id, "the ids");
 
+    this.props.selectMeal({ prop: mealCategory, value: mealId });
+
+    this.setState({ [mealCategory]: mealId, updated: true });
+    if (mealCategory === "mainMeal") {
+      this.setState({ menuId: id });
+    }
+  };
 
   render() {
-    const { menu: { id }, match, data, toggleModal, isLoading } = this.props;
-    const { updated, mainMeal, acc1, acc2 } = this.state;
+    const {
+      menu: { id },
+      match,
+      data,
+      toggleModal,
+      isLoading
+    } = this.props;
 
-    let main = [];
-    let firstAccompaniment;
-    let secondAccompaniment;
+    const { updated, mainMeal, proteins, sides, menuId } = this.state;
 
-    const menus = getMenu(data, match.params.id);
-    if (menus) {
-      main = menus.meal.main;
-      firstAccompaniment = menus.meal.firstAccompaniment;
-      secondAccompaniment = menus.meal.secondAccompaniment;
-    }
+    const menusLists = getMenu(data, match.params.id);
+
+    const newList = menusLists.menus.filter(menu => menu.id === menuId);
+
+    const mainMealMenu = menusLists.menus.map(main => {
+      return main.mainMeal;
+    });
 
     return (
       <div>
         {isLoading && <Loader />}
-        <div className={`menus-container ${isLoading && 'blurred'}`}>
-          {main.length > 0 ? <div>
-            <h3>{`${id ? 'Edit' : 'New'} Order`}</h3>
-            <MealOptions
-              category="mainMeal"
-              title="Main Meal"
-              mealOptions={main}
-              selectedMealId={mainMeal}
-              updateSelection={this.updateSelection}
-            />
-            <MealOptions
-              category="acc1"
-              title="Accompaniment 1"
-              mealOptions={firstAccompaniment}
-              selectedMealId={acc1}
-              updateSelection={this.updateSelection}
-            />
-            <MealOptions
-              category="acc2"
-              title="Accompaniment 2"
-              mealOptions={secondAccompaniment}
-              updateSelection={this.updateSelection}
-              selectedMealId={acc2}
-            />
-            <div className="cta">
-              <div className="float-left"></div>
-              <div className="float-right">
-                {!id && <div className="btn reset-order" onClick={this.resetMenus}>reset order</div>}
-                <button
-                  disabled={!updated}
-                  className={`btn submit-order ${!updated && 'isDisabled'}`}
-                  onClick={() => toggleModal(id)}>{`${id ? 'update' : 'submit'} order`}
-                </button>
+        <div className={`menus-container ${isLoading && "blurred"}`}>
+          {menusLists.menus.length > 0 ? (
+            <div>
+              <h3>{`${id ? "Edit" : "New"} Order`}</h3>
+              <MealOptions
+                category="mainMeal"
+                title="Main Meal"
+                mealOptions={menusLists.menus}
+                selectedMealId={mainMeal}
+                updateSelection={this.updateSelection}
+              />
+              {newList.length > 0 && (
+                <div>
+                  <MealOptions
+                    category="sideMeal"
+                    title="Side Meal"
+                    mealOptions={newList[0].sideItems}
+                    selectedMealId={sides}
+                    updateSelection={this.updateSelection}
+                  />
+                  <MealOptions
+                    category="proteinMeal"
+                    title="Protein Meal"
+                    mealOptions={newList[0].proteinItems}
+                    selectedMealId={proteins}
+                    updateSelection={this.updateSelection}
+                  />
+                </div>
+              )}
+
+              <div className="cta">
+                <div className="float-left" />
+                <div className="float-right">
+                  {!id && (
+                    <div className="btn reset-order" onClick={this.resetMenus}>
+                      reset order
+                    </div>
+                  )}
+                  <button
+                    disabled={!updated}
+                    className={`btn submit-order ${!updated && "isDisabled"}`}
+                    onClick={() => toggleModal(id)}
+                  >
+                    {`${id ? "update" : "submit"} order`}
+                  </button>
+                </div>
               </div>
             </div>
-          </div> : <div>No Available options yet</div>
-          }
+          ) : (
+            <div> No options available </div>
+          )}
         </div>
       </div>
-    )
+    );
   }
 }
 
@@ -183,4 +224,7 @@ Menus.propTypes = {
   match: PropType.object,
   data: PropType.array
 };
-export default connect(mapStateToProps, { getOrderByDate })(Menus);
+export default connect(
+  mapStateToProps,
+  { getOrderByDate }
+)(Menus);

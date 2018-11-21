@@ -1,5 +1,4 @@
-
-import axios from 'axios';
+import axios from "axios";
 import {
   SET_MENUS,
   MAKE_ORDER_FAILURE,
@@ -7,9 +6,10 @@ import {
   SELECT_MEAL,
   RESET_MENU,
   MENU_IS_LOADING
-} from './actionTypes';
-import { config } from '../config';
-
+} from "./actionTypes";
+import { config } from "../config";
+// mock data
+import { MockData } from "../tests/__mocks__/mockMenuListData";
 export const baseUrl = config.API_BASE_URL;
 
 /**
@@ -29,7 +29,7 @@ export function setMenus(menus) {
 /**
  *
  * @export
- * @param {object} prop value 
+ * @param {object} prop value
  * @returns {object} object
  */
 export function selectMeal({ prop, value }) {
@@ -41,18 +41,18 @@ export function selectMeal({ prop, value }) {
 /**
  *
  * @export
- * @returns {void} 
+ * @returns {void}
  */
 export function resetMenu() {
   return {
-    type: RESET_MENU,
+    type: RESET_MENU
   };
 }
 
 /**
  *
  * @export
- * @param {boolean} isLoading  
+ * @param {boolean} isLoading
  * @returns {object} object
  */
 export function setMenuLoading(isLoading) {
@@ -90,20 +90,33 @@ export function handleOrderFailure(error) {
   };
 }
 
-export const getUpComingMenus = () => (dispatch) => axios.get(`${baseUrl}/menu`)
-  .then((response) => {
-    dispatch(setMenus(response.data));
-  });
+export const getUpComingMenus = () => dispatch => {
+  return axios
+    .get(
+      `${
+        config.ANDELAEATS_API_BASE_URL
+      }/admin/menus/lunch/2018-11-17/2018-11-23`,
+      {
+        headers: {
+          "X-Location": 1
+        }
+      }
+    )
+    .then(response => {
+      dispatch(setMenus(response.data.payload));
+    });
+};
 
 // eslint-disable-next-line
-export const orderMeal = (orders) => (dispatch) => {
+export const orderMeal = orders => dispatch => {
   dispatch(setMenuLoading(true));
-  return axios.post(`${baseUrl}/menu`, orders)
-    .then((response) => {
+  return axios
+    .post(`${baseUrl}/menu`, orders)
+    .then(response => {
       dispatch(handleOrderSuccess(response.data));
       dispatch(setMenuLoading(false));
     })
-    .catch((error) => {
+    .catch(error => {
       dispatch(handleOrderFailure(error));
     });
 };

@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { format } from 'date-fns';
-import { toast, ToastContainer } from 'react-toastify';
-import { Route, NavLink } from 'react-router-dom';
-import PropType from 'prop-types';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { format } from "date-fns";
+import { toast, ToastContainer } from "react-toastify";
+import { Route, NavLink } from "react-router-dom";
+import PropType from "prop-types";
 
-import Menus from './Menus';
+import Menus from "./Menus";
 import {
   getUpComingMenus,
   selectMeal,
   orderMeal,
   resetMenu
-} from '../../actions/menuAction';
-import { canOrderMeal, validateDate, endDate } from '../../helpers/mealsHelper';
-import ConfirmOrder from './ConfirmOrder';
-import Loader from '../common/Loader/Loader';
-import { updateOrder } from '../../actions/ordersAction';
-
+} from "../../actions/menuAction";
+import { canOrderMeal, validateDate, endDate } from "../../helpers/mealsHelper";
+import ConfirmOrder from "./ConfirmOrder";
+import Loader from "../common/Loader/Loader";
+import { updateOrder } from "../../actions/ordersAction";
+import { MockData } from "../../tests/__mocks__/mockMenuListData";
 
 /**
  *
@@ -39,36 +39,35 @@ export class Orders extends Component {
   }
 
   componentDidMount() {
-    this.props.getUpComingMenus()
-      .then(() => {
-        this.setState({ isLoading: false });
-        this.selectDefaultMenu();
-      });
+    this.props.getUpComingMenus().then(() => {
+      this.setState({ isLoading: false });
+      this.selectDefaultMenu();
+    });
   }
 
   showToast = () => {
     toast.success(this.props.message, {
       position: toast.POSITION.TOP_CENTER
     });
-  }
+  };
 
-  toggleModal = (menuId) => {
+  toggleModal = menuId => {
     const { acc1, acc2, mainMeal } = this.props.mealSelected;
-    if (acc1 !== '' || acc2 !== '' || mainMeal !== '') {
+    if (acc1 !== "" || acc2 !== "" || mainMeal !== "") {
       this.setState(state => ({
         isModalOpen: !state.isModalOpen,
         menuId
       }));
     }
-  }
+  };
 
   selectDefaultMenu() {
-    const selectedMeal = this.props.menus.find(menu => canOrderMeal(menu)
-      && validateDate(menu, endDate())
+    const selectedMeal = MockData.payload.menuList.find(
+      menu => canOrderMeal(menu) && validateDate(menu, endDate())
     );
-
-    this.context.router.history
-      .push(`${this.props.match.url}/${selectedMeal && selectedMeal.id}`);
+    this.context.router.history.push(
+      `${this.props.match.url}/${selectedMeal && selectedMeal.id}`
+    );
   }
 
   /**
@@ -78,88 +77,95 @@ export class Orders extends Component {
    * @memberof Orders
    */
   renderDates() {
-    if (this.props.menus) {
-      return this.props.menus.map((menuDate) => validateDate(menuDate, endDate()) && (
-      <li
-        key={menuDate.id}
-        className={canOrderMeal(menuDate) ? "dates" : 'dates-disable'}
-      >
-        <NavLink
-          activeClassName={canOrderMeal(menuDate)
-            ? "active" : 'isDisabled'}
-
-          to={canOrderMeal(menuDate)
-            ? `${this.props.match.url}/${menuDate.id}` : '#'}
-        >
-          {format(menuDate.date, 'dddd Do')}
-        </NavLink>
-        <div className="border-circle" />
-      </li>
-      ));
+    if (MockData) {
+      return MockData.payload.menuList.map(
+        menuDate =>
+          validateDate(menuDate, endDate()) && (
+            <li
+              key={menuDate.id}
+              className={canOrderMeal(menuDate) ? "dates" : "dates-disable"}
+            >
+              <NavLink
+                activeClassName={
+                  canOrderMeal(menuDate) ? "active" : "isDisabled"
+                }
+                to={
+                  canOrderMeal(menuDate)
+                    ? `${this.props.match.url}/${menuDate.id}`
+                    : "#"
+                }
+              >
+                {format(menuDate.date, "dddd Do")}
+              </NavLink>
+              <div className="border-circle" />
+            </li>
+          )
+      );
     }
   }
-
 
   render() {
     const {
       match: { url },
-      menus, selectMeal, mealSelected, orderMeal, resetMenu, isLoading, updateOrder //eslint-disable-line
+      menus: { menuList },
+      selectMeal,
+      mealSelected,
+      orderMeal,
+      resetMenu,
+      isLoading,
+      updateOrder //eslint-disable-line
     } = this.props;
+
     return (
       <div className="wrapper">
-        {this.state.isLoading ? <Loader />
-          : (
-            <div className="orders-wrapper">
-              <ToastContainer
-                autoClose={2000}
-                pauseOnHover={false}
-                hideProgressBar
-              />
-              <h3>Make Orders</h3>
+        {this.state.isLoading ? (
+          <Loader />
+        ) : (
+          <div className="orders-wrapper">
+            <ToastContainer
+              autoClose={2000}
+              pauseOnHover={false}
+              hideProgressBar
+            />
+            <h3>Make Orders</h3>
 
-              <div className="orders-container">
-                <div className="date-wrapper">
-                  <h3>
-                    {format(Date.now(), "MMMM YYYY")}
-                  </h3>
-                  <ul>
-                    {this.renderDates()}
-                  </ul>
-                </div>
-                <div className="menu-wrapper">
-                  <Route
-                    path={`${url}/:id`}
-                    render={(props) => (
-                      <div>
-                        <Menus
-                          data={menus}
-                          toggleModal={this.toggleModal}
-                          selectMeal={selectMeal}
-                          resetMenu={resetMenu}
-                          mealSelected={mealSelected}
-                          {...props}
-                        />
-                        <ConfirmOrder
-                          menuId={this.state.menuId}
-                          toggleModal={this.toggleModal}
-                          isModalOpen={this.state.isModalOpen}
-                          menus={menus}
-                          mealSelected={mealSelected}
-                          orderMeal={orderMeal}
-                          updateOrder={updateOrder}
-                          showToast={this.showToast}
-                          isLoading={isLoading}
-                          {...props}
-                        />
-                      </div>
-                    )
-                    }
-                  />
-                </div>
+            <div className="orders-container">
+              <div className="date-wrapper">
+                <h3>{format(Date.now(), "MMMM YYYY")}</h3>
+                <ul>{this.renderDates()}</ul>
+              </div>
+              <div className="menu-wrapper">
+                <Route
+                  path={`${url}/:id`}
+                  render={props => (
+                    <div>
+                      <Menus
+                        data={MockData.payload.menuList}
+                        toggleModal={this.toggleModal}
+                        selectMeal={selectMeal}
+                        resetMenu={resetMenu}
+                        mealSelected={mealSelected}
+                        {...props}
+                      />
+                      <ConfirmOrder
+                        menuId={this.state.menuId}
+                        toggleModal={this.toggleModal}
+                        isModalOpen={this.state.isModalOpen}
+                        menus={menuList}
+                        mealSelected={mealSelected}
+                        orderMeal={orderMeal}
+                        updateOrder={updateOrder}
+                        showToast={this.showToast}
+                        isLoading={isLoading}
+                        {...props}
+                      />
+                    </div>
+                  )}
+                />
               </div>
             </div>
-          )
-        }
+          </div>
+        )}
       </div>
     );
   }
@@ -170,7 +176,7 @@ Orders.propTypes = {
   isLoading: PropType.bool,
   match: PropType.object,
   mealSelected: PropType.object,
-  menus: PropType.array,
+  menus: PropType.object,
   message: PropType.string,
   orderMeal: PropType.func.isRequired,
   resetMenu: PropType.func.isRequired,
@@ -187,17 +193,19 @@ Orders.contextTypes = {
  * @returns {object} menus
  */
 function mapStateToProps({ upcomingMenus }) {
-  const {
-    menus, acc1, acc2, mainMeal, message, isLoading
-  } = upcomingMenus;
+  const { menus, acc1, acc2, mainMeal, message, isLoading } = upcomingMenus;
 
   const mealSelected = {
     mainMeal,
     firstAccompaniment: acc1,
-    secondAccompaniment: acc2,
+    secondAccompaniment: acc2
   };
+
   return {
-    menus, mealSelected, message, isLoading
+    menus,
+    mealSelected,
+    message,
+    isLoading
   };
 }
 
@@ -209,4 +217,7 @@ const actionCreators = {
   updateOrder
 };
 
-export default connect(mapStateToProps, actionCreators)(Orders);
+export default connect(
+  mapStateToProps,
+  actionCreators
+)(Orders);
