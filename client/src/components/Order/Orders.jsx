@@ -34,7 +34,8 @@ export class Orders extends Component {
     super(props);
     this.state = {
       isModalOpen: false,
-      isLoading: true
+      isLoading: true,
+      selectedMenu: ''
     };
   }
 
@@ -42,7 +43,7 @@ export class Orders extends Component {
     this.props.getUpComingMenus().then(() => {
       this.setState({ isLoading: false });
       this.selectDefaultMenu();
-    });
+    }).catch(() => this.setState({ isLoading: false }));
   }
 
   showToast = () => {
@@ -61,12 +62,18 @@ export class Orders extends Component {
     }
   };
 
+  setSelectedMenu = id => {
+    this.setState({
+      selectedMenu: id
+    })
+  }
+
   selectDefaultMenu() {
     const selectedMeal = MockData.payload.menuList.find(
       menu => canOrderMeal(menu) && validateDate(menu, endDate())
     );
     this.context.router.history.push(
-      `${this.props.match.url}/${selectedMeal && selectedMeal.id}`
+      `${this.props.match.url}/${selectedMeal && selectedMeal.date}`
     );
   }
 
@@ -82,7 +89,7 @@ export class Orders extends Component {
         menuDate =>
           validateDate(menuDate, endDate()) && (
             <li
-              key={menuDate.id}
+              key={menuDate.date}
               className={canOrderMeal(menuDate) ? "dates" : "dates-disable"}
             >
               <NavLink
@@ -91,7 +98,7 @@ export class Orders extends Component {
                 }
                 to={
                   canOrderMeal(menuDate)
-                    ? `${this.props.match.url}/${menuDate.id}`
+                    ? `${this.props.match.url}/${menuDate.date}`
                     : "#"
                 }
               >
@@ -116,6 +123,8 @@ export class Orders extends Component {
       updateOrder //eslint-disable-line
     } = this.props;
 
+    const { selectedMenu } = this.state;
+
     return (
       <div className="wrapper">
         {this.state.isLoading ? (
@@ -136,7 +145,7 @@ export class Orders extends Component {
               </div>
               <div className="menu-wrapper">
                 <Route
-                  path={`${url}/:id`}
+                  path={`${url}/:date`}
                   render={props => (
                     <div>
                       <Menus
@@ -145,14 +154,16 @@ export class Orders extends Component {
                         selectMeal={selectMeal}
                         resetMenu={resetMenu}
                         mealSelected={mealSelected}
+                        setSelectedMenu={this.setSelectedMenu}
                         {...props}
                       />
                       <ConfirmOrder
                         menuId={this.state.menuId}
                         toggleModal={this.toggleModal}
                         isModalOpen={this.state.isModalOpen}
-                        menus={menuList}
+                        menus={MockData.payload.menuList}
                         mealSelected={mealSelected}
+                        selectedMenu={selectedMenu}
                         orderMeal={orderMeal}
                         updateOrder={updateOrder}
                         showToast={this.showToast}
@@ -176,7 +187,6 @@ Orders.propTypes = {
   isLoading: PropType.bool,
   match: PropType.object,
   mealSelected: PropType.object,
-  menus: PropType.object,
   message: PropType.string,
   orderMeal: PropType.func.isRequired,
   resetMenu: PropType.func.isRequired,

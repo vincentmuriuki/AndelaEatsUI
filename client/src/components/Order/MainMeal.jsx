@@ -12,7 +12,7 @@ class MainMeal extends Component {
       shouldHaveCheckBox,
       meal
     } = this.props;
-    console.log(this.props, "the meal");
+    
 
     return (
       <li className={classname({ selected: mainMeal.id === selectedMealId })}>

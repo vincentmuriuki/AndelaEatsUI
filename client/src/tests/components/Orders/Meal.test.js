@@ -10,6 +10,9 @@ const props = {
     courseType: "Main Meal",
     meal: "Rice",
     mealPicture: ''
+  },
+  menuLists: {
+    menus: []
   }
 };
 
@@ -23,11 +26,7 @@ describe('Meal Component', () => {
     wrapper = shallow(<Meal {...props} />);
     expect(wrapper).toBeDefined();
   });
-  it('should render meal details', () => {
-    wrapper = shallow(<Meal {...props} />);
-    expect(wrapper.find('.meal-name').contains(props.meal.meal)).toBeTruthy();
-  });
-
+  
   it('should call onChange on radio input', () => {
     const event = { target: { checked: true } };
     const onChangeSpy = jest.spyOn(props, 'onChange');

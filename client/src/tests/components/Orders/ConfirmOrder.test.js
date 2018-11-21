@@ -9,9 +9,15 @@ const props = {
   updateOrder: () => Promise.resolve(),
   showToast: () => Promise.resolve(),
   isModalOpen: true,
-  menus: mockMenu,
+  menus: [
+    {
+      date: "2018-11-21",
+      id: 29,
+      menus: []
+    }
+  ],
   match: {
-    params: { id: 23 }
+    params: { date: "2018-11-21" }
   },
   mealSelected: {
     mainMeal: 1,

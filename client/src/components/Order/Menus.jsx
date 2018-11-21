@@ -10,7 +10,7 @@ import { log } from "util";
 /* eslint-disable */
 
 const findSelected = meals => meals.find(meal => meal.selected);
-const getMenu = (menus, id) => menus.find(meals => meals.id === Number(id));
+const getMenu = (menus, date) => menus.find(meals => meals.date === date);
 
 export class MealOptions extends Component {
   constructor() {
@@ -18,15 +18,12 @@ export class MealOptions extends Component {
   }
 
   onChange = (mealId, checked, id) => {
-    console.log(mealId, id);
 
     this.props.updateSelection(this.props.category, checked ? mealId : "", id);
   };
 
   render() {
     const { mealOptions = [], title, selectedMealId, category } = this.props;
-    console.log(mealOptions, "from meal optios");
-
     return (
       <div className="main-meal">
         <h3>{title}</h3>
@@ -124,12 +121,11 @@ export class Menus extends Component {
   }
 
   updateSelection = (mealCategory, mealId, id) => {
-    console.log(mealCategory, id, "the ids");
-
     this.props.selectMeal({ prop: mealCategory, value: mealId });
 
     this.setState({ [mealCategory]: mealId, updated: true });
     if (mealCategory === "mainMeal") {
+      this.props.setSelectedMenu(id)
       this.setState({ menuId: id });
     }
   };
@@ -143,16 +139,13 @@ export class Menus extends Component {
       isLoading
     } = this.props;
 
-    const { updated, mainMeal, proteins, sides, menuId } = this.state;
-
-    const menusLists = getMenu(data, match.params.id);
+    const { updated, mainMeal, proteins, sides, menuId, acc1, acc2 } = this.state;
+    
+    const menusLists = getMenu(data, match.params.date);
 
     const newList = menusLists.menus.filter(menu => menu.id === menuId);
 
-    const mainMealMenu = menusLists.menus.map(main => {
-      return main.mainMeal;
-    });
-
+    
     return (
       <div>
         {isLoading && <Loader />}
@@ -170,17 +163,17 @@ export class Menus extends Component {
               {newList.length > 0 && (
                 <div>
                   <MealOptions
-                    category="sideMeal"
+                    category="acc1"
                     title="Side Meal"
                     mealOptions={newList[0].sideItems}
-                    selectedMealId={sides}
+                    selectedMealId={acc1}
                     updateSelection={this.updateSelection}
                   />
                   <MealOptions
-                    category="proteinMeal"
+                    category="acc2"
                     title="Protein Meal"
                     mealOptions={newList[0].proteinItems}
-                    selectedMealId={proteins}
+                    selectedMealId={acc2}
                     updateSelection={this.updateSelection}
                   />
                 </div>

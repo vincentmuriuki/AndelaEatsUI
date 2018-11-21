@@ -90,22 +90,13 @@ export function handleOrderFailure(error) {
   };
 }
 
-export const getUpComingMenus = () => dispatch => {
-  return axios
-    .get(
-      `${
-        config.ANDELAEATS_API_BASE_URL
-      }/admin/menus/lunch/2018-11-17/2018-11-23`,
-      {
-        headers: {
-          "X-Location": 1
-        }
-      }
-    )
-    .then(response => {
-      dispatch(setMenus(response.data.payload));
-    });
-};
+export const getUpComingMenus = () => (dispatch) => axios.get(`${baseUrl}/menu`)
+  .then((response) => {
+    dispatch(setMenus(response.data));
+  })
+  .catch(error => {
+    dispatch(handleOrderFailure(error));
+  });
 
 // eslint-disable-next-line
 export const orderMeal = orders => dispatch => {

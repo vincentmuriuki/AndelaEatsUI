@@ -11,6 +11,7 @@ export const initialMenus = {
   acc2: '',
   mainMeal: '',
   message: '',
+  selectedMeal: ''
 };
 
 export const orders = {

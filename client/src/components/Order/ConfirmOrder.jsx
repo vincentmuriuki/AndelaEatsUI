@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import classname from "classnames";
 
 import Meal from "./Meal";
+import MainMeal from './MainMeal';
 
 /* eslint-disable */
 
@@ -47,25 +48,25 @@ class ConfirmOrder extends Component {
       menus,
       match,
       mealSelected,
-      isLoading
+      isLoading,
+      selectedMenu
     } = this.props;
+
     let mainMeal;
     let proteinItems;
     let sideItems;
     let date;
-    const menu = menus.find(meals => meals.id === Number(match.params.id));
-    if (menu) {
-      mainMeal = Object.values(menu.mainMeal).find(
-        meal => meal.id === mealSelected.mainMeal.id
-      );
-      proteinItems = menu.proteinItems.map(meal =>
-        Object.values(meal).find(meal => meal.id === mealSelected.proteins)
-      );
-      sideItems = menu.sideItems.map(meal =>
-        Object.values(meal).find(meal => meal.id === mealSelected.sideItems)
-      );
-      date = menu.date;
+
+    const todaysMenu = menus.find(meals => meals.date === match.params.date);
+    const userSelectedMenu = todaysMenu.menus.find(meal => meal.id === selectedMenu)
+    
+    if (userSelectedMenu) {
+      mainMeal = userSelectedMenu.mainMeal
+      proteinItems = userSelectedMenu.proteinItems.find(meal => meal.id === mealSelected.secondAccompaniment);
+      sideItems = userSelectedMenu.sideItems.find(meal => meal.id === mealSelected.firstAccompaniment);
+      date = todaysMenu.date
     }
+    
     return (
       <div
         id="confirm-order-modal"
@@ -97,18 +98,18 @@ class ConfirmOrder extends Component {
                 ) : (
                   ""
                 )}
-                {proteinItems ? (
+                {sideItems ? (
                   <div>
-                    <div className="meal-title">Accompaniment 1</div>
-                    <Meal meal={proteinItems} shouldHaveCheckBox={false} />
+                    <div className="meal-title">Side Item</div>
+                    <Meal meal={sideItems} shouldHaveCheckBox={false} />
                   </div>
                 ) : (
                   ""
                 )}
-                {sideItems ? (
+                {proteinItems ? (
                   <div>
-                    <div className="meal-title">Accompaniment 2</div>
-                    <Meal meal={sideItems} shouldHaveCheckBox={false} />
+                    <div className="meal-title">Protein Item</div>
+                    <Meal meal={proteinItems} shouldHaveCheckBox={false} />
                   </div>
                 ) : (
                   ""
