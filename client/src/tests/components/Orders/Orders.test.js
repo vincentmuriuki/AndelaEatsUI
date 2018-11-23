@@ -11,8 +11,9 @@ const props = {
   match: {
     url: 'http:abc.css'
   },
-  getUpComingMenus: () => Promise.resolve(),
-  orderMeal: jest.fn(),
+  fetchMenu: () => Promise.resolve(),
+  fetchUserOrders: jest.fn(),
+  createOrder: jest.fn().mockImplementation(() => Promise.resolve()),
   resetMenu: jest.fn(),
   selectMeal: jest.fn(),
   mealSelected: {

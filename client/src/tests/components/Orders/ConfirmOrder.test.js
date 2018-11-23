@@ -5,9 +5,9 @@ import { mockMenu } from '../../helpers/mockOrders';
 
 const props = {
   toggleModal: () => Promise.resolve(),
-  orderMeal: () => Promise.resolve(),
   updateOrder: () => Promise.resolve(),
   showToast: () => Promise.resolve(),
+  createOrder: () => Promise.resolve(),
   isModalOpen: true,
   menus: [
     {
@@ -38,21 +38,21 @@ describe('ConfirmOrder Component', () => {
 
   describe('Action test', () => {
     it('order meal successfully', () => {
-      const orderMealSpy = jest.spyOn(props, 'orderMeal');
+      const createOrderSpy = jest.spyOn(props, 'createOrder');
       wrapper = shallow(<ConfirmOrder {...props} />);
       const confirmOrderSpy = jest.spyOn(wrapper.instance(), 'confirmOrder');
       wrapper.instance().confirmOrder();
-      expect(orderMealSpy).toHaveBeenCalled();
+      expect(createOrderSpy).toHaveBeenCalled();
       expect(confirmOrderSpy).toHaveBeenCalled();
     });
 
     it('order meal failure', () => {
-      props.orderMeal = () => Promise.reject();
-      const orderMealSpy = jest.spyOn(props, 'orderMeal');
+      props.createOrder = () => Promise.reject();
+      const createOrderSpy = jest.spyOn(props, 'createOrder');
       wrapper = shallow(<ConfirmOrder {...props} />);
       const confirmOrderSpy = jest.spyOn(wrapper.instance(), 'confirmOrder');
       wrapper.instance().confirmOrder();
-      expect(orderMealSpy).toHaveBeenCalled();
+      expect(createOrderSpy).toHaveBeenCalled();
       expect(confirmOrderSpy).toHaveBeenCalled();
     });
 

@@ -2,15 +2,19 @@ import moxios from 'moxios';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import {
-  baseUrl, getUpComingMenus, orderMeal, selectMeal, resetMenu 
+  baseUrl, userID, fetchMenu, createOrder, fetchUserOrders, selectMeal, resetMenu 
 } from '../../actions/menuAction';
 import {
   SET_MENUS,
-  MAKE_ORDER_SUCCESS,
-  MAKE_ORDER_FAILURE,
-  MENU_IS_LOADING,
   SELECT_MEAL,
-  RESET_MENU
+  RESET_MENU,
+  FETCH_ORDERS_SUCCESS,
+  FETCH_ORDERS_LOADING,
+  FETCH_USERS_MENU_SUCCESS,
+  FETCH_USERS_MENU_LOADING,
+  CREATE_ORDER_LOADING,
+  CREATE_ORDER_SUCCESS,
+  CREATE_ORDER_FAILURE
 } from '../../actions/actionTypes';
 
 const middlewares = [thunk];
@@ -26,39 +30,81 @@ describe('Menu actions', () => {
   afterEach(() => moxios.uninstall());
 
   it('should set upcoming menus', async (done) => {
-    moxios.stubRequest(`${baseUrl}/menu`, {
+    moxios.stubRequest(`${baseUrl}/menus/lunch/2018-11-11/2018-11-18`, {
       status: 200,
-      response: {}
+      response: {
+        payload: {
+          menuList: []
+        }
+      }
     });
     const expectedActions = [
       {
-        type: SET_MENUS,
-        payload: {}
+        type: FETCH_USERS_MENU_LOADING,
+        payload: true
+      },
+      {
+        type: FETCH_USERS_MENU_SUCCESS,
+        payload: []
+      },
+      {
+        type: FETCH_USERS_MENU_LOADING,
+        payload: false
       }
     ];
     const store = mockStore({});
-    await store.dispatch(getUpComingMenus())
+    await store.dispatch(fetchMenu('2018-11-11', '2018-11-18'))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    done();
+  });
+  it('should fetch users orders', async (done) => {
+    moxios.stubRequest(`${baseUrl}/orders/user/${userID}`, {
+      status: 200,
+      response: {
+        payload: {
+          orders: []
+        }
+      }
+    });
+    const expectedActions = [
+      {
+        type: FETCH_ORDERS_LOADING,
+        isLoading: true
+      },
+      {
+        type: FETCH_ORDERS_SUCCESS,
+        payload: []
+      },
+      {
+        type: FETCH_ORDERS_LOADING,
+        isLoading: false
+      }
+    ];
+    const store = mockStore({});
+    await store.dispatch(fetchUserOrders())
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
     done();
   });
   it('should handle order success', async (done) => {
-    moxios.stubRequest(`${baseUrl}/menu`, {
+    moxios.stubRequest(`${baseUrl}/orders/`, {
       status: 200,
       response: {}
     });
     const expectedActions = [
       {
-        type: MENU_IS_LOADING,
+        type: CREATE_ORDER_LOADING,
         payload: true
       },
       {
-        type: MAKE_ORDER_SUCCESS,
+        type: CREATE_ORDER_SUCCESS,
         payload: {}
       },
       {
-        type: MENU_IS_LOADING,
+        type: CREATE_ORDER_LOADING,
         payload: false
       }
     ];
@@ -68,33 +114,24 @@ describe('Menu actions', () => {
       acc2: 3
     };
     const store = mockStore({});
-    await store.dispatch(orderMeal(order))
+    await store.dispatch(createOrder(order))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
     done();
   });
   it('should handle order failure', async (done) => {
-    moxios.stubRequest(`${baseUrl}/menu`, {
+    moxios.stubRequest(`${baseUrl}/orders/`, {
       status: 400,
     });
-    const expectedActions = [
-      {
-        type: MENU_IS_LOADING,
-        payload: true
-      },
-      {
-        type: MAKE_ORDER_FAILURE,
-        payload: new Error("Request failed with status code 400")
-      }
-    ];
+    const expectedActions = [{"payload": true, "type": "CREATE_ORDER_LOADING"}, {"payload": new Error("Request failed with status code 400"), "type": "CREATE_ORDER_FAILURE"}, {"payload": false, "type": "CREATE_ORDER_LOADING"}];
     const order = {
       mainMeal: 1,
       acc1: 2,
       acc2: 3
     };
     const store = mockStore({});
-    await store.dispatch(orderMeal(order))
+    await store.dispatch(createOrder(order))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });

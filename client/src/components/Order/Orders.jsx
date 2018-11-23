@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { format } from "date-fns";
+import { format, addDays } from "date-fns";
 import { toast, ToastContainer } from "react-toastify";
 import { Route, NavLink } from "react-router-dom";
 import PropType from "prop-types";
@@ -9,14 +9,15 @@ import Menus from "./Menus";
 import {
   getUpComingMenus,
   selectMeal,
-  orderMeal,
-  resetMenu
+  resetMenu,
+  fetchMenu,
+  fetchUserOrders,
+  createOrder
 } from "../../actions/menuAction";
 import { canOrderMeal, validateDate, endDate } from "../../helpers/mealsHelper";
 import ConfirmOrder from "./ConfirmOrder";
 import Loader from "../common/Loader/Loader";
 import { updateOrder } from "../../actions/ordersAction";
-import { MockData } from "../../tests/__mocks__/mockMenuListData";
 
 /**
  *
@@ -40,8 +41,12 @@ export class Orders extends Component {
   }
 
   componentDidMount() {
-    this.props.getUpComingMenus().then(() => {
+    const startDate = format(new Date, 'YYYY-MM-DD');
+    const endDate = format(addDays(new Date, 7), 'YYYY-MM-DD');
+
+    this.props.fetchMenu(startDate, endDate).then(() => {
       this.setState({ isLoading: false });
+      this.props.fetchUserOrders();
       this.selectDefaultMenu();
     }).catch(() => this.setState({ isLoading: false }));
   }
@@ -53,8 +58,8 @@ export class Orders extends Component {
   };
 
   toggleModal = menuId => {
-    const { acc1, acc2, mainMeal } = this.props.mealSelected;
-    if (acc1 !== "" || acc2 !== "" || mainMeal !== "") {
+    const { firstAccompaniment, secondAccompaniment, mainMeal } = this.props.mealSelected;
+    if (firstAccompaniment !== "" && secondAccompaniment !== "" && mainMeal !== "") {
       this.setState(state => ({
         isModalOpen: !state.isModalOpen,
         menuId
@@ -69,7 +74,7 @@ export class Orders extends Component {
   }
 
   selectDefaultMenu() {
-    const selectedMeal = MockData.payload.menuList.find(
+    const selectedMeal = this.props.menus.find(
       menu => canOrderMeal(menu) && validateDate(menu, endDate())
     );
     this.context.router.history.push(
@@ -84,8 +89,9 @@ export class Orders extends Component {
    * @memberof Orders
    */
   renderDates() {
-    if (MockData) {
-      return MockData.payload.menuList.map(
+    const { menus } = this.props
+    if (menus) {
+      return menus.map(
         menuDate =>
           validateDate(menuDate, endDate()) && (
             <li
@@ -111,6 +117,7 @@ export class Orders extends Component {
     }
   }
 
+
   render() {
     const {
       match: { url },
@@ -120,9 +127,13 @@ export class Orders extends Component {
       orderMeal,
       resetMenu,
       isLoading,
-      updateOrder //eslint-disable-line
+      updateOrder,
+      menus,
+      orderedMenus,
+      createOrder //eslint-disable-line
     } = this.props;
 
+    
     const { selectedMenu } = this.state;
 
     return (
@@ -149,25 +160,27 @@ export class Orders extends Component {
                   render={props => (
                     <div>
                       <Menus
-                        data={MockData.payload.menuList}
+                        data={menus}
                         toggleModal={this.toggleModal}
                         selectMeal={selectMeal}
                         resetMenu={resetMenu}
                         mealSelected={mealSelected}
                         setSelectedMenu={this.setSelectedMenu}
+                        orderedMenus={orderedMenus}
                         {...props}
                       />
                       <ConfirmOrder
                         menuId={this.state.menuId}
                         toggleModal={this.toggleModal}
                         isModalOpen={this.state.isModalOpen}
-                        menus={MockData.payload.menuList}
+                        menus={menus}
                         mealSelected={mealSelected}
                         selectedMenu={selectedMenu}
                         orderMeal={orderMeal}
                         updateOrder={updateOrder}
                         showToast={this.showToast}
                         isLoading={isLoading}
+                        createOrder={createOrder}
                         {...props}
                       />
                     </div>
@@ -188,7 +201,6 @@ Orders.propTypes = {
   match: PropType.object,
   mealSelected: PropType.object,
   message: PropType.string,
-  orderMeal: PropType.func.isRequired,
   resetMenu: PropType.func.isRequired,
   selectMeal: PropType.func.isRequired
 };
@@ -203,7 +215,7 @@ Orders.contextTypes = {
  * @returns {object} menus
  */
 function mapStateToProps({ upcomingMenus }) {
-  const { menus, acc1, acc2, mainMeal, message, isLoading } = upcomingMenus;
+  const { menus, acc1, acc2, mainMeal, message, isLoading, orderedMenus } = upcomingMenus;
 
   const mealSelected = {
     mainMeal,
@@ -215,16 +227,19 @@ function mapStateToProps({ upcomingMenus }) {
     menus,
     mealSelected,
     message,
-    isLoading
+    isLoading,
+    orderedMenus
   };
 }
 
 const actionCreators = {
   getUpComingMenus,
   selectMeal,
-  orderMeal,
   resetMenu,
-  updateOrder
+  updateOrder,
+  fetchMenu,
+  fetchUserOrders,
+  createOrder
 };
 
 export default connect(

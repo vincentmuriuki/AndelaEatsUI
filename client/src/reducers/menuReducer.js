@@ -1,5 +1,16 @@
 import {
-  SET_MENUS, SELECT_MEAL, MAKE_ORDER_SUCCESS, RESET_MENU, MAKE_ORDER_FAILURE, MENU_IS_LOADING
+  SET_MENUS, 
+  SELECT_MEAL, 
+  MAKE_ORDER_SUCCESS, 
+  RESET_MENU, 
+  MAKE_ORDER_FAILURE, 
+  MENU_IS_LOADING,
+  FETCH_USERS_MENU_LOADING,
+  FETCH_USERS_MENU_SUCCESS,
+  FETCH_USERS_MENU_FAILURE,
+  FETCH_ORDERS_LOADING,
+  FETCH_ORDERS_SUCCESS,
+  FETCH_ORDERS_FAILURE,
 } from '../actions/actionTypes';
 import { initialMenus } from './initialState';
 
@@ -19,6 +30,17 @@ const menuReducer = (state = initialMenus, action) => {
       };
     case MENU_IS_LOADING:
       return { ...state, isLoading: action.payload };
+    case FETCH_USERS_MENU_LOADING:
+      return { ...state, isLoading: action.payload };
+    case FETCH_USERS_MENU_SUCCESS:
+      return { ...state, menus: action.payload };
+    case FETCH_ORDERS_LOADING:
+      return { ...state, isLoading: action.payload };
+    case FETCH_ORDERS_SUCCESS:
+      return { ...state, orderedMenus: action.payload };
+    case FETCH_USERS_MENU_FAILURE:
+    case FETCH_ORDERS_FAILURE:
+      return state;
     default:
       return state;
   }

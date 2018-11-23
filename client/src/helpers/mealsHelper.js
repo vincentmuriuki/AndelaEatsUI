@@ -69,7 +69,7 @@ export const generateFormData = (mealDetails, types) => {
 };
 
 export const endDate = () => new Date(today.getFullYear(), 
-  today.getMonth(), today.getDate() + 7);
+  today.getMonth(), today.getDate() + 8);
 
 export const findUpdatedIndex = (prevState, updatedId) => (
   prevState.findIndex(item => item.id === updatedId)

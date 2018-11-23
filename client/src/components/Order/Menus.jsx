@@ -6,6 +6,8 @@ import MainMeal from "./MainMeal";
 import Loader from "../common/Loader/Loader";
 import { getOrderByDate } from "../../actions/ordersAction";
 import { log } from "util";
+import { formatDateToISOString } from "../../helpers/dateFormatter";
+import EmptyContent from '../common/EmptyContent';
 
 /* eslint-disable */
 
@@ -130,13 +132,25 @@ export class Menus extends Component {
     }
   };
 
+  hasUserAlreadyBooked = () => {
+    const { orderedMenus, match: { params: { date }}} = this.props
+     return orderedMenus.find(data => date === formatDateToISOString(data.dateBookedFor))
+  }
+
+  validateMeals = () => {
+    const { firstAccompaniment, secondAccompaniment, mainMeal } = this.props.mealSelected;
+    return (firstAccompaniment !== "" && secondAccompaniment !== "" && mainMeal !== "")
+
+  }
+
   render() {
     const {
       menu: { id },
       match,
-      data,
+      data=[],
       toggleModal,
-      isLoading
+      isLoading,
+      mealSelected
     } = this.props;
 
     const { updated, mainMeal, proteins, sides, menuId, acc1, acc2 } = this.state;
@@ -149,58 +163,63 @@ export class Menus extends Component {
     return (
       <div>
         {isLoading && <Loader />}
-        <div className={`menus-container ${isLoading && "blurred"}`}>
-          {menusLists.menus.length > 0 ? (
-            <div>
-              <h3>{`${id ? "Edit" : "New"} Order`}</h3>
-              <MealOptions
-                category="mainMeal"
-                title="Main Meal"
-                mealOptions={menusLists.menus}
-                selectedMealId={mainMeal}
-                updateSelection={this.updateSelection}
-              />
-              {newList.length > 0 && (
+        {this.hasUserAlreadyBooked() ?
+          <EmptyContent message="Booked" /> :
+          (
+            <div className={`menus-container ${isLoading && "blurred"}`}>
+              {menusLists.menus.length > 0 ? (
                 <div>
+                  <h3>{`${id ? "Edit" : "New"} Order`}</h3>
                   <MealOptions
-                    category="acc1"
-                    title="Side Meal"
-                    mealOptions={newList[0].sideItems}
-                    selectedMealId={acc1}
+                    category="mainMeal"
+                    title="Main Meal"
+                    mealOptions={menusLists.menus}
+                    selectedMealId={mainMeal}
                     updateSelection={this.updateSelection}
                   />
-                  <MealOptions
-                    category="acc2"
-                    title="Protein Meal"
-                    mealOptions={newList[0].proteinItems}
-                    selectedMealId={acc2}
-                    updateSelection={this.updateSelection}
-                  />
-                </div>
-              )}
-
-              <div className="cta">
-                <div className="float-left" />
-                <div className="float-right">
-                  {!id && (
-                    <div className="btn reset-order" onClick={this.resetMenus}>
-                      reset order
+                  {newList.length > 0 && (
+                    <div>
+                      <MealOptions
+                        category="acc1"
+                        title="Side Meal"
+                        mealOptions={newList[0].sideItems}
+                        selectedMealId={acc1}
+                        updateSelection={this.updateSelection}
+                      />
+                      <MealOptions
+                        category="acc2"
+                        title="Protein Meal"
+                        mealOptions={newList[0].proteinItems}
+                        selectedMealId={acc2}
+                        updateSelection={this.updateSelection}
+                      />
                     </div>
                   )}
-                  <button
-                    disabled={!updated}
-                    className={`btn submit-order ${!updated && "isDisabled"}`}
-                    onClick={() => toggleModal(id)}
-                  >
-                    {`${id ? "update" : "submit"} order`}
-                  </button>
-                </div>
+
+                  <div className="cta">
+                    <div className="float-left" />
+                    <div className="float-right">
+                      {!id && (
+                        <div className="btn reset-order" onClick={this.resetMenus}>
+                          reset order
+                        </div>
+                      )}
+                      <button
+                        disabled={!this.validateMeals()}
+                        className={`btn submit-order ${!this.validateMeals() && "isDisabled"}`}
+                        onClick={() => toggleModal(id)}
+                      >
+                        {`${id ? "update" : "submit"} order`}
+                      </button>
+                    </div>
+                  </div>
               </div>
+              ) : (
+                <div> No options available </div>
+              )}
             </div>
-          ) : (
-            <div> No options available </div>
-          )}
-        </div>
+          )
+        }
       </div>
     );
   }

@@ -3,7 +3,6 @@ import { format } from "date-fns";
 import classname from "classnames";
 
 import Meal from "./Meal";
-import MainMeal from './MainMeal';
 
 /* eslint-disable */
 
@@ -21,7 +20,8 @@ class ConfirmOrder extends Component {
       toggleModal,
       menuId,
       updateOrder,
-      isLoading
+      isLoading,
+      createOrder
     } = this.props;
     if (menuId) {
       // Updating an already created order
@@ -30,10 +30,21 @@ class ConfirmOrder extends Component {
       });
     } else {
       // Creating a new order
-      orderMeal(this.props.mealSelected)
+      const { 
+        mealSelected: { mainMeal, firstAccompaniment, secondAccompaniment }, 
+        match: { params: { date }}} = this.props;
+
+      const newOrder = {
+        channel: "web",
+        dateBookedFor: date,
+        mealItems: [mainMeal, firstAccompaniment, secondAccompaniment],
+        mealPeriod: "lunch"
+      }
+      
+      createOrder(newOrder)
         .then(() => {
           showToast();
-          toggleModal();
+          this.props.history.push("/")
         })
         .catch(() => {
           showToast();
@@ -58,13 +69,13 @@ class ConfirmOrder extends Component {
     let date;
 
     const todaysMenu = menus.find(meals => meals.date === match.params.date);
+    date = todaysMenu.date
     const userSelectedMenu = todaysMenu.menus.find(meal => meal.id === selectedMenu)
     
     if (userSelectedMenu) {
       mainMeal = userSelectedMenu.mainMeal
       proteinItems = userSelectedMenu.proteinItems.find(meal => meal.id === mealSelected.secondAccompaniment);
       sideItems = userSelectedMenu.sideItems.find(meal => meal.id === mealSelected.firstAccompaniment);
-      date = todaysMenu.date
     }
     
     return (
@@ -80,7 +91,7 @@ class ConfirmOrder extends Component {
               <span className="label date-label">Order Date:</span>
               <span className="order-date">
                 {" "}
-                <b>{format(date, "dddd d MMMM")}</b>
+                <b>{format(date, "dddd MMMM D")}</b>
               </span>
             </div>
           </div>

@@ -1,16 +1,28 @@
 import axios from "axios";
+import token from '../helpers/jwtDecode';
+
 import {
   SET_MENUS,
   MAKE_ORDER_FAILURE,
   MAKE_ORDER_SUCCESS,
   SELECT_MEAL,
   RESET_MENU,
-  MENU_IS_LOADING
+  MENU_IS_LOADING,
+  FETCH_USERS_MENU_LOADING,
+  FETCH_USERS_MENU_SUCCESS,
+  FETCH_USERS_MENU_FAILURE,
+  CREATE_ORDER_LOADING,
+  CREATE_ORDER_SUCCESS,
+  CREATE_ORDER_FAILURE,
+  FETCH_ORDERS_LOADING,
+  FETCH_ORDERS_SUCCESS,
+  FETCH_ORDERS_FAILURE,
+
 } from "./actionTypes";
 import { config } from "../config";
-// mock data
-import { MockData } from "../tests/__mocks__/mockMenuListData";
-export const baseUrl = config.API_BASE_URL;
+
+export const baseUrl = config.ANDELAEATS_API_BASE_URL;
+export const userID = token().id;
 
 /**
  *
@@ -90,24 +102,109 @@ export function handleOrderFailure(error) {
   };
 }
 
-export const getUpComingMenus = () => (dispatch) => axios.get(`${baseUrl}/menu`)
-  .then((response) => {
-    dispatch(setMenus(response.data));
-  })
-  .catch(error => {
-    dispatch(handleOrderFailure(error));
-  });
 
-// eslint-disable-next-line
-export const orderMeal = orders => dispatch => {
-  dispatch(setMenuLoading(true));
-  return axios
-    .post(`${baseUrl}/menu`, orders)
+export const fetchMenuLoading = isLoading => ({
+  type: FETCH_USERS_MENU_LOADING,
+  payload: isLoading
+});
+
+export const fetchMenuSuccess = engagements => ({
+  type: FETCH_USERS_MENU_SUCCESS,
+  payload: engagements
+});
+
+export const fetchMenuFailure = error => ({
+  type: FETCH_USERS_MENU_FAILURE,
+  payload: error
+});
+
+export const fetchMenu = (startDate, endDate) => dispatch => {
+  dispatch(fetchMenuLoading(true));
+
+  return axios.get(`${baseUrl}/menus/lunch/${startDate}/${endDate}`, {
+    headers: {
+      'X-Location': 1
+    }
+  })
     .then(response => {
-      dispatch(handleOrderSuccess(response.data));
-      dispatch(setMenuLoading(false));
+      dispatch(fetchMenuSuccess(response.data.payload.menuList));
+      dispatch(fetchMenuLoading(false));
     })
     .catch(error => {
-      dispatch(handleOrderFailure(error));
+      dispatch(fetchMenuFailure(error));
+      dispatch(fetchMenuLoading(false));
+    });
+};
+
+export const setOrdersSuccess = payload => ({
+  type: FETCH_ORDERS_SUCCESS,
+  payload
+});
+
+export const setOrdersFailure = (error) => ({
+  type: FETCH_ORDERS_FAILURE,
+  error
+});
+
+export const setOrdersLoading = (isLoading) => ({
+  type: FETCH_ORDERS_LOADING,
+  isLoading
+});
+
+export const fetchUserOrders = () => (dispatch) => {
+  dispatch(setOrdersLoading(true));
+  return axios.get(`${baseUrl}/orders/user/${userID}`, {
+    headers: {
+      'X-Location': 1
+    }
+  })
+    .then((response) => {
+      dispatch(setOrdersSuccess(response.data.payload.orders));
+      dispatch(setOrdersLoading(false));
+    }).catch((error) => {
+      dispatch(setOrdersFailure(error));
+      dispatch(setOrdersLoading(false));
+    });
+};
+
+
+export const createOrderLoading = isCreating => ({
+  type: CREATE_ORDER_LOADING,
+  payload: isCreating
+});
+
+export const createOrderSuccess = order => ({
+  type: CREATE_ORDER_SUCCESS,
+  payload: order
+});
+
+export const createOrderFailure = error => ({
+  type: CREATE_ORDER_FAILURE,
+  payload: error
+});
+
+
+export const createOrder = orderDetails => dispatch => {
+  dispatch(createOrderLoading(true));
+
+  const url = `${baseUrl}/orders/`;
+
+  const options = {
+    method: 'POST',
+    headers: {
+      'X-Location': 1
+    },
+    data: orderDetails,
+    url
+  };
+
+  return axios(options)
+    .then((res) => {
+      dispatch(createOrderSuccess(res.data));
+      dispatch(createOrderLoading(false));
+    })
+    .catch((error) => {
+      dispatch(createOrderFailure(error));
+      dispatch(createOrderLoading(false));
     });
 };

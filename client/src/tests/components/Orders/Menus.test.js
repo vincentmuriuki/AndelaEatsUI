@@ -34,7 +34,8 @@ const props = {
         menus: []
       }
     ]
-  }
+  },
+  orderedMenus: []
 };
 
 const middlewares = [thunk];

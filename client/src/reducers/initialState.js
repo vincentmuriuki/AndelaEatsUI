@@ -11,7 +11,8 @@ export const initialMenus = {
   acc2: '',
   mainMeal: '',
   message: '',
-  selectedMeal: ''
+  selectedMeal: '',
+  orderedMenus: []
 };
 
 export const orders = {
