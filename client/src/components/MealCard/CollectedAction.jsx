@@ -32,7 +32,7 @@ const CollectedAction = ({ id, rating }) => (
 );
 
 CollectedAction.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.number,
   rating: PropTypes.number
 };
 

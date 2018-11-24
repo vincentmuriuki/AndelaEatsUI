@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 const NotCollectedAction = ({
-  baseUrl, id, meal, showModal 
+  id, meal, showModal
 }) => (
   <div className="card-action not-collected">
     <div>
@@ -15,8 +15,7 @@ const NotCollectedAction = ({
       <div className="button-group">
         <Link
           to={{
-            pathname: `${baseUrl}`,
-            query: { mainMeal: meal.name.main, protein: meal.name.protein }
+            pathname: '/'
           }}
           className="button"
         >Edit
@@ -34,20 +33,13 @@ const NotCollectedAction = ({
 );
 
 NotCollectedAction.propTypes = {
-  id: PropTypes.string.isRequired,
-  baseUrl: PropTypes.string.isRequired,
+  id: PropTypes.number,
   meal: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    isCollected: PropTypes.bool,
-    name: PropTypes.shape({
-      main: PropTypes.string,
-      protein: PropTypes.string
-    }).isRequired,
-    imageUrl: PropTypes.string,
-    orderDate: PropTypes.string.isRequired,
+    id: PropTypes.number,
+    mealItems: PropTypes.array,
     rating: PropTypes.number
   }),
-  showModal: PropTypes.func 
+  showModal: PropTypes.func
 };
 
 export default NotCollectedAction;

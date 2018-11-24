@@ -134,7 +134,7 @@ export class Menus extends Component {
 
   hasUserAlreadyBooked = () => {
     const { orderedMenus, match: { params: { date }}} = this.props
-     return orderedMenus.find(data => date === formatDateToISOString(data.dateBookedFor))
+     return orderedMenus && orderedMenus.find(data => date === formatDateToISOString(data.dateBookedFor))
   }
 
   validateMeals = () => {
@@ -154,12 +154,12 @@ export class Menus extends Component {
     } = this.props;
 
     const { updated, mainMeal, proteins, sides, menuId, acc1, acc2 } = this.state;
-    
+
     const menusLists = getMenu(data, match.params.date);
 
     const newList = menusLists.menus.filter(menu => menu.id === menuId);
 
-    
+
     return (
       <div>
         {isLoading && <Loader />}

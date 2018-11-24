@@ -6,12 +6,12 @@ let props = {
   url: "/orders",
   id: '0023',
   meal: {
-    id: "002",
-    name: { main: "Rice", protein: "beans" },
-    imageUlr: "",
-    orderDate: new Date().toDateString(),
-    isCollected: true,
-    rating: 3
+     mealItems: [
+    { image: "image1", name: "Meal1"},
+    { image: "image1", name: "Meal1"},
+    { image: "image1", name: "Meal1"}
+    ],
+    orderStatus: "cancelled"
   },
   actions: {
     handleDelete: jest.fn(),
@@ -21,9 +21,9 @@ let props = {
 
 const getComponent = () => shallow(<MealCard {...props} />);
 
-/* 
-global jest 
-expect 
+/*
+global jest
+expect
 */
 describe('MealCard Component', () => {
   it('should render at least once', () => {
@@ -42,7 +42,7 @@ describe('MealCard Component', () => {
     props = {
       ...props,
       meal: {
-        ...meal, isCollected: false
+        ...meal, orderStatus: "booked"
       }
     };
     expect(getComponent().find('NotCollectedAction').length).toBe(1);

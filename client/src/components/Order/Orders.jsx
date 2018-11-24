@@ -133,7 +133,7 @@ export class Orders extends Component {
       createOrder //eslint-disable-line
     } = this.props;
 
-    
+
     const { selectedMenu } = this.state;
 
     return (

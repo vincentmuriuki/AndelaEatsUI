@@ -8,16 +8,16 @@ const props = {
   deleteOrder: jest.fn(),
   modalContent: {
     id: "123",
-    name: {
-      main: "Wheat",
-      protein: "Ace"
-    },
-    orderDate: '2/52018'
+    mealItems: [
+    { image: "image1", name: "Meal1"},
+    { image: "image1", name: "Meal1"},
+    { image: "image1", name: "Meal1"}
+    ]
   }
 };
-/* 
-global jest 
-expect 
+/*
+global jest
+expect
 */
 describe('Modal Component', () => {
   const wrapper = shallow(<Modal {...props} />);

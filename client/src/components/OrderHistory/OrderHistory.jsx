@@ -22,7 +22,7 @@ import {
 
 /**
  * @description Orders Component
- * 
+ *
  * @name Orders
  */
 export class Orders extends Component {
@@ -54,7 +54,7 @@ export class Orders extends Component {
    * Loads data when component mounts
    *
    * @memberof OrderHistory
-   * 
+   *
    * @returns {*} null
    */
   componentDidMount() {
@@ -66,7 +66,7 @@ export class Orders extends Component {
    *
    * @param {*} { target }
    * @memberof Orders
-   * 
+   *
    * @returns {void}
    */
   onChange({ target }) {
@@ -74,12 +74,12 @@ export class Orders extends Component {
   }
 
   /**
-   * 
-   * 
+   *
+   *
    * @description chhoose filter button class
-   * 
+   *
    * @memberof Orders
-   * 
+   *
    * @returns { String }
   */
   filterClassName = () => {
@@ -99,7 +99,7 @@ export class Orders extends Component {
    * Reset the form fields
    *
    * @memberof Orders
-   * 
+   *
    * @returns {void}
    */
   clearForm() {
@@ -115,7 +115,7 @@ export class Orders extends Component {
    *
    * @memberof Orders
    * @param {number} newPage
-   * 
+   *
    * @returns {void}
    */
   handlePageChange(newPage) {
@@ -147,7 +147,7 @@ export class Orders extends Component {
    * @param {number} total
    * @param {array} range
    * @memberof Orders
-   * 
+   *
    * @returns {string} summary
    */
   showTotal(total, range) { //eslint-disable-line
@@ -159,7 +159,7 @@ export class Orders extends Component {
    *
    * @param {object} meal
    * @memberof Orders
-   * 
+   *
    * @returns {void}
    */
   showModal(meal) {
@@ -174,7 +174,7 @@ export class Orders extends Component {
    *
    * @param {string} id
    * @memberof Orders
-   * 
+   *
    * @returns {void}
    */
   deleteOrder(id) {
@@ -193,7 +193,7 @@ export class Orders extends Component {
    * Hide modal
    *
    * @memberof Orders
-   * 
+   *
    * @returns {void}
    */
   hideModal() {
@@ -203,7 +203,7 @@ export class Orders extends Component {
   }
 
   /**
-   * 
+   *
    * This is React render method that render the UI on the dom
    * @function Orders
    *
@@ -214,6 +214,7 @@ export class Orders extends Component {
     const {
       isOpen, searchParam, start, end
     } = this.state;
+
 
     return (
       <Fragment>
@@ -293,30 +294,29 @@ export class Orders extends Component {
                 {orders.error.response || "Unable to connect to the internet"}
               </div>)
           }
-          <Modal 
+          <Modal
             displayModal={this.state.showModal}
             closeModal={this.hideModal}
             deleteOrder={this.deleteOrder}
             modalContent={this.state.modalContent}
           />
           {
-            Array.isArray(orders.meals) && orders.meals.length > 0
+            Array.isArray(orders.orders) && orders.orders.length > 0
               ? (
                 <Fragment>
                   <div className="container">
                     {
-                      orders.meals.map((meal) => (
+                      orders.orders.map((meal) => (
                         <MealCard
                           key={meal.id}
                           meal={meal}
-                          url={url}
                           showModal={this.showModal}
                         />
                       ))
                     }
                   </div>
                   {
-                    orders.meals.length > 0 && (
+                    orders.orders.length > 0 && (
                       <Pagination
                         locale={{ items_per_page: 'Items' }}
                         onChange={this.handlePageChange}

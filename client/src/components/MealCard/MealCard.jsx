@@ -3,42 +3,35 @@ import PropTypes from 'prop-types';
 import CollectedAction from './CollectedAction';
 import NotCollectedAction from './NotCollectedAction';
 import dateFormatter from '../../helpers/dateFormatter';
+import formatDateToISOString from '../../helpers/dateFormatter';
 
-const MealCard = ({
-  url,
-  meal,
-  meal: {
-    id, name: { main, protein }, imageUrl, orderDate, isCollected, rating
-  },
-  showModal
-}) => (
+const MealCard = ({ meal: { id, dateBookedFor, mealItems, orderStatus }, showModal, meal }) => (
   <div className="card-container">
-    <div className="card-image" style={{ backgroundImage: `url(${imageUrl})` }}>
-      <p className={`order-id ${isCollected ? "not-collected" : "collected"}`}>
+    <div className="card-image" style={{ backgroundImage: `url(${mealItems[0].image})`}}>
+      <p className={`order-id ${orderStatus !== "booked" ? "not-collected" : "collected"}`}>
         {`#${id}`}
       </p>
     </div>
     <div>
       <div className="card-details">
         <div className="main">
-          <p className="heading">{`${main} ${protein}`}</p>
+          <p className="heading">{`${mealItems[0].name}, ${mealItems[1].name}, ${mealItems[2].name}`}</p>
           <p>
             <span className="sub-head">Order date&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <span className="heading">{dateFormatter(orderDate)}</span>
+            <span className="heading">{formatDateToISOString(dateBookedFor)}</span>
           </p>
         </div>
 
-        {isCollected
+        {orderStatus !== "booked"
           ? (
-            <CollectedAction 
-              id={id} 
-              rating={+rating} 
+            <CollectedAction
+              id={id}
+              rating={3}
             />
           )
           : (
-            <NotCollectedAction 
-              id={id} 
-              baseUrl={url}
+            <NotCollectedAction
+              id={id}
               meal={meal}
               showModal={showModal}
             />
@@ -49,18 +42,15 @@ const MealCard = ({
 );
 
 MealCard.propTypes = {
-  url: PropTypes.string.isRequired,
   meal: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    id: PropTypes.number,
     isCollected: PropTypes.bool,
-    name: PropTypes.shape({
-      main: PropTypes.string,
-      protein: PropTypes.string
-    }).isRequired,
+    dateBookedFor: PropTypes.string,
+    mealItems: PropTypes.array,
     imageUrl: PropTypes.string,
-    orderDate: PropTypes.string.isRequired,
+    orderStatus: PropTypes.string,
     rating: PropTypes.number
-  }).isRequired,
+  }),
   showModal: PropTypes.func
 };
 

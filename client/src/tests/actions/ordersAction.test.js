@@ -26,18 +26,22 @@ import {
 const id = '123';
 const date = new Date();
 
-/* 
-global jest 
-expect 
+/*
+global jest
+expect
 */
 describe('Order actions', () => {
   beforeEach(() => moxios.install());
   afterEach(() => moxios.uninstall());
 
   it('fetch past orders success', async (done) => {
-    moxios.stubRequest(`${base}?page=1&limit=9`, {
+    moxios.stubRequest(`${base}/orders/`, {
       status: 200,
-      response: {}
+      response: {
+        payload: {
+          orders: []
+        }
+      }
     });
     const expectedActions = [
       {
@@ -46,7 +50,7 @@ describe('Order actions', () => {
       },
       {
         type: FETCH_ORDERS_SUCCESS,
-        orders: { currentPage: 1 }
+        orders: { orders:[], currentPage: 1 }
       }, {
         type: FETCH_ORDERS_LOADING,
         isLoading: false
@@ -60,7 +64,7 @@ describe('Order actions', () => {
   });
 
   it('fetch past orders failure', async (done) => {
-    moxios.stubRequest(`${base}?page=1&limit=9`, {
+    moxios.stubRequest(`${base}/orders/`, {
       status: 401
     });
     const expectedActions = [
@@ -251,7 +255,7 @@ describe('Order actions', () => {
       },
       {
         type: MENU_IS_LOADING,
-        payload: true, 
+        payload: true,
       },
       {
         type: UPDATE_ORDER_SUCCESS,
@@ -262,7 +266,7 @@ describe('Order actions', () => {
       },
       {
         type: MENU_IS_LOADING,
-        payload: false, 
+        payload: false,
       }];
     const store = mockStore({});
     await store.dispatch(updateOrder({}, id))
@@ -284,7 +288,7 @@ describe('Order actions', () => {
       },
       {
         type: MENU_IS_LOADING,
-        payload: true, 
+        payload: true,
       },
       {
         type: FETCH_ORDERS_LOADING,
@@ -292,7 +296,7 @@ describe('Order actions', () => {
       },
       {
         type: MENU_IS_LOADING,
-        payload: false, 
+        payload: false,
       }];
     const store = mockStore({});
     await store.dispatch(updateOrder({}, id))

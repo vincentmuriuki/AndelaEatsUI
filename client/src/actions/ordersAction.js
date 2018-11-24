@@ -6,14 +6,14 @@ import {
   FETCH_ORDERS_FAILURE,
   FETCH_FILTERED_ORDERS,
   DELETE_ORDER_SUCCESS,
-  EDIT_ORDER_SUCCESS, 
+  EDIT_ORDER_SUCCESS,
   UPDATE_ORDER_SUCCESS,
   GET_ORDER_SUCCESS
 } from './actionTypes';
 import { config } from '../config';
 import { setMenuLoading } from './menuAction';
 
-export const base = `${config.API_BASE_URL}/orders`;
+export const base = `${config.ANDELAEATS_API_BASE_URL}`;
 
 export const setOrdersSuccess = (orders, currentPage) => ({
   type: FETCH_ORDERS_SUCCESS,
@@ -57,9 +57,14 @@ export const getOrderSuccess = (order) => ({
 
 export const fetchOrders = (page = 1, limit = 9) => (dispatch) => {
   dispatch(setOrdersLoading(true));
-  return axios.get(`${base}?page=${page}&limit=${limit}`)
+
+  return axios.get(`${base}/orders/`, {
+    headers: {
+      'X-Location': 1
+    }
+  })
     .then((response) => {
-      dispatch(setOrdersSuccess(response.data, page));
+      dispatch(setOrdersSuccess(response.data.payload, page));
       dispatch(setOrdersLoading(false));
     }).catch((error) => {
       dispatch(setOrdersFailure(error));
