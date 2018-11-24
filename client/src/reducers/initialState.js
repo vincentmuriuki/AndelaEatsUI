@@ -22,13 +22,15 @@ export const orders = {
   currentPage: 1,
   meals: [],
   isFiltered: false,
+  orders: [],
   menu: {
     meal: {
       main: [],
       firstAccompaniment: [],
       secondAccompaniment: []
     }
-  }
+  },
+  isDeleting: false
 };
 
 export const initialVendors = {

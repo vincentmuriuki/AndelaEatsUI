@@ -5,7 +5,9 @@ import {
   FETCH_ORDERS_SUCCESS,
   FETCH_ORDERS_FAILURE,
   FETCH_FILTERED_ORDERS,
+  DELETE_ORDER_LOADING,
   DELETE_ORDER_SUCCESS,
+  DELETE_ORDER_FAILURE,
   EDIT_ORDER_SUCCESS,
   UPDATE_ORDER_SUCCESS,
   GET_ORDER_SUCCESS
@@ -35,9 +37,19 @@ export const setFilteredOrders = (orders, currentPage) => ({
   orders: { ...orders, currentPage }
 });
 
+export const deleteOrdersLoading = isLoading => ({
+  type: DELETE_ORDER_LOADING,
+  payload: isLoading
+});
+
 export const deleteOrdersSuccess = (id) => ({
   type: DELETE_ORDER_SUCCESS,
-  id
+  payload: id
+});
+
+export const deleteOrdersFailure = error => ({
+  type: DELETE_ORDER_FAILURE,
+  payload: error
 });
 
 export const editOrderSuccess = (response) => ({
@@ -89,14 +101,20 @@ export const filterOrders = (order) => (dispatch) => {
 
 
 export const deleteOrder = (id) => (dispatch) => {
-  dispatch(setOrdersLoading(true));
-  return axios.delete(`${base}/${id}`)
+  dispatch(deleteOrdersLoading(true));
+  return axios.delete(`${base}/orders/${id}`, {
+    headers: {
+      'X-Location': 1
+    }
+  })
     .then((response) => {
+      toast.success(response.data.msg)
       dispatch(deleteOrdersSuccess(id));
-      dispatch(setOrdersLoading(false));
+      dispatch(deleteOrdersLoading(false));
     }).catch((error) => {
       toast.error(error.message)
-      dispatch(setOrdersLoading(false));
+      dispatch(deleteOrdersFailure(error.message));
+      dispatch(deleteOrdersLoading(false))
     });
 };
 

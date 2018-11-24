@@ -178,15 +178,8 @@ export class Orders extends Component {
    * @returns {void}
    */
   deleteOrder(id) {
-    this.props.deleteOrder(id);
-
-    toast.success('Your order has been deleted', {
-      position: toast.POSITION.TOP_CENTER
-    });
-
-    this.setState({
-      showModal: false
-    });
+    this.props.deleteOrder(id)
+      .then(() => this.hideModal());
   }
 
   /**
