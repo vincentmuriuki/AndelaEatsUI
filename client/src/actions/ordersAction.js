@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify';
+
 import axios from 'axios';
 import {
   FETCH_ORDERS_LOADING,
@@ -14,8 +15,11 @@ import {
 } from './actionTypes';
 import { config } from '../config';
 import { setMenuLoading } from './menuAction';
+import token from '../helpers/jwtDecode';
+
 
 export const base = `${config.ANDELAEATS_API_BASE_URL}`;
+export const userID = token().id;
 
 export const setOrdersSuccess = (orders, currentPage) => ({
   type: FETCH_ORDERS_SUCCESS,
@@ -67,10 +71,10 @@ export const getOrderSuccess = (order) => ({
   order
 });
 
-export const fetchOrders = (page = 1, limit = 9) => (dispatch) => {
+export const fetchOrders = (startDate, endDate, page = 1, limit = 9) => (dispatch) => {
   dispatch(setOrdersLoading(true));
 
-  return axios.get(`${base}/orders/`, {
+  return axios.get(`${base}/orders/user/${userID}/${startDate}/${endDate}`, {
     headers: {
       'X-Location': 1
     }
@@ -86,15 +90,20 @@ export const fetchOrders = (page = 1, limit = 9) => (dispatch) => {
 
 export const filterOrders = (order) => (dispatch) => {
   const {
-    searchParam = '', start = '', end = '', page = 1
+    searchParam, startDate, endDate, page = 1
   } = order;
+
   dispatch(setOrdersLoading(true));
-  return axios.get(`${base}/search?param=${searchParam}&start=${start}&end=${end}&page=${page}`) //eslint-disable-line
+  return axios.get(`${base}/orders/user/${userID}/${startDate}/${endDate}`, {
+    headers: {
+      'X-Location': 1
+    }
+  }) //eslint-disable-line
     .then((response) => {
-      dispatch(setFilteredOrders(response.data, page));
+      dispatch(setFilteredOrders(response.data.payload, page));
       dispatch(setOrdersLoading(false));
     }).catch((error) => {
-      dispatch(setOrdersFailure(error));
+      dispatch(setOrdersFailure(error.message));
       dispatch(setOrdersLoading(false));
     });
 };

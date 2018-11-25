@@ -151,9 +151,9 @@ export const setOrdersLoading = (isLoading) => ({
   isLoading
 });
 
-export const fetchUserOrders = () => (dispatch) => {
+export const fetchUserOrders = (startDate, endDate) => (dispatch) => {
   dispatch(setOrdersLoading(true));
-  return axios.get(`${baseUrl}/orders/user/${userID}`, {
+  return axios.get(`${baseUrl}/orders/user/${userID}/${startDate}/${endDate}`, {
     headers: {
       'X-Location': 1
     }

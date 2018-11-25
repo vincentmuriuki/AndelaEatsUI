@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Pagination from 'rc-pagination/lib';
 import { connect } from 'react-redux';
 import DatePicker from 'react-date-picker';
+import { format, addDays } from "date-fns";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -20,6 +21,9 @@ import {
   deleteOrder
 } from '../../actions/ordersAction';
 
+import { validateDate } from '../../helpers/dateFormatter';
+
+
 /**
  * @description Orders Component
  *
@@ -35,8 +39,8 @@ export class Orders extends Component {
     this.state = {
       isOpen: false,
       searchParam: '',
-      start: '',
-      end: new Date(),
+      start: addDays(new Date, -5),
+      end: addDays(new Date(), 5),
       showModal: false,
       modalContent: null
     };
@@ -58,7 +62,11 @@ export class Orders extends Component {
    * @returns {*} null
    */
   componentDidMount() {
-    this.props.fetchOrders();
+    const { start, end } = this.state;
+    const startDate = format(start, 'YYYY-MM-DD');
+    const endDate = format(end, 'YYYY-MM-DD');
+
+    this.props.fetchOrders(startDate, endDate);
   }
 
   /**
@@ -83,17 +91,14 @@ export class Orders extends Component {
    * @returns { String }
   */
   filterClassName = () => {
-    const { orders: { meals } } = this.props;
+    const { orders: { orders } } = this.props;
     const { isOpen } = this.state;
 
-    if (meals.length > 0) {
       if (isOpen) {
         return 'active';
       }
       return '';
     }
-    return 'grayed';
-  }
 
   /**
    * Reset the form fields
@@ -135,10 +140,21 @@ export class Orders extends Component {
    * @returns {void}
    */
   handleFilter() {
-    this.setState((state) => {
-      this.props.filterOrders(state);
-      return { isOpen: false };
-    });
+    const { searchParam, start, end } = this.state;
+    const dates = validateDate(start, end);
+
+    if(dates){
+      const order = {
+        searchParam,
+        startDate: dates.startDate,
+        endDate: dates.endDate
+      }
+
+      this.props.filterOrders(order)
+        .then(() => this.setState({ isOpen: false }))
+    }
+
+
   }
 
   /**
@@ -196,6 +212,19 @@ export class Orders extends Component {
   }
 
   /**
+   * Toggle Filter modal
+   *
+   * @memberof Orders
+   *
+   * @returns {void}
+   */
+  openFilterModal = () => {
+    this.setState(prevProps => ({
+      isOpen: !prevProps.isOpen
+    }))
+  }
+
+  /**
    *
    * This is React render method that render the UI on the dom
    * @function Orders
@@ -208,7 +237,6 @@ export class Orders extends Component {
       isOpen, searchParam, start, end
     } = this.state;
 
-
     return (
       <Fragment>
         {orders.isLoading && <Loader />}
@@ -219,10 +247,9 @@ export class Orders extends Component {
             {orders.isFiltered && <span>&nbsp;(filtered)</span>}
             <div className="filter">
               <button
-                disabled={orders.meals.length === 0}
                 className={`button ${this.filterClassName()}`}
                 type="button"
-                onClick={() => this.setState({ isOpen: !isOpen })}
+                onClick={this.openFilterModal}
               ><i className="fas fa-filter" />   Filter
               </button>
               <form

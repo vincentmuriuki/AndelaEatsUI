@@ -66,31 +66,7 @@ export class Menus extends Component {
     };
   }
 
-  queryEdit = (id, menus) => {
-    const date = getMenu(menus, id) && getMenu(menus, id).date;
 
-    this.props.getOrderByDate(date).then(() => {
-      const foundId = this.props.menu.id;
-
-      if (foundId) {
-        const { main, proteinItems, sideItems } = this.props.menu.meal;
-        const selectedMain = findSelected(main);
-        const selectedAcc1 = findSelected(proteinItems);
-        const selectedsides = findSelected(sideItems);
-
-        this.updateSelection("mainMeal", selectedMain.id);
-        this.updateSelection("acc1", selectedAcc1.id);
-        this.updateSelection("acc2", selectedAcc2.id);
-
-        this.setState({
-          mainMeal: selectedMain && selectedMain.id,
-          acc1: selectedAcc1 && selectedAcc1.id,
-          acc2: selectedAcc2 && selectedAcc2.id,
-          updated: false
-        });
-      }
-    });
-  };
 
   /**
    * Resets Menus to default.
@@ -107,20 +83,6 @@ export class Menus extends Component {
     });
   };
 
-  componentDidMount() {
-    const { id } = this.props.match.params;
-    this.queryEdit(id, this.props.data);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.match.params.id !== this.props.match.params.id) {
-      const { id } = nextProps.match.params;
-      this.queryEdit(id, nextProps.data);
-      this.setState({
-        updated: false
-      });
-    }
-  }
 
   updateSelection = (mealCategory, mealId, id) => {
     this.props.selectMeal({ prop: mealCategory, value: mealId });
@@ -157,7 +119,7 @@ export class Menus extends Component {
 
     const menusLists = getMenu(data, match.params.date);
 
-    const newList = menusLists.menus.filter(menu => menu.id === menuId);
+    const newList = menusLists && menusLists.menus.filter(menu => menu.id === menuId);
 
 
     return (
@@ -167,7 +129,7 @@ export class Menus extends Component {
           <EmptyContent message="Booked" /> :
           (
             <div className={`menus-container ${isLoading && "blurred"}`}>
-              {menusLists.menus.length > 0 ? (
+              {menusLists && menusLists.menus.length > 0 ? (
                 <div>
                   <h3>{`${id ? "Edit" : "New"} Order`}</h3>
                   <MealOptions

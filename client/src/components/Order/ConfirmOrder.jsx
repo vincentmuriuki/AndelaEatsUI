@@ -30,8 +30,8 @@ class ConfirmOrder extends Component {
       });
     } else {
       // Creating a new order
-      const { 
-        mealSelected: { mainMeal, firstAccompaniment, secondAccompaniment }, 
+      const {
+        mealSelected: { mainMeal, firstAccompaniment, secondAccompaniment },
         match: { params: { date }}} = this.props;
 
       const newOrder = {
@@ -40,7 +40,7 @@ class ConfirmOrder extends Component {
         mealItems: [mainMeal, firstAccompaniment, secondAccompaniment],
         mealPeriod: "lunch"
       }
-      
+
       createOrder(newOrder)
         .then(() => {
           showToast();
@@ -69,15 +69,15 @@ class ConfirmOrder extends Component {
     let date;
 
     const todaysMenu = menus.find(meals => meals.date === match.params.date);
-    date = todaysMenu.date
-    const userSelectedMenu = todaysMenu.menus.find(meal => meal.id === selectedMenu)
-    
+    date = todaysMenu && todaysMenu.date
+    const userSelectedMenu = todaysMenu && todaysMenu.menus.find(meal => meal.id === selectedMenu)
+
     if (userSelectedMenu) {
       mainMeal = userSelectedMenu.mainMeal
       proteinItems = userSelectedMenu.proteinItems.find(meal => meal.id === mealSelected.secondAccompaniment);
       sideItems = userSelectedMenu.sideItems.find(meal => meal.id === mealSelected.firstAccompaniment);
     }
-    
+
     return (
       <div
         id="confirm-order-modal"

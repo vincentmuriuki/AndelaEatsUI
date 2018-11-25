@@ -2,7 +2,7 @@ import moxios from 'moxios';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import {
-  baseUrl, userID, fetchMenu, createOrder, fetchUserOrders, selectMeal, resetMenu 
+  baseUrl, userID, fetchMenu, createOrder, fetchUserOrders, selectMeal, resetMenu
 } from '../../actions/menuAction';
 import {
   SET_MENUS,
@@ -21,9 +21,9 @@ const middlewares = [thunk];
 
 const mockStore = configureMockStore(middlewares);
 
-/* 
-global jest 
-expect 
+/*
+global jest
+expect
 */
 describe('Menu actions', () => {
   beforeEach(() => moxios.install());
@@ -60,7 +60,10 @@ describe('Menu actions', () => {
     done();
   });
   it('should fetch users orders', async (done) => {
-    moxios.stubRequest(`${baseUrl}/orders/user/${userID}`, {
+    const startDate = '2018-11-18';
+    const endDate = '2018-12-12';
+
+    moxios.stubRequest(`${baseUrl}/orders/user/${userID}/${startDate}/${endDate}`, {
       status: 200,
       response: {
         payload: {
@@ -83,7 +86,7 @@ describe('Menu actions', () => {
       }
     ];
     const store = mockStore({});
-    await store.dispatch(fetchUserOrders())
+    await store.dispatch(fetchUserOrders(startDate, endDate))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });

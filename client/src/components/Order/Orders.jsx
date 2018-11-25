@@ -45,10 +45,9 @@ export class Orders extends Component {
     const endDate = format(addDays(new Date, 7), 'YYYY-MM-DD');
 
     this.props.fetchMenu(startDate, endDate).then(() => {
-      this.setState({ isLoading: false });
-      this.props.fetchUserOrders();
+      this.props.fetchUserOrders(startDate, endDate);
       this.selectDefaultMenu();
-    }).catch(() => this.setState({ isLoading: false }));
+    })
   }
 
   showToast = () => {
@@ -138,15 +137,11 @@ export class Orders extends Component {
 
     return (
       <div className="wrapper">
-        {this.state.isLoading ? (
+        {isLoading ? (
           <Loader />
         ) : (
           <div className="orders-wrapper">
-            <ToastContainer
-              autoClose={2000}
-              pauseOnHover={false}
-              hideProgressBar
-            />
+
             <h3>Make Orders</h3>
 
             <div className="orders-container">

@@ -8,7 +8,8 @@ import {
   editOrder,
   updateOrder,
   updateOrderSuccess,
-  getOrderByDate
+  getOrderByDate,
+  userID
 } from '../../actions/ordersAction';
 
 import {
@@ -36,8 +37,11 @@ describe('Order actions', () => {
   beforeEach(() => moxios.install());
   afterEach(() => moxios.uninstall());
 
+  const startDate = '2018-11-21';
+  const endDate = '2018-12-02';
+
   it('fetch past orders success', async (done) => {
-    moxios.stubRequest(`${base}/orders/`, {
+    moxios.stubRequest(`${base}/orders/user/${userID}/${startDate}/${endDate}`, {
       status: 200,
       response: {
         payload: {
@@ -58,7 +62,7 @@ describe('Order actions', () => {
         isLoading: false
       }];
     const store = mockStore({});
-    await store.dispatch(fetchOrders(1, 9))
+    await store.dispatch(fetchOrders(startDate, endDate, 1, 9))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -66,7 +70,7 @@ describe('Order actions', () => {
   });
 
   it('fetch past orders failure', async (done) => {
-    moxios.stubRequest(`${base}/orders/`, {
+    moxios.stubRequest(`${base}/orders/user/${userID}/${startDate}/${endDate}`, {
       status: 401
     });
     const expectedActions = [
@@ -82,7 +86,7 @@ describe('Order actions', () => {
         isLoading: false
       }];
     const store = mockStore({});
-    await store.dispatch(fetchOrders(1, 9))
+    await store.dispatch(fetchOrders(startDate, endDate, 1, 9))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });
@@ -186,14 +190,15 @@ describe('Order actions', () => {
     done();
   });
 
+  const order = {
+    searchParam: 'rice',
+    startDate: '2018-11-21',
+    endDate: '2018-12-02',
+    page: 1
+  };
+
   it('filter orders success', async (done) => {
-    const order = {
-      searchParam: 'rice',
-      start: new Date(),
-      end: new Date(),
-      page: 2
-    };
-    moxios.stubRequest(`${base}/search?param=${order.searchParam}&start=${order.start}&end=${order.end}&page=${order.page}`, {//eslint-disable-line
+    moxios.stubRequest(`${base}/orders/user/${userID}/${order.startDate}/${order.endDate}`, {//eslint-disable-line
       status: 200,
       response: {}
     });
@@ -204,7 +209,7 @@ describe('Order actions', () => {
       },
       {
         type: FETCH_FILTERED_ORDERS,
-        orders: { currentPage: 2 }
+        orders: { currentPage: 1 }
       }, {
         type: FETCH_ORDERS_LOADING,
         isLoading: false
@@ -218,13 +223,7 @@ describe('Order actions', () => {
   });
 
   it('filter orders failure', async (done) => {
-    const order = {
-      searchParam: 'yam',
-      start: new Date(),
-      end: new Date(),
-      page: 2
-    };
-    moxios.stubRequest(`${base}/search?param=${order.searchParam}&start=${order.start}&end=${order.end}&page=${order.page}`, {//eslint-disable-line
+    moxios.stubRequest(`${base}/orders/user/${userID}/${order.startDate}/${order.endDate}`, {//eslint-disable-line
       status: 401
     });
 
@@ -235,7 +234,7 @@ describe('Order actions', () => {
       },
       {
         type: FETCH_ORDERS_FAILURE,
-        error: new Error("Request failed with status code 401")
+        error: "Request failed with status code 401"
       }, {
         type: FETCH_ORDERS_LOADING,
         isLoading: false

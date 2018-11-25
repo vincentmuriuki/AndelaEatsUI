@@ -42,9 +42,9 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 let wrapper;
-/* 
-global jest 
-expect 
+/*
+global jest
+expect
 */
 describe('MealOptions Component', () => {
   it('should mount successfully', () => {
@@ -66,19 +66,6 @@ describe('MealOptions Component', () => {
       wrapper.instance().onChange(mealId, true);
 
       expect(selectMealSpy).toHaveBeenCalled();
-    });
-  });
-});
-
-describe('Menus Component', () => {
-  describe('class methods test', () => {
-    it('queryEdit method', () => {
-      const id = 23;
-      wrapper = shallow(<Menus {...props} />).instance();
-      const methodSpy = jest.spyOn(wrapper, 'queryEdit');
-      wrapper.queryEdit(id, mockMenu);
-
-      expect(methodSpy).toHaveBeenCalled();
     });
   });
 });
