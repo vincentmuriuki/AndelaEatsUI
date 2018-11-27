@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import MealCard from '../MealCard/MealCard';
 import Modal from '../MealCard/Modal';
+import RatingModal from '../MealCard/RatingModal';
 
 import Loader from '../common/Loader/Loader';
 import EmptyContent from '../common/EmptyContent';
@@ -18,7 +19,8 @@ import 'rc-pagination/assets/index.css';
 import {
   fetchOrders,
   filterOrders,
-  deleteOrder
+  deleteOrder,
+  createRating
 } from '../../actions/ordersAction';
 
 import { validateDate } from '../../helpers/dateFormatter';
@@ -42,7 +44,10 @@ export class Orders extends Component {
       start: addDays(new Date, -5),
       end: addDays(new Date(), 5),
       showModal: false,
-      modalContent: null
+      modalContent: null,
+      showRatingModal: false,
+      textArea: '',
+      newRating: 0
     };
 
     this.onChange = this.onChange.bind(this);
@@ -178,6 +183,21 @@ export class Orders extends Component {
    *
    * @returns {void}
    */
+  showRatingModal = meal => {
+    this.setState({
+      modalContent: meal,
+      showRatingModal: true
+    });
+  }
+
+   /**
+   * Display a modal to rate a meal
+   *
+   * @param {object} meal
+   * @memberof Orders
+   *
+   * @returns {void}
+   */
   showModal(meal) {
     this.setState({
       modalContent: meal,
@@ -207,7 +227,9 @@ export class Orders extends Component {
    */
   hideModal() {
     this.setState({
-      showModal: false
+      showModal: false,
+      showRatingModal: false,
+      textArea: ''
     });
   }
 
@@ -225,6 +247,47 @@ export class Orders extends Component {
   }
 
   /**
+   * Change ratings stars
+   *
+   * @memberof Orders
+   *
+   * @returns {void}
+   */
+  ratingChanged = newRating => {
+    this.setState({
+      newRating
+    })
+  }
+
+  /**
+   * Submit ratings
+   *
+   * @memberof Orders
+   *
+   * @returns {void}
+   */
+  handleRatingSubmit = event => {
+    event.preventDefault();
+    const { newRating, textArea, modalContent } = this.state;
+
+    const ratingDetails = {
+      channel: "web",
+      comment: textArea,
+      rating: newRating,
+      orderId: modalContent.id
+    }
+
+    if ( newRating && textArea ) {
+      this.props.createRating(ratingDetails)
+        .then(() => {
+          toast.success('Your Feedback has been noted');
+          this.hideModal()
+        });
+    }
+  }
+
+
+  /**
    *
    * This is React render method that render the UI on the dom
    * @function Orders
@@ -234,7 +297,14 @@ export class Orders extends Component {
   render() {
     const { match: { url }, orders } = this.props;
     const {
-      isOpen, searchParam, start, end
+      isOpen,
+      searchParam,
+      start,
+      end,
+      showRatingModal,
+      modalContent,
+      textArea,
+      newRating
     } = this.state;
 
     return (
@@ -320,6 +390,16 @@ export class Orders extends Component {
             deleteOrder={this.deleteOrder}
             modalContent={this.state.modalContent}
           />
+          <RatingModal
+            displayModal={showRatingModal}
+            hideModal={this.hideModal}
+            modalContent={modalContent}
+            ratingChanged={this.ratingChanged}
+            newRating={newRating}
+            textArea={textArea}
+            onChange={this.onChange}
+            handleSubmit={this.handleRatingSubmit}
+          />
           {
             Array.isArray(orders.orders) && orders.orders.length > 0
               ? (
@@ -331,6 +411,7 @@ export class Orders extends Component {
                           key={meal.id}
                           meal={meal}
                           showModal={this.showModal}
+                          showRatingModal={this.showRatingModal}
                         />
                       ))
                     }
@@ -390,7 +471,7 @@ const mapStateToProps = state => ({
 });
 
 const actionCreators = {
-  fetchOrders, filterOrders, deleteOrder
+  fetchOrders, filterOrders, deleteOrder, createRating
 };
 
 export default connect(mapStateToProps, actionCreators)(Orders);

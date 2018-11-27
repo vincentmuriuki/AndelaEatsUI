@@ -36,7 +36,8 @@ export class Orders extends Component {
     this.state = {
       isModalOpen: false,
       isLoading: true,
-      selectedMenu: ''
+      selectedMenu: '',
+      menuListId: ''
     };
   }
 
@@ -47,6 +48,12 @@ export class Orders extends Component {
     this.props.fetchMenu(startDate, endDate).then(() => {
       this.props.fetchUserOrders(startDate, endDate);
       this.selectDefaultMenu();
+    })
+  }
+
+  selectMenuListId = id => {
+    this.setState({
+      menuListId: id
     })
   }
 
@@ -133,8 +140,8 @@ export class Orders extends Component {
     } = this.props;
 
 
-    const { selectedMenu } = this.state;
-
+    const { selectedMenu, menuListId } = this.state;
+    
     return (
       <div className="wrapper">
         {isLoading ? (
@@ -162,6 +169,7 @@ export class Orders extends Component {
                         mealSelected={mealSelected}
                         setSelectedMenu={this.setSelectedMenu}
                         orderedMenus={orderedMenus}
+                        selectMenuListId={this.selectMenuListId}
                         {...props}
                       />
                       <ConfirmOrder
@@ -176,6 +184,7 @@ export class Orders extends Component {
                         showToast={this.showToast}
                         isLoading={isLoading}
                         createOrder={createOrder}
+                        menuListId={menuListId}
                         {...props}
                       />
                     </div>

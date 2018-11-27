@@ -32,13 +32,14 @@ class ConfirmOrder extends Component {
       // Creating a new order
       const {
         mealSelected: { mainMeal, firstAccompaniment, secondAccompaniment },
-        match: { params: { date }}} = this.props;
+        match: { params: { date }}, menuListId } = this.props;
 
       const newOrder = {
         channel: "web",
         dateBookedFor: date,
         mealItems: [mainMeal, firstAccompaniment, secondAccompaniment],
-        mealPeriod: "lunch"
+        mealPeriod: "lunch",
+        menuId: menuListId
       }
 
       createOrder(newOrder)

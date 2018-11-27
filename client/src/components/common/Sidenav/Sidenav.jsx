@@ -26,9 +26,9 @@ class SideNav extends Component {
 
     return (
       <div className="wrapper">
-        <Navbar 
-          isAdmin={isAdmin()} 
-          adminDashboard={this.props.location.pathname.includes('admin')} 
+        <Navbar
+          isAdmin={isAdmin()}
+          adminDashboard={this.props.location.pathname.includes('admin')}
         />
         <div className="push-down">
           <div className="side-nav">
@@ -59,7 +59,7 @@ class SideNav extends Component {
                     <span>Order History</span>
                   </li>
                 </Link>
-                
+
                 <Link to="/admin/meals">
                   <li
                     className={
@@ -81,12 +81,20 @@ class SideNav extends Component {
                     <span>Menus</span>
                   </li>
                 </Link>
-              
+
                 <Link to="/admin/vendors">
                   <li className={`side-nav-item vendors
                     ${homeActive('admin/vendors') && "active"}`}
                   >
                     <span>Vendors</span>
+                  </li>
+                </Link>
+
+                <Link to="/admin/ratings">
+                  <li className={`side-nav-item ratings
+                    ${homeActive('admin/ratings') && "active"}`}
+                  >
+                    <span>Ratings</span>
                   </li>
                 </Link>
 

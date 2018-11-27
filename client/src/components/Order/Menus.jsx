@@ -20,7 +20,6 @@ export class MealOptions extends Component {
   }
 
   onChange = (mealId, checked, id) => {
-
     this.props.updateSelection(this.props.category, checked ? mealId : "", id);
   };
 
@@ -88,7 +87,9 @@ export class Menus extends Component {
     this.props.selectMeal({ prop: mealCategory, value: mealId });
 
     this.setState({ [mealCategory]: mealId, updated: true });
+    
     if (mealCategory === "mainMeal") {
+      this.props.selectMenuListId(id)
       this.props.setSelectedMenu(id)
       this.setState({ menuId: id });
     }
@@ -120,7 +121,6 @@ export class Menus extends Component {
     const menusLists = getMenu(data, match.params.date);
 
     const newList = menusLists && menusLists.menus.filter(menu => menu.id === menuId);
-
 
     return (
       <div>

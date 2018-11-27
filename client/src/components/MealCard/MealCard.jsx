@@ -5,7 +5,7 @@ import NotCollectedAction from './NotCollectedAction';
 import dateFormatter from '../../helpers/dateFormatter';
 import formatDateToISOString from '../../helpers/dateFormatter';
 
-const MealCard = ({ meal: { id, dateBookedFor, mealItems, orderStatus }, showModal, meal }) => (
+const MealCard = ({ meal: { id, dateBookedFor, mealItems, orderStatus }, showModal, meal, showRatingModal }) => (
   <div className="card-container">
     <div className="card-image" style={{ backgroundImage: `url(${mealItems[0].image})`}}>
       <p className={`order-id ${orderStatus !== "booked" ? "not-collected" : "collected"}`}>
@@ -27,6 +27,8 @@ const MealCard = ({ meal: { id, dateBookedFor, mealItems, orderStatus }, showMod
             <CollectedAction
               id={id}
               rating={3}
+              meal={meal}
+              showRatingModal={showRatingModal}
             />
           )
           : (

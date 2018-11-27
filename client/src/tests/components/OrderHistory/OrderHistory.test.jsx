@@ -98,7 +98,12 @@ describe('Component: Orders', () => {
         start: '',
         end: '',
         showModal: false,
-        modalContent: null
+        modalContent: null,
+        newRating: 0,
+        showModal: false,
+        showRatingModal: false,
+        start: "",
+        textArea: ""
       });
     });
 

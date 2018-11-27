@@ -11,7 +11,10 @@ import {
   DELETE_ORDER_FAILURE,
   EDIT_ORDER_SUCCESS,
   UPDATE_ORDER_SUCCESS,
-  GET_ORDER_SUCCESS
+  GET_ORDER_SUCCESS,
+  CREATE_MENU_RATING_LOADING,
+  CREATE_MENU_RATING_SUCCESS,
+  CREATE_MENU_RATING_FAILURE
 } from './actionTypes';
 import { config } from '../config';
 import { setMenuLoading } from './menuAction';
@@ -70,6 +73,7 @@ export const getOrderSuccess = (order) => ({
   type: GET_ORDER_SUCCESS,
   order
 });
+
 
 export const fetchOrders = (startDate, endDate, page = 1, limit = 9) => (dispatch) => {
   dispatch(setOrdersLoading(true));
@@ -167,3 +171,46 @@ export const getOrderByDate = (date) => dispatch => {
       dispatch(setOrdersLoading(false));
     });
 };
+
+
+export const createRatingLoading = isLoading => ({
+  type: CREATE_MENU_RATING_LOADING,
+  payload: isLoading
+});
+
+export const createRatingSuccess = ratings => ({
+  type: CREATE_MENU_RATING_SUCCESS,
+  payload: ratings,
+});
+
+export const createRatingFailure = error => ({
+  type: CREATE_MENU_RATING_FAILURE,
+  payload: error
+});
+
+
+export const createRating = ratingDetails => dispatch => {
+  dispatch(createRatingLoading(true));
+  const url = `${base}/ratings/order/`;
+
+  const options = {
+    method: 'POST',
+    headers: {
+      'X-Location': 1
+    },
+    data: ratingDetails,
+    url
+  };
+
+  return axios(options)
+    .then((response) => {
+      const { msg: message, payload: { rating  } } = response.data;
+      dispatch(createRatingSuccess(rating ));
+      dispatch(createRatingLoading(false));
+    })
+    .catch((error) => {
+      dispatch(createRatingFailure(error));
+      dispatch(createRatingLoading(false));
+    });
+};
+
