@@ -33,9 +33,11 @@ export class ExportOrders extends Component {
   );
 
   render() {
-    const { orders, isLoading } = this.props;
+    const {
+      orderHistory: { orders },
+      isLoading } = this.props;
 
-    if (!isLoading && !orders.length) {
+    if (orders && orders.length === 0) {
       return (
         <div id="admin-orders-no-content">
           <EmptyContent
@@ -50,7 +52,7 @@ export class ExportOrders extends Component {
         { isLoading && <Loader /> }
         <div className={`${isLoading && 'blurred'}`}>
           
-          <OrdersHeader
+          { orders && (<OrdersHeader
             title="Last 24 hours orders"
             type={2}
             ordersCount={orders.length}
@@ -58,6 +60,7 @@ export class ExportOrders extends Component {
             orders={orders}
             svg={svg}
           />
+          )}
 
           <div className="table-header">
             <div className="custom-col-4">Order Number</div>
@@ -65,11 +68,10 @@ export class ExportOrders extends Component {
             <div className="custom-col-5">Order Description</div>
           </div>
 
-          { orders.map((order) => this.renderOrder(order))}
+          { orders && orders.map((order) => this.renderOrder(order))}
 
           {
-            orders.length
-            && (
+            orders && orders.length > 15 && (
               <Pagination
                 onChange={() => {}}
                 current={1}
@@ -82,17 +84,23 @@ export class ExportOrders extends Component {
         </div>
       </section>
     );
+
   }
 }
 
 const mapStateToProps = ({ mealOrders }) => ({
-  orders: mealOrders.orders,
-  isLoading: mealOrders.isLoading
+  orderHistory: mealOrders.orders,
+  isLoading: mealOrders.isLoading,
+  isFiltering: mealOrders.isFiltering,
+  filteredOrders: mealOrders.filteredOrders
 });
 
 ExportOrders.propTypes = {
   fetchOrders: PropTypes.func.isRequired,
-  orders: PropTypes.arrayOf(PropTypes.shape({})),
+  orderHistory: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object
+  ]),
   isLoading: PropTypes.bool.isRequired,
 };
 

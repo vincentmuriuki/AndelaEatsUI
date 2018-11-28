@@ -98,6 +98,12 @@
     }
   }
 
+  &.cancelled {
+    .heading{
+      color: $color-red;
+    }
+  }
+
   .button {
     border: 1px solid $color-light-grey;
     border-radius: 2px;

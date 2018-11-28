@@ -18,7 +18,7 @@ const CollectedAction = ({ rating, meal, showRatingModal }) => (
           name="rating"
         />
       </div>
-      <div>
+      { meal && !meal.hasRated && (<div>
         <p className="sub-head">Rate this meal</p>
         <a
           className="button"
@@ -28,6 +28,7 @@ const CollectedAction = ({ rating, meal, showRatingModal }) => (
         >Rate
         </a>
       </div>
+      )}
     </Fragment>
   </div>
 );

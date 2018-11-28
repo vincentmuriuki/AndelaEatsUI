@@ -2,15 +2,17 @@ import axios from 'axios';
 import {
   FETCH_MEAL_ORDERS_SUCCESS,
   FETCH_MEAL_ORDERS_FAILURE,
-  FETCH_MEAL_ORDERS_LOADING,
+  FETCH_MEAL_ORDERS_LOADING
 } from '../actionTypes';
 
-export const baseUrl = 'https://private-b7e73-andelaeats.apiary-mock.com/';
+import { config } from '../../config';
+
+export const baseUrl = config.ANDELAEATS_API_BASE_URL;
 
 export const fecthOrdersLoading = (isLoading) => ({
   type: FETCH_MEAL_ORDERS_LOADING,
   payload: isLoading,
-  
+
 });
 
 export const fecthOrdersSuccess = orders => ({
@@ -23,12 +25,24 @@ export const fecthOrdersFailure = error => ({
   payload: error,
 });
 
-export const fetchOrders = () => dispatch => {
+export const fetchOrders = (currentPage = '', startDate = '', endDate = '') => dispatch => {
   dispatch(fecthOrdersLoading(true));
 
-  return axios.get(`${baseUrl}admin/orders`)
+  let url;
+
+  if (!startDate || !endDate) {
+    url = `${baseUrl}/orders/?page=${currentPage}&per_page=15`
+  } else {
+    url = `${baseUrl}/orders/${startDate}/${endDate}?page=${currentPage}&per_page=15`
+  }
+
+  return axios.get(url, {
+    headers: {
+      'X-Location': 1
+    }
+  })
     .then((response) => {
-      dispatch(fecthOrdersSuccess(response.data.orders));
+      dispatch(fecthOrdersSuccess(response.data.payload));
       dispatch(fecthOrdersLoading(false));
     })
     .catch((error) => {

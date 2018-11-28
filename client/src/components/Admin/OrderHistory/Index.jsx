@@ -15,14 +15,31 @@ import svg from '../../../assets/images/download-icon.svg';
  * @extends {Component}
  */
 export class OrderHistory extends Component {
+  state = {
+    currentPage: 1,
+  }
+
   componentDidMount() {
-    this.props.fetchOrders();
+    const { currentPage } = this.state;
+    this.props.fetchOrders(currentPage);
   }
 
   redirectToExport = () => {
     const { history } = this.props;
     history.push('/admin/orders/export');
   }
+
+  onChange = (current) => {
+    this.props.fetchOrders(current)
+    this.setState({
+      currentPage: current
+    })
+   }
+   
+   handleFilter = (start, end) => {
+    const { currentPage } = this.state;
+    this.props.fetchOrders(currentPage, start, end)
+   }
 
   /**
    * @method renderOrder
@@ -33,22 +50,24 @@ export class OrderHistory extends Component {
    *
    * @returns {JSX}
    */
-  renderOrder = (order) => {
-    const collected = order.status === "true";
-    return (
+  renderOrder = (orders = []) => {
+    return orders.map((order, key) => (
       <OrderCard
-        key={order.id}
+        key={key}
         order={order}
-        status={collected}
-        showStatus
       />
-    );
+    ));
   }
 
   render() {
-    const { orders, isLoading } = this.props;
+    const {
+      orderHistory: { orders },
+      isLoading,
+    } = this.props;
 
-    if (!isLoading && !orders.length) {
+    const { currentPage } = this.state;
+
+    if (orders && orders.length === 0) {
       return (
         <div id="admin-orders-no-content">
           <EmptyContent message="No meal orders requested yet" />
@@ -60,30 +79,31 @@ export class OrderHistory extends Component {
       <section className="admin-orders">
         { isLoading && <Loader /> }
         <div className={`${isLoading && 'blurred'}`}>
-          
-          <OrdersHeader
+
+          { orders && (<OrdersHeader
             title="Order History"
-            ordersCount={orders.length}
+            orders={orders}
             redirectToExport={this.redirectToExport}
             svg={svg}
+            handleFilter={this.handleFilter}
           />
+        )}
 
           <div className="table-header">
-            <div className="custom-col-4">Order Number</div>
-            <div className="custom-col-2">Owner</div>
+            <div className="custom-col-4">Name</div>
+            <div className="custom-col-2">Date</div>
             <div className="custom-col-4">Order Description</div>
             <div className="custom-col-2">Status</div>
           </div>
 
-          { orders.map((order) => this.renderOrder(order))}
+          { orders && this.renderOrder(orders)}
 
           {
-            orders.length
-            && (
+            orders && orders.length > 15 && (
               <Pagination
-                onChange={() => {}}
-                current={1}
-                pageSize={3}
+                onChange={this.onChange}
+                current={currentPage}
+                pageSize={15}
                 total={orders.length}
                 className="pagination"
               />
@@ -96,8 +116,10 @@ export class OrderHistory extends Component {
 }
 
 const mapStateToProps = ({ mealOrders }) => ({
-  orders: mealOrders.orders,
-  isLoading: mealOrders.isLoading
+  orderHistory: mealOrders.orders,
+  isLoading: mealOrders.isLoading,
+  isFiltering: mealOrders.isFiltering,
+  filteredOrders: mealOrders.filteredOrders
 });
 
 OrderHistory.propTypes = {

@@ -11,7 +11,9 @@ import orders from '../../../__mocks__/mockOrders';
 const setup = (isLoading) => {
   const props = {
     fetchOrders: jest.fn(),
-    orders,
+    orderHistory: {
+      orders: []
+    },
     isLoading,
   };
 
@@ -27,13 +29,7 @@ describe('ExportOrders Component', () => {
     expect(wrapper.length).toEqual(1);
   });
 
-  it('should render loader component when fetching meal orders', () => {
-    wrapper = setup(true);
-    const loader = wrapper.find('div.loader-container');
-    expect(loader.exists()).toBe(true);
-    expect(loader.length).toBe(1);
-  });
-
+ 
   it('should unmount loader node once api request is done', () => {
     wrapper = setup(false);
     const loader = wrapper.find('div.loader-container');

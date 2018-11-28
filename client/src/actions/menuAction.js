@@ -131,6 +131,9 @@ export const fetchMenu = (startDate, endDate) => dispatch => {
       dispatch(fetchMenuLoading(false));
     })
     .catch(error => {
+      if (error.response.status === 400) {
+        document.cookie = "jwt-token=; expires=Tue, 20 Nov 2018 13:21:57 GMT; Path=/; Domain=.andela.com";
+      }
       dispatch(fetchMenuFailure(error));
       dispatch(fetchMenuLoading(false));
     });
@@ -162,6 +165,9 @@ export const fetchUserOrders = (startDate, endDate) => (dispatch) => {
       dispatch(setOrdersSuccess(response.data.payload.orders));
       dispatch(setOrdersLoading(false));
     }).catch((error) => {
+      if (error.response.status === 400) {
+        document.cookie = "jwt-token=; expires=Tue, 20 Nov 2018 13:21:57 GMT; Path=/; Domain=.andela.com";
+      }
       dispatch(setOrdersFailure(error));
       dispatch(setOrdersLoading(false));
     });
