@@ -117,9 +117,7 @@ export class OrderHistory extends Component {
 
 const mapStateToProps = ({ mealOrders }) => ({
   orderHistory: mealOrders.orders,
-  isLoading: mealOrders.isLoading,
-  isFiltering: mealOrders.isFiltering,
-  filteredOrders: mealOrders.filteredOrders
+  isLoading: mealOrders.isLoading
 });
 
 OrderHistory.propTypes = {

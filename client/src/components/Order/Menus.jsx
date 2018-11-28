@@ -5,13 +5,11 @@ import Meal from "./Meal";
 import MainMeal from "./MainMeal";
 import Loader from "../common/Loader/Loader";
 import { getOrderByDate } from "../../actions/ordersAction";
-import { log } from "util";
 import { formatDateToISOString } from "../../helpers/dateFormatter";
 import EmptyContent from '../common/EmptyContent';
 
 /* eslint-disable */
 
-const findSelected = meals => meals.find(meal => meal.selected);
 const getMenu = (menus, date) => menus.find(meals => meals.date === date);
 
 export class MealOptions extends Component {

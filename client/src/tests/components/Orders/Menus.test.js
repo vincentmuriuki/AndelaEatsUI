@@ -1,85 +1,42 @@
+/* eslint-disable no-undef */
 import React from 'react';
-import { shallow } from 'enzyme';
-import thunk from 'redux-thunk';
-import configureMockStore from 'redux-mock-store';
-import ConnectedMenus,
-{ MealOptions, Menus } from '../../../components/Order/Menus';
-import { mockMenu } from '../../helpers/mockOrders';
+import { mount } from 'enzyme';
 
-const props = {
-  data: [
-    {
-      date: "2018-11-21",
-      id: 29,
-      menus: []
-    }
-  ],
-  mealOptions: mockMenu,
-  title: 'Test Meal',
-  selectedMealId: 1,
-  toggleModal: jest.fn(),
-  selectMeal: jest.fn(),
-  match: {
-    params: { date: "2018-11-21" }
-  },
-  resetMenu: jest.fn(),
-  updateSelection: jest.fn(),
-  menu: mockMenu[0],
-  getOrderByDate: () => Promise.resolve(),
-  menusLists: {
-    menus: [
-      {
-        date: "2018-11-21",
-        id: 29,
-        menus: []
+import { Menus } from '../../../components/Order/Menus';
+
+const setup = () => {
+  const props = {
+    menu: {
+      id: '234'
+    },
+    isLoading: false,
+    toggleModal: jest.fn(),
+    match: {
+      params: {
+        date: '2018-12-02'
       }
-    ]
-  },
-  orderedMenus: []
-};
+    },
+    data: [],
+    resetMenu: jest.fn(),
+    selectMeal: jest.fn(),
+    mealSelected: jest.fn()
+  }
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+  return mount(<Menus {...props} />)
+}
 
-let wrapper;
-/*
-global jest
-expect
-*/
-describe('MealOptions Component', () => {
-  it('should mount successfully', () => {
-    wrapper = shallow(<MealOptions {...props} />);
-    expect(wrapper).toBeDefined();
-  });
-
-  it('should have a title', () => {
-    wrapper = shallow(<MealOptions {...props} />);
-    expect(wrapper.find('h3').contains(props.title)).toBeTruthy();
-  });
-
-  describe('class methods test', () => {
-    it('onChange method', () => {
-      const mealId = 1;
-
-      const selectMealSpy = jest.spyOn(props, 'updateSelection');
-      wrapper = shallow(<MealOptions {...props} />);
-      wrapper.instance().onChange(mealId, true);
-
-      expect(selectMealSpy).toHaveBeenCalled();
-    });
-  });
-});
+const wrapper = setup();
 
 
-describe('ConnectedMenus Test', () => {
-  it('renders without problems', () => {
-    const store = mockStore({
-      orders: {
-        isLoading: false,
-        menu: mockMenu
-      }
-    });
-    wrapper = shallow(<ConnectedMenus store={store} />);
-    expect(wrapper.length).toBe(1);
-  });
-});
+describe('Menus Component', () => {
+  it('should render correctly', () => {
+    expect(wrapper).toMatchSnapshot();
+  })
+  
+  it('expects the following methods to be defined', () => {
+    wrapper.instance().resetMenus();
+    wrapper.instance().updateSelection();
+    wrapper.instance().hasUserAlreadyBooked();
+    wrapper.instance().validateMeals();
+  })
+})
