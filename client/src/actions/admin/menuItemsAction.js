@@ -44,11 +44,7 @@ export const mockMenu = menuList => dispatch => dispatch({
 
 export const fetchMenus = (startDate, endDate) => (dispatch) => {
   dispatch(fetchMenusLoading(true));
-  return axios.get(`${baseUrl}/admin/menus/lunch/${startDate}/${endDate}`, {
-    headers: {
-      'X-Location': 1
-    }
-  })
+  return axios.get(`${baseUrl}/admin/menus/lunch/${startDate}/${endDate}`)
     .then(response => {
       const { payload } = response.data;
 
@@ -78,11 +74,7 @@ const deleteMenuItemSuccess = menuId => ({
 
 export const deleteMenuItem = menuId => dispatch => {
   dispatch(deleteMenuItemLoading(true));
-  return axios.delete(`${baseUrl}/admin/menu/${menuId}`, {
-    headers: {
-      'X-Location': 1
-    }
-  })
+  return axios.delete(`${baseUrl}/admin/menu/${menuId}`)
     .then(() => {
       toastSuccess('Deleted Successfully');
       dispatch(deleteMenuItemSuccess(menuId));
@@ -107,11 +99,7 @@ const fetchVendorEngagementFailure = payload => ({
 });
 
 export const fetchVendorEngagements = () => dispatch => axios
-  .get(`${baseUrl}/engagements/`, { 
-    headers: { 
-      'X-Location': 1 
-    }
-  })
+  .get(`${baseUrl}/engagements/`)
   .then((response) => {
     const { payload } = response.data;
     dispatch(fetchVendorEngagementSuccess(payload));
@@ -130,11 +118,7 @@ const fetchMealItemsFailure = payload => ({
 });
 
 export const fetchMealItems = () => dispatch => axios
-  .get(`${baseUrl}/meal-items/`, { 
-    headers: { 
-      'X-Location': 1 
-    } 
-  })
+  .get(`${baseUrl}/meal-items/`)
   .then((response) => {
     const { payload } = response.data;
     dispatch(fetchMealItemsSuccess(payload));
@@ -161,11 +145,7 @@ const createMenuFailure = message => ({
 export const createMenu = (menu) => dispatch => {
   dispatch(createMenuLoading(true));
 
-  return axios.post(`${baseUrl}/admin/menus/`, menu, { 
-    headers: { 
-      'X-Location': 1 
-    } 
-  })
+  return axios.post(`${baseUrl}/admin/menus/`, menu)
     .then((response) => {
       const { msg, payload } = response.data;
       toastSuccess(msg);

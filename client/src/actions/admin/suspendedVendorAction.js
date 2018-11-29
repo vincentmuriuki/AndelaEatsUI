@@ -31,11 +31,7 @@ export const fetchSuspensionFailure = error => ({
 export const fetchSuspensions = () => dispatch => {
   dispatch(fetchSuspensionLoading(true));
 
-  return axios.get(`${baseUrl}/vendors/suspended/`, {
-    headers: {
-      'X-Location': 1
-    }
-  })
+  return axios.get(`${baseUrl}/vendors/suspended/`)
     .then(response => {
       dispatch(fetchSuspensionSuccess(response.data.payload.vendors));
       dispatch(fetchSuspensionLoading(false));
@@ -69,9 +65,6 @@ export const unsuspendVendor = (vendorId) => dispatch => {
 
   const options = {
     method: 'PATCH',
-    headers: {
-      'X-Location': 1
-    },
     url
   };
 

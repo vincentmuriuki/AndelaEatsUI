@@ -39,11 +39,7 @@ export const fetchEngagementsFailure = error => ({
 export const fetchEngagements = () => dispatch => {
   dispatch(fetchEngagementsLoading(true));
 
-  return axios.get(`${baseUrl}/engagements/`, {
-    headers: {
-      'X-Location': 1
-    }
-  })
+  return axios.get(`${baseUrl}/engagements/`)
     .then(response => {
       dispatch(fetchEngagementsSuccess(response.data.payload.engagements));
       dispatch(fetchEngagementsLoading(false));
@@ -65,11 +61,7 @@ export const fetchVendorsFailure = error => ({
 });
 
 export const fetchVendors = () => dispatch => {
-  return axios.get(`${baseUrl}/vendors/`, {
-    headers: {
-      'X-Location': 1
-    }
-  })
+  return axios.get(`${baseUrl}/vendors/`)
     .then((res) => {
       dispatch(fetchVendorsSuccess(res.data.payload.vendors));
     })
@@ -100,9 +92,6 @@ export const createEngagement = engagementDetails => dispatch => {
 
   const options = {
     method: 'POST',
-    headers: {
-      'X-Location': 1
-    },
     data: engagementDetails,
     url
   };
@@ -141,11 +130,7 @@ export const deleteEngagementFailure = error => ({
 export const deleteEngagement = (engagementId) => dispatch => {
   dispatch(deleteEngagementsLoading(true));
 
-  return axios.delete(`${baseUrl}/engagements/${engagementId}`, {
-    headers: {
-      'X-Location': 1
-    }
-  })
+  return axios.delete(`${baseUrl}/engagements/${engagementId}`)
     .then((res) => {
       toastSuccess(res.data.msg);
       dispatch(deleteEngagementsSuccess(engagementId));
@@ -181,9 +166,6 @@ export const editEngagement = (engagementId, engagementDetails) => dispatch => {
 
   const options = {
     method: 'PATCH',
-    headers: {
-      'X-Location': 1
-    },
     data: engagementDetails,
     url
   };

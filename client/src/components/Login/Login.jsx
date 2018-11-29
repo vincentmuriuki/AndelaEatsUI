@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import logo from '../../assets/images/logo.png';
+import Select from 'react-select';
 import 
 backgroundImg 
   from '../../assets/images/google-logo-icon-PNG-Transparent-Background.png';
@@ -30,7 +31,13 @@ class Login extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      selectedOption: null
+    };
+  }
+
+  handleChange = selectedOption => {
+    this.setState({ selectedOption });
   }
 
   /**
@@ -49,6 +56,15 @@ class Login extends Component {
 
     const loginError = localStorage.getItem('error');
     const message = 'Unauthorised Access, Please Log in with an Andela Email';
+
+    const countryLocation = [
+      { value: 'lagos', label: 'Lagos', location: 1 },
+      { value: 'nairobi', label: 'Nairobi', location: 2 },
+      { value: 'kampala', label: 'Kampala', location: 3 }
+    ]
+
+    const { selectedOption } = this.state;
+    selectedOption && localStorage.setItem('location', selectedOption.location)
 
     // Display Login Error
     if (loginError) {
@@ -75,19 +91,33 @@ class Login extends Component {
               <br /> 
                 order your meals
             </div>
-            <a href={redirectUrl}>
-              <div className="google-button">
-                <div className="google-img">
-                  <img 
-                    src={backgroundImg}
-                    alt="google-logo"
-                  />
-                </div>
-                <div className="login-button">
-                  LOGIN WITH GOOGLE
-                </div>
+
+            <div className="action-wrapper">
+              <div className="select-button">
+                <Select 
+                  value={selectedOption}
+                  onChange={this.handleChange}
+                  options={countryLocation}
+                  placeholder="Select a Location"
+                />
               </div>
-            </a>
+
+              {selectedOption &&
+                <a href={redirectUrl}>
+                <div className="google-button">
+                  <div className="google-img">
+                    <img 
+                      src={backgroundImg}
+                      alt="google-logo"
+                    />
+                  </div>
+                  <div className="login-button">                
+                      LOGIN WITH GOOGLE
+                  </div>
+                </div>
+                </a>
+              }
+            </div>
             <ToastContainer />
           </div>
           <div className="login-picture-frame" />

@@ -121,11 +121,7 @@ export const fetchMenuFailure = error => ({
 export const fetchMenu = (startDate, endDate) => dispatch => {
   dispatch(fetchMenuLoading(true));
 
-  return axios.get(`${baseUrl}/menus/lunch/${startDate}/${endDate}`, {
-    headers: {
-      'X-Location': 1
-    }
-  })
+  return axios.get(`${baseUrl}/menus/lunch/${startDate}/${endDate}`)
     .then(response => {
       dispatch(fetchMenuSuccess(response.data.payload.menuList));
       dispatch(fetchMenuLoading(false));
@@ -156,11 +152,7 @@ export const setOrdersLoading = (isLoading) => ({
 
 export const fetchUserOrders = (startDate, endDate) => (dispatch) => {
   dispatch(setOrdersLoading(true));
-  return axios.get(`${baseUrl}/orders/user/${userID}/${startDate}/${endDate}`, {
-    headers: {
-      'X-Location': 1
-    }
-  })
+  return axios.get(`${baseUrl}/orders/user/${userID}/${startDate}/${endDate}`)
     .then((response) => {
       dispatch(setOrdersSuccess(response.data.payload.orders));
       dispatch(setOrdersLoading(false));
@@ -197,9 +189,6 @@ export const createOrder = orderDetails => dispatch => {
 
   const options = {
     method: 'POST',
-    headers: {
-      'X-Location': 1
-    },
     data: orderDetails,
     url
   };

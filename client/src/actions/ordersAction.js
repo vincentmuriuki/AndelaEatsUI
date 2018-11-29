@@ -78,11 +78,7 @@ export const getOrderSuccess = (order) => ({
 export const fetchOrders = (startDate, endDate, page = 1, limit = 9) => (dispatch) => {
   dispatch(setOrdersLoading(true));
 
-  return axios.get(`${base}/orders/user/${userID}/${startDate}/${endDate}`, {
-    headers: {
-      'X-Location': 1
-    }
-  })
+  return axios.get(`${base}/orders/user/${userID}/${startDate}/${endDate}`)
     .then((response) => {
       dispatch(setOrdersSuccess(response.data.payload, page));
       dispatch(setOrdersLoading(false));
@@ -98,11 +94,7 @@ export const filterOrders = (order) => (dispatch) => {
   } = order;
 
   dispatch(setOrdersLoading(true));
-  return axios.get(`${base}/orders/user/${userID}/${startDate}/${endDate}`, {
-    headers: {
-      'X-Location': 1
-    }
-  }) //eslint-disable-line
+  return axios.get(`${base}/orders/user/${userID}/${startDate}/${endDate}`) //eslint-disable-line
     .then((response) => {
       dispatch(setFilteredOrders(response.data.payload, page));
       dispatch(setOrdersLoading(false));
@@ -115,11 +107,7 @@ export const filterOrders = (order) => (dispatch) => {
 
 export const deleteOrder = (id) => (dispatch) => {
   dispatch(deleteOrdersLoading(true));
-  return axios.delete(`${base}/orders/${id}`, {
-    headers: {
-      'X-Location': 1
-    }
-  })
+  return axios.delete(`${base}/orders/${id}`)
     .then((response) => {
       toast.success(response.data.msg)
       dispatch(deleteOrdersSuccess(id));
@@ -195,9 +183,6 @@ export const createRating = ratingDetails => dispatch => {
 
   const options = {
     method: 'POST',
-    headers: {
-      'X-Location': 1
-    },
     data: ratingDetails,
     url
   };

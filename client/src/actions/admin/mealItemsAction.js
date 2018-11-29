@@ -37,11 +37,7 @@ export const fetchMealItemsSuccess = (mealItems, pagination) => ({
 
 export const fetchMealItems = (page = 1) => dispatch => {
   dispatch(fectchMealItemsLoading(true));
-  return axios.get(`${apiBaseUrl}/meal-items/?page=${page}`, {
-    headers: {
-      'X-Location': 1
-    }
-  })
+  return axios.get(`${apiBaseUrl}/meal-items/?page=${page}`)
     .then((response) => {
       const { meta: pagination, mealItems } = response.data.payload;
       dispatch(fetchMealItemsSuccess(mealItems, pagination));
@@ -87,11 +83,7 @@ export const addMealItem = formData => dispatch => {
       const reqdata = { ...rest, image: url };
 
       return (
-        axios.post(`${apiBaseUrl}/meal-items/`, reqdata, {
-          headers: {
-            'X-Location': 1
-          }
-        })
+        axios.post(`${apiBaseUrl}/meal-items/`, reqdata)
           .then((response) => {
             const { mealItem } = response.data.payload;
             dispatch(addMealItemSuccess(mealItem));
@@ -123,9 +115,7 @@ export const deleteMealItemSuccess = mealItemId => ({
 
 export const deleteMealItem = (mealItemId) => dispatch => {
   dispatch(deleteMealItemLoading(true));
-  return axios.delete(`${apiBaseUrl}/meal-items/${mealItemId}`, {
-    headers: { 'X-Location': 1 }
-  })
+  return axios.delete(`${apiBaseUrl}/meal-items/${mealItemId}`)
     .then(() => {
       toastSuccess("Deleted successfully");
       dispatch(deleteMealItemSuccess(mealItemId));
@@ -163,9 +153,7 @@ export const editMealItem = (mealItemId, formData) => dispatch => {
       const { file, dataurl, ...rest } = formData;
       const reqdata = { ...rest, image: url };
       return (
-        axios.put(`${apiBaseUrl}/meal-items/${mealItemId}`, reqdata, { 
-          headers: { 'X-Location': 1 }
-        })
+        axios.put(`${apiBaseUrl}/meal-items/${mealItemId}`, reqdata)
           .then(response => {
             const { mealItem } = response.data.payload;
             toastSuccess("Meal item updated successfully");

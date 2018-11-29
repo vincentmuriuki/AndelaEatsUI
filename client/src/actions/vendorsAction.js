@@ -37,11 +37,7 @@ export const fetchVendorsFailure = error => ({
 export const fetchVendors = () => dispatch => {
   dispatch(fetchVendorsLoading(true));
 
-  return axios.get(`${baseUrl}/vendors/`, {
-    headers: {
-      'X-Location': 1
-    }
-  })
+  return axios.get(`${baseUrl}/vendors/`)
     .then((res) => {
       dispatch(fetchVendorsSuccess(res.data.payload.vendors));
       dispatch(fetchVendorsLoading(false));
@@ -75,9 +71,6 @@ export const createVendor = (vendorDetails) => dispatch => {
 
   const options = {
     method: 'POST',
-    headers: {
-      'X-Location': 1
-    },
     data: vendorDetails,
     url
   };
@@ -121,9 +114,6 @@ export const suspendVendor = (vendorId) => dispatch => {
 
   const options = {
     method: 'PATCH',
-    headers: {
-      'X-Location': 1
-    },
     url
   };
 
@@ -165,9 +155,6 @@ export const updateVendor = (id, vendorDetails) => dispatch => {
 
   const options = {
     method: 'PUT',
-    headers: {
-      'X-Location': 1
-    },
     data: vendorDetails,
     url
   };

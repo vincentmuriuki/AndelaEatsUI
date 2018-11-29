@@ -36,11 +36,7 @@ export const fetchOrders = (currentPage = '', startDate = '', endDate = '') => d
     url = `${baseUrl}/orders/${startDate}/${endDate}?page=${currentPage}&per_page=15`
   }
 
-  return axios.get(url, {
-    headers: {
-      'X-Location': 1
-    }
-  })
+  return axios.get(url)
     .then((response) => {
       dispatch(fecthOrdersSuccess(response.data.payload));
       dispatch(fecthOrdersLoading(false));
