@@ -157,7 +157,7 @@ OrdersHeader.propTypes = {
   type: PropTypes.number,
   orders: PropTypes.object.isRequired,
   redirectToExport: PropTypes.func,
-  svg: PropTypes.any.isRequired,
+  svg: PropTypes.any,
   title: PropTypes.string.isRequired,
   orders: PropTypes.array
 };

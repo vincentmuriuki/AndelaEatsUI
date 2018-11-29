@@ -17,7 +17,7 @@ class Meal extends Component {
           <div className="menu-checkbox">
             <input
               id={meal.id}
-              type="checkbox"
+              type="radio"
               name={meal.name}
               className="radio-custom"
               onChange={evt => onChange(meal.id, evt.target.checked)}

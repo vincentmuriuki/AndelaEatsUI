@@ -11,20 +11,17 @@ class Ratings extends Component {
 	}
 
 	handleFilterModal = () => {
-		this.setState(prevProps => {
+		this.setState(prevProps => ({
 			isOpen: !prevProps.isOpen
-		})
+		}))
 	}
 
 	handleFilterSubmit = () => {
 		const { end } = this.state;
-		console.log('end', end)
 	}
 
 	render() {
 		const { isOpen, end } = this.state;
-
-		console.log('isOpen', isOpen)
 
 		return (
 			<Fragment>

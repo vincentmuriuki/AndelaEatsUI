@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 const NotCollectedAction = ({
-  id, meal, showModal
+  meal, showModal
 }) => (
   <div className="card-action not-collected">
     <div>
@@ -13,13 +13,6 @@ const NotCollectedAction = ({
     <div className="item">
       <p className="sub-head">Order options</p>
       <div className="button-group">
-        <Link
-          to={{
-            pathname: '/'
-          }}
-          className="button"
-        >Edit
-        </Link>
         <a
           className="button test"
           role="button"
@@ -33,9 +26,7 @@ const NotCollectedAction = ({
 );
 
 NotCollectedAction.propTypes = {
-  id: PropTypes.number,
   meal: PropTypes.shape({
-    id: PropTypes.number,
     mealItems: PropTypes.array,
     rating: PropTypes.number
   }),

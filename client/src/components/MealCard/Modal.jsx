@@ -49,7 +49,6 @@ Modal.propTypes = {
   closeModal: PropTypes.func,
   deleteOrder: PropTypes.func,
   modalContent: PropTypes.shape({
-    id: PropTypes.number,
     mealItems: PropTypes.array
   })
 };

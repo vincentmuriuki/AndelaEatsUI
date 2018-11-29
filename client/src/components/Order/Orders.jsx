@@ -149,7 +149,7 @@ export class Orders extends Component {
         ) : (
           <div className="orders-wrapper">
 
-            <h3>Make Orders</h3>
+            <h3>Make Booking</h3>
 
             <div className="orders-container">
               <div className="date-wrapper">

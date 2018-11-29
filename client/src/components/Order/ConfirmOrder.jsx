@@ -44,7 +44,6 @@ class ConfirmOrder extends Component {
 
       createOrder(newOrder)
         .then(() => {
-          showToast();
           this.props.history.push("/")
         })
         .catch(() => {
@@ -87,9 +86,9 @@ class ConfirmOrder extends Component {
       >
         <div className="modal-content">
           <div className="modal-header">
-            <div className="header-title">CONFIRM ORDER</div>
+            <div className="header-title">CONFIRM BOOKING</div>
             <div className="header-date">
-              <span className="label date-label">Order Date:</span>
+              <span className="label date-label">Booking Date:</span>
               <span className="order-date">
                 {" "}
                 <b>{format(date, "dddd MMMM D")}</b>
@@ -97,7 +96,7 @@ class ConfirmOrder extends Component {
             </div>
           </div>
 
-          <div className="order-details-label">Order Details</div>
+          <div className="order-details-label">Booking Details</div>
 
           <div className="menus-container">
             <div className="main-meal">
@@ -140,7 +139,7 @@ class ConfirmOrder extends Component {
                 className={classname("fill", { isDisabled: isLoading })}
                 onClick={this.confirmOrder}
               >
-                Confirm order
+                Confirm booking
               </button>
             </div>
           </div>

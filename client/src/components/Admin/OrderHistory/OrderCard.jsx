@@ -45,8 +45,7 @@ OrderCard.propTypes = {
   order: PropTypes.shape({
     userId: PropTypes.string.isRequired,
     dateBookedFor: PropTypes.string.isRequired,
-    mealItems: PropTypes.array.isRequired,
-    orderStatus: PropTypes.string.isRequired,
+    mealItems: PropTypes.array.isRequired
   })
 };
 
