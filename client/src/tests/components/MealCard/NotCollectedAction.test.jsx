@@ -27,11 +27,4 @@ describe('NotCollectedAction Component', () => {
     expect(wrapper).toMatchSnapshot();
     expect(wrapper.length).toEqual(1);
   });
-
-  it('should call showModal method from prop', () => {
-    const buttonSpy = jest.spyOn(props, 'showModal');
-    wrapper = shallow(<NotCollectedAction {...props} />);
-    wrapper.find('.button.test').simulate('click');
-    expect(buttonSpy).toHaveBeenCalled();
-  });
 });

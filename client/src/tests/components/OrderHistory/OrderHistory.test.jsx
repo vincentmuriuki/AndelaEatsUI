@@ -103,7 +103,8 @@ describe('Component: Orders', () => {
         showModal: false,
         showRatingModal: false,
         start: "",
-        textArea: ""
+        textArea: "",
+        modalTitle: ""
       });
     });
 

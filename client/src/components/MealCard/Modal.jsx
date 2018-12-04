@@ -5,16 +5,18 @@ const Modal = ({
   displayModal,
   closeModal,
   deleteOrder,
-  modalContent
+  modalContent,
+  modalTitle,
+  tapOrder
 }) => (
   <div className="modal" style={(displayModal) ? { display: 'block' } : { display: 'none' }}>
     { displayModal
       ? (
         <div className="modal-content">
           <div className="modal-header">
-            <div className="header-title">Delete Order</div>
+            <div className="header-title">{modalTitle}</div>
           </div>
-          <h3>{`Permanently delete ${modalContent.mealItems[0].name}, ${modalContent.mealItems[1].name} and ${modalContent.mealItems[2].name} order?`}</h3>
+          <h3>{`${modalContent.mealItems[0].name}, ${modalContent.mealItems[1].name} and ${modalContent.mealItems[2].name}?`}</h3>
           <span className="warning">This cannot be undone</span>
           <div className="modal-footer">
             <div className="cta">
@@ -26,13 +28,22 @@ const Modal = ({
                 >
                   Cancel
                 </button>
-                <button
-                  type="button"
-                  className="fill upper delete-order"
-                  onClick={() => deleteOrder(modalContent.id)}
-                >
-                  Delete
-                </button>
+                {modalTitle === 'Collect Order' ? (
+                  <button
+                    type="button"
+                    className="fill upper delete-order"
+                    onClick={() => tapOrder(modalContent)}
+                  >
+                    Collect
+                  </button>) : (
+                  <button
+                    type="button"
+                    className="fill upper delete-order"
+                    onClick={() => deleteOrder(modalContent.id)}
+                  >
+                    Delete
+                  </button>)
+                }
               </div>
             </div>
           </div>
@@ -41,7 +52,7 @@ const Modal = ({
       : null
     }
   </div>
-);
+)
 
 
 Modal.propTypes = {

@@ -9,7 +9,8 @@ import {
   updateOrder,
   updateOrderSuccess,
   getOrderByDate,
-  userID
+  userID,
+  collectOrder
 } from '../../actions/ordersAction';
 
 import {
@@ -23,7 +24,10 @@ import {
   EDIT_ORDER_SUCCESS,
   UPDATE_ORDER_SUCCESS,
   GET_ORDER_SUCCESS,
-  MENU_IS_LOADING
+  MENU_IS_LOADING,
+  COLLECT_ORDER_LOADING,
+  COLLECT_ORDER_SUCCESS,
+  COLLECT_ORDER_FAILURE
 } from '../../actions/actionTypes';
 
 const id = '123';
@@ -39,6 +43,7 @@ describe('Order actions', () => {
 
   const startDate = '2018-11-21';
   const endDate = '2018-12-02';
+  const orderDetails = {}
 
   it('fetch past orders success', async (done) => {
     moxios.stubRequest(`${base}/orders/user/${userID}/${startDate}/${endDate}`, {
@@ -80,13 +85,66 @@ describe('Order actions', () => {
       },
       {
         type: FETCH_ORDERS_FAILURE,
-        error: new Error("Request failed with status code 401")
+        error: "Request failed with status code 401"
       }, {
         type: FETCH_ORDERS_LOADING,
         isLoading: false
       }];
     const store = mockStore({});
     await store.dispatch(fetchOrders(startDate, endDate, 1, 9))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    done();
+  });
+
+  it('tabs an order success', async (done) => {
+    moxios.stubRequest(`${base}/orders/collect`, {
+      status: 200,
+      response: {
+        payload: {
+          order: []
+        }
+      }
+    });
+    const expectedActions = [
+      {
+        type: COLLECT_ORDER_LOADING,
+        payload: true
+      },
+      {
+        type: COLLECT_ORDER_SUCCESS,
+        payload: []
+      }, {
+        type: COLLECT_ORDER_LOADING,
+        payload: false
+      }];
+    const store = mockStore({});
+    await store.dispatch(collectOrder(orderDetails))
+      .then(() => {
+        expect(store.getActions()).toEqual(expectedActions);
+      });
+    done();
+  });
+
+  it('fetch past orders failure', async (done) => {
+    moxios.stubRequest(`${base}/orders/collect`, {
+      status: 401
+    });
+    const expectedActions = [
+      {
+        type: COLLECT_ORDER_LOADING,
+        payload: true
+      },
+      {
+        type: COLLECT_ORDER_FAILURE,
+        payload: "Request failed with status code 401"
+      }, {
+        type: COLLECT_ORDER_LOADING,
+        payload: false
+      }];
+    const store = mockStore({});
+    await store.dispatch(collectOrder(orderDetails))
       .then(() => {
         expect(store.getActions()).toEqual(expectedActions);
       });

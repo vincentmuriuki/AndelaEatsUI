@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify';
+import { toastSuccess, toastError } from '../helpers/toast';
 
 import axios from 'axios';
 import {
@@ -14,7 +15,10 @@ import {
   GET_ORDER_SUCCESS,
   CREATE_MENU_RATING_LOADING,
   CREATE_MENU_RATING_SUCCESS,
-  CREATE_MENU_RATING_FAILURE
+  CREATE_MENU_RATING_FAILURE,
+  COLLECT_ORDER_LOADING,
+  COLLECT_ORDER_SUCCESS,
+  COLLECT_ORDER_FAILURE
 } from './actionTypes';
 import { config } from '../config';
 import { setMenuLoading } from './menuAction';
@@ -83,7 +87,7 @@ export const fetchOrders = (startDate, endDate, page = 1, limit = 9) => (dispatc
       dispatch(setOrdersSuccess(response.data.payload, page));
       dispatch(setOrdersLoading(false));
     }).catch((error) => {
-      dispatch(setOrdersFailure(error));
+      dispatch(setOrdersFailure(error.message));
       dispatch(setOrdersLoading(false));
     });
 };
@@ -196,6 +200,47 @@ export const createRating = ratingDetails => dispatch => {
     .catch((error) => {
       dispatch(createRatingFailure(error));
       dispatch(createRatingLoading(false));
+    });
+};
+
+
+export const collectOrderLoading = isLoading => ({
+  type: COLLECT_ORDER_LOADING,
+  payload: isLoading
+});
+
+export const collectOrderSuccess = orderDetails => ({
+  type: COLLECT_ORDER_SUCCESS,
+  payload: orderDetails,
+});
+
+export const collectOrderFailure = error => ({
+  type: COLLECT_ORDER_FAILURE,
+  payload: error
+});
+
+
+export const collectOrder = orderDetails => dispatch => {
+  dispatch(collectOrderLoading(true));
+  const url = `${base}/orders/collect`;
+
+  const options = {
+    method: 'POST',
+    data: orderDetails,
+    url
+  };
+
+  return axios(options)
+    .then((response) => {
+      const { msg: message, payload: { order  } } = response.data;
+      toastSuccess(message)
+      dispatch(collectOrderSuccess(order ));
+      dispatch(collectOrderLoading(false));
+    })
+    .catch((error) => {
+      toastError(error.message)
+      dispatch(collectOrderFailure(error.message));
+      dispatch(collectOrderLoading(false));
     });
 };
 

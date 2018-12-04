@@ -20,7 +20,8 @@ import {
   fetchOrders,
   filterOrders,
   deleteOrder,
-  createRating
+  createRating,
+  collectOrder
 } from '../../actions/ordersAction';
 
 import { validateDate } from '../../helpers/dateFormatter';
@@ -47,7 +48,8 @@ export class Orders extends Component {
       modalContent: null,
       showRatingModal: false,
       textArea: '',
-      newRating: 0
+      newRating: 0,
+      modalTitle: ''
     };
 
     this.onChange = this.onChange.bind(this);
@@ -176,7 +178,7 @@ export class Orders extends Component {
   }
 
   /**
-   * Display a modal to delete a meal
+   * Display a modal to rate a meal
    *
    * @param {object} meal
    * @memberof Orders
@@ -191,17 +193,18 @@ export class Orders extends Component {
   }
 
    /**
-   * Display a modal to rate a meal
+   * Display a modal
    *
    * @param {object} meal
    * @memberof Orders
    *
    * @returns {void}
    */
-  showModal(meal) {
+  showModal(meal, modalTitle) {
     this.setState({
       modalContent: meal,
-      showModal: true
+      showModal: true,
+      modalTitle
     });
   }
 
@@ -216,6 +219,16 @@ export class Orders extends Component {
   deleteOrder(id) {
     this.props.deleteOrder(id)
       .then(() => this.hideModal());
+  }
+
+  tapOrder = (modalContent) => {
+    const orderDetails = {
+      orderDate: format(modalContent.dateBookedFor, 'YYYY-MM-DD'),
+      orderType: modalContent.mealPeriod,
+      userId: modalContent.userId
+    }
+    this.props.collectOrder(orderDetails)
+      .then(() => window.location.reload())
   }
 
   /**
@@ -279,10 +292,8 @@ export class Orders extends Component {
 
     if ( newRating && textArea ) {
       this.props.createRating(ratingDetails)
-        .then(() => {
-          toast.success('Your Feedback has been noted');
-          this.hideModal()
-        });
+        .then(() => toast.success('Your Feedback has been noted'))
+        .then(() => window.location.reload());
     }
   }
 
@@ -304,7 +315,8 @@ export class Orders extends Component {
       showRatingModal,
       modalContent,
       textArea,
-      newRating
+      newRating,
+      modalTitle
     } = this.state;
 
     return (
@@ -389,6 +401,8 @@ export class Orders extends Component {
             closeModal={this.hideModal}
             deleteOrder={this.deleteOrder}
             modalContent={this.state.modalContent}
+            modalTitle={modalTitle}
+            tapOrder={this.tapOrder}
           />
           <RatingModal
             displayModal={showRatingModal}
@@ -471,7 +485,7 @@ const mapStateToProps = state => ({
 });
 
 const actionCreators = {
-  fetchOrders, filterOrders, deleteOrder, createRating
+  fetchOrders, filterOrders, deleteOrder, createRating, collectOrder
 };
 
 export default connect(mapStateToProps, actionCreators)(Orders);
