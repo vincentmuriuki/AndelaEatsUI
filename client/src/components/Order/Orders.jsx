@@ -101,6 +101,7 @@ export class Orders extends Component {
         menuDate =>
           validateDate(menuDate, endDate()) && (
             <li
+              onClick={() => this.props.resetMenu()}
               key={menuDate.date}
               className={canOrderMeal(menuDate) ? "dates" : "dates-disable"}
             >

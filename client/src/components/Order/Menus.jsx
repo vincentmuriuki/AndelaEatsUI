@@ -63,7 +63,13 @@ export class Menus extends Component {
     };
   }
 
-
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      mainMeal: nextProps.mealSelected.mainMeal,
+      acc1: nextProps.mealSelected.firstAccompaniment,
+      acc2: nextProps.mealSelected.secondAccompaniment
+    })
+  }
 
   /**
    * Resets Menus to default.
@@ -75,17 +81,15 @@ export class Menus extends Component {
     this.setState({
       selectedMainMealId: "",
       mainMeal: "",
-      proteins: "",
-      sides: ""
+      acc1: "",
+      acc2: ""
     });
   };
 
 
   updateSelection = (mealCategory, mealId, id) => {
     this.props.selectMeal({ prop: mealCategory, value: mealId });
-
     this.setState({ [mealCategory]: mealId, updated: true });
-    
     if (mealCategory === "mainMeal") {
       this.props.selectMenuListId(id)
       this.props.setSelectedMenu(id)
@@ -113,11 +117,8 @@ export class Menus extends Component {
       isLoading,
       mealSelected
     } = this.props;
-
     const { updated, mainMeal, proteins, sides, menuId, acc1, acc2 } = this.state;
-
     const menusLists = getMenu(data, match.params.date);
-
     const newList = menusLists && menusLists.menus.filter(menu => menu.id === menuId);
 
     return (
