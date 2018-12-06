@@ -38,7 +38,7 @@ const DeleteEngagementModal = ({
                 disabled={isDeleting}
                 onClick={() => deleteEngagement(modalContent.id)}
               >
-                Suspend
+                Delete
               </button>
             </div>
           </div>

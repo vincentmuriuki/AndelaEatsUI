@@ -74,7 +74,7 @@ const deleteMenuItemSuccess = menuId => ({
 
 export const deleteMenuItem = menuId => dispatch => {
   dispatch(deleteMenuItemLoading(true));
-  return axios.delete(`${baseUrl}/admin/menu/${menuId}`)
+  return axios.delete(`${baseUrl}/admin/menus/${menuId}`)
     .then(() => {
       toastSuccess('Deleted Successfully');
       dispatch(deleteMenuItemSuccess(menuId));

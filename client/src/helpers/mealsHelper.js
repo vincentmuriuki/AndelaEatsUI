@@ -8,7 +8,7 @@ export const canOrderMeal = (day) => {
   const tomorrowsDate = new Date(day.date);
   const timeLeft = Math.floor((tomorrowsDate - todaysDate) / 3600 / 1000);
 
-  if (dueTime < timeLeft && timeLeft < 144) {
+  if (dueTime < timeLeft && timeLeft < 184) {
     return true;
   } 
   return false;
@@ -69,7 +69,7 @@ export const generateFormData = (mealDetails, types) => {
 };
 
 export const endDate = () => new Date(today.getFullYear(), 
-  today.getMonth(), today.getDate() + 8);
+  today.getMonth(), today.getDate() + 10);
 
 export const findUpdatedIndex = (prevState, updatedId) => (
   prevState.findIndex(item => item.id === updatedId)

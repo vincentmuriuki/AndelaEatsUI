@@ -43,7 +43,7 @@ export class Orders extends Component {
 
   componentDidMount() {
     const startDate = format(new Date, 'YYYY-MM-DD');
-    const endDate = format(addDays(new Date, 7), 'YYYY-MM-DD');
+    const endDate = format(addDays(new Date, 10), 'YYYY-MM-DD');
 
     this.props.fetchMenu(startDate, endDate).then(() => {
       this.props.fetchUserOrders(startDate, endDate);
@@ -150,7 +150,6 @@ export class Orders extends Component {
         ) : (
           <div className="orders-wrapper">
 
-            <h3>Make Booking</h3>
 
             <div className="orders-container">
               <div className="date-wrapper">

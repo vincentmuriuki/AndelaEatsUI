@@ -305,7 +305,7 @@ class Menus extends Component {
                 deleteMenu={this.deleteMenu}
                 closeModal={this.closeModal}
                 deleting={isDeleting}
-                {...menuDetails}
+                menuDetails={menuDetails}
               />)}
             </Fragment>
           )
@@ -322,7 +322,7 @@ class Menus extends Component {
    * @memberof Menus
    */
   renderRows = () => {
-    const { menuList, dateOfMeal } = this.props.menus;
+    const { menuList } = this.props.menus;
     return menuList.map(menuItem => {
       const {
         mainMealId,
@@ -332,14 +332,15 @@ class Menus extends Component {
         sideItems,
         proteinItems,
         allowedSide,
-        allowedProtein
+        allowedProtein,
+        date
       } = menuItem;
 
       return (
         <div key={id} className="ct-row">
           <div className="ct-wrap">
             <div className="custom-col-5">
-              { formatMenuItemDate(dateOfMeal) }
+              { formatMenuItemDate(date) }
             </div>
             <div className="custom-col-4">{mainMeal.name}</div>
             
@@ -358,9 +359,9 @@ class Menus extends Component {
                 <span>Edit</span>
               </Link>
 
-              <Link to="#" onClick={() => this.showDeleteModal(menuItem)}>
-                <span>Delete</span>
-              </Link>
+              <span to="#" onClick={() => this.showDeleteModal(menuItem)}>
+                Delete
+              </span>
             </div>
           </div>
         </div>

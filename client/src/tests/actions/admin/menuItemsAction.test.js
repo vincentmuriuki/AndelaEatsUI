@@ -110,7 +110,7 @@ describe('Admin::Menu Items Action', () => {
     });
 
     it('delete menu item success', async (done) => {
-      moxios.stubRequest(`${baseUrl}/admin/menu/2`, {
+      moxios.stubRequest(`${baseUrl}/admin/menus/2`, {
         status: 200,
         response: {}
       });
@@ -140,7 +140,7 @@ describe('Admin::Menu Items Action', () => {
     });
 
     it('delete menu item failure', async (done) => {
-      moxios.stubRequest(`${baseUrl}/admin/menu/2`, {
+      moxios.stubRequest(`${baseUrl}/admin/menus/2`, {
         status: 400,
         response: {
           msg: 'Access Error - Permission Denied'

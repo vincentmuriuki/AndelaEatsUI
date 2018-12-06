@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 
-import decodedToken from '../../../helpers/jwtDecode.js'
-
 const OrderCard = ({ order: { userId, dateBookedFor, mealItems, orderStatus } }) => {
   return (
   <div className={
@@ -14,10 +12,7 @@ const OrderCard = ({ order: { userId, dateBookedFor, mealItems, orderStatus } })
     <div className="table-row">
       <div className="custom-row">
         <div className="custom-col-4">
-          { userId === decodedToken().id ?
-            `${decodedToken().firstName} ${decodedToken().lastName}` :
-             ''
-          }
+          { userId }
         </div>
         <div className={`custom-col-${orderStatus ? 2 : 3}`}>
           { format(dateBookedFor, 'YYYY-MM-DD') }
