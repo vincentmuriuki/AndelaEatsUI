@@ -33,6 +33,7 @@ const MealCard = ({
 
       <div className="controls">
         <button
+          className="edit-meal-item"
           type="button"
           onClick={() => {
             showEditModal({
@@ -43,6 +44,7 @@ const MealCard = ({
         Edit
         </button>
         <button
+          className="delete-meal-item"
           type="button"
           onClick={() => showDeleteModal({ id, name })}
         >

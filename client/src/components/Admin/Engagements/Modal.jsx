@@ -41,11 +41,12 @@ const Modal = ({
         <div>
           <div className="form-field-set">
             <label htmlFor="vendorId">Vendor
-              <Select 
+              <Select
                 value={selectedOption}
                 onChange={(data) => onChange(data, "selectedOption")}
                 options={vendorsResult}
               />
+              <span className="vendor-name-validation">* Required</span>
             </label>
           </div>
           <div className="form-field-set">

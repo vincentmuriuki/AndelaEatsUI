@@ -19,8 +19,8 @@
 
       .button {
         @include buttons(
-          $color-white,
           $color-blue,
+          $color-white,
           px-to-rem(7px) px-to-rem(18px),
           px-to-rem(17px),
           1px solid $color-blue

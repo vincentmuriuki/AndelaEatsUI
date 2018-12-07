@@ -47,8 +47,7 @@ export class Engagements extends Component {
     this.props.fetchEngagements();
     this.props.fetchVendors();
   }
-  
-  
+
   /**
    * Handles input fields text changes
    *
@@ -86,10 +85,16 @@ export class Engagements extends Component {
         vendorId: selectedOption.vendorId,
         startDate: formatDate(startDate),
         endDate: formatDate(endDate)
-      } 
+      }
       if(modalTitle === "ADD ENGAGEMENT") {
-        this.props.createEngagement(engagement)
-        .then(() => this.closeModal());
+        if(selectedOption.vendorId !== 0){
+          this.props.createEngagement(engagement)
+          .then(() => this.closeModal());
+        } else {
+          toast.error('Vendor name is missing', {
+            position: toast.POSITION.TOP_CENTER
+          });
+        }
       } else {
         this.props.editEngagement(engagementId, engagement)
         .then(() => this.closeModal())

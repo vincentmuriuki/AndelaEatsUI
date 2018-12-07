@@ -17,7 +17,7 @@
     border-radius: px-to-rem(4px);
     border: none;
     top: 25%;
-    width: 70%;
+    width: 50%;
     padding: 40px;
     margin: auto;
     border-radius: 4px;
@@ -55,8 +55,8 @@
 
       button {
         @include buttons(
-          $color-white,
           $color-blue,
+          $color-white,
           px-to-rem(10px) px-to-rem(18px) px-to-rem(7px), 
           px-to-rem(16px),
           1px solid $color-blue
@@ -66,6 +66,7 @@
         font-weight: 300;
 
         &.grayed {
+          background: none;
           border-color: $color-medium-gray;
           color: $color-medium-gray;
           margin-right: 20px;
@@ -83,4 +84,10 @@
       }
     }
   }
+}
+
+.vendor-name-validation {
+  color: red;
+  margin-top: 5px;
+  display: none;
 }

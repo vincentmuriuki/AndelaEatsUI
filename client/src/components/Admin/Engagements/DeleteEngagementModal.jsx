@@ -17,7 +17,7 @@ const DeleteEngagementModal = ({
       ? (
         <div className="modal-content">
           <div className="modal-header">
-            <div className="header-title">Suspend Engagement</div>
+            <div className="header-title">Delete Engagement</div>
           </div>
           <h3>{`Permanently delete Engagement`}</h3>
           <span className="warning">This cannot be undone</span>

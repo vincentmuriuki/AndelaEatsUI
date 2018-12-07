@@ -25,7 +25,7 @@ const CollectedAction = ({ rating, meal, showRatingModal }) => (
           tabIndex="0"
           role="button"
           onClick={() => showRatingModal(meal)}
-        >Rate
+        >RATE
         </a>
       </div>
       )}

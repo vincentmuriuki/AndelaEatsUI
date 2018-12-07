@@ -13,11 +13,12 @@ const RatingModal = ({
   onChange,
   handleSubmit
 }) => {
+
 	return (
 		<div
-        className="modal"
-        style={displayModal ? { display: "block" } : { display: "none" }}
-      >
+      className="modal"
+      style={displayModal ? { display: "block" } : { display: "none" }}
+    >
         {displayModal ? (
           <div className="rating-modal-content">
             <div className="rating-modal-wrapper">
@@ -25,6 +26,37 @@ const RatingModal = ({
                 <div className="rating header-title">
                   Rate Meal for { format(modalContent.dateBookedFor, 'dddd, Do MMMM YYYY') }
                 </div>
+              </div>
+
+            <form onSubmit={handleSubmit}>
+              <div className="average-rating">
+                <ReactStars
+                  value={newRating}
+                  count={5}
+                  size={20}
+                  color2="#54a61e"
+                  half={false}
+                  onChange={ratingChanged}
+                />
+                <div className="text">Average Rating</div>
+                <span className="validate-rating">
+                  * Required
+                </span>
+              </div>
+              <div className="comment-area">
+                <div className="text">Leave a comment</div>
+                <textarea
+                  className="comment-textarea"
+                  value={textArea}
+                  onChange={onChange}
+                  name="textArea"
+                  maxLength="40"
+                />
+                <span className="validate-rating">
+                  * Required
+                </span>
+              </div>
+              <div className="modal-footer">
                 <button
                   type="button"
                   className="grayed upper"
@@ -32,40 +64,14 @@ const RatingModal = ({
                 >
                   Cancel
                 </button>
+                <button
+                  type="submit"
+                  className="submit-comment"
+                >
+                  Submit
+                </button>
               </div>
-
-             <form onSubmit={handleSubmit}>
-              <div className="average-rating">
-                  <ReactStars
-                    value={newRating}
-                    count={5}
-                    size={20}
-                    color2="#54a61e"
-                    half={false}
-                    onChange={ratingChanged}
-                  />
-                  <div className="text">Average Rating</div>
-                </div>
-                <div className="comment-area">
-                  <div className="text">Leave a comment</div>
-                  <textarea
-                    className="comment-textarea"
-                    value={textArea}
-                    onChange={onChange}
-                    name="textArea"
-                    maxLength="40"
-                  />
-                </div>
-                <div className="modal-footer">
-                      <button
-                        type="submit"
-                        className="submit-comment"
-                      >
-                        Submit Rating
-                      </button>
-                    </div>
-
-             </form>
+            </form>
             </div>
           </div>
         ) : null}

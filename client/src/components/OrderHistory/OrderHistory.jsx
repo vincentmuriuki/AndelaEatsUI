@@ -292,11 +292,23 @@ export class Orders extends Component {
 
     if ( newRating && textArea ) {
       this.props.createRating(ratingDetails)
-        .then(() => toast.success('Your Feedback has been noted'))
-        .then(() => window.location.reload());
+        .then(() => {
+          toast.success('Your Feedback has been noted');
+          this.hideModal()
+        });
+    } else {
+      if (newRating && !textArea) {
+        document.getElementsByClassName("validate-rating")[1].style.display = 'block';
+        document.getElementsByClassName("comment-textarea")[0].style.border = '1px solid red';
+      } else if (!newRating && textArea) {
+        document.getElementsByClassName("validate-rating")[0].style.display = 'block';
+        } else {
+          document.getElementsByClassName("validate-rating")[0].style.display = 'block';
+          document.getElementsByClassName("validate-rating")[1].style.display = 'block';
+          document.getElementsByClassName("comment-textarea")[0].style.border = '1px solid red';
+        }
     }
   }
-
 
   /**
    *

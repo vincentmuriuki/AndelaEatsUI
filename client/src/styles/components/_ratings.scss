@@ -101,19 +101,35 @@
 }
 
 .modal-footer {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-end;
+  margin-top: 35px;
+  
   .submit-comment {
      flex: 0 0 auto;
       box-sizing: border-box;
       height: 39px;
       width: 131px;
-      border: 1px solid #3359DF;
+      border: 1px solid $color-blue;
       border-radius: 2px;
-      background-color: #FFFFFF;
-      color: #3359DF;
+      background-color: $color-blue;
+      color: $color-white;
       font-family: "DINPro";
       font-size: 16px;
       line-height: 18px;
-      margin-top: 20px;
+      cursor: pointer;
+  }
+
+  .grayed {
+    height: 39px;
+    width: 131px;
+    border-color: #999999;
+    color: #999999;
+    margin-right: 20px;
+    font-size: 16px;
+    font-family: "DINPro";
+    cursor: pointer;
   }
 }
 
@@ -157,4 +173,9 @@
 
 .modal-adj {
   padding-top: 15px !important;
+}
+
+.validate-rating {
+  color: red;
+  display: none;
 }
