@@ -54,9 +54,6 @@ class Login extends Component {
       hideProgressBar: true,
     };
 
-    const loginError = localStorage.getItem('error');
-    const message = 'Unauthorised Access, Please Log in with an Andela Email';
-
     const countryLocation = [
       { value: 'lagos', label: 'Lagos', location: 1 },
       { value: 'nairobi', label: 'Nairobi', location: 2 },
@@ -66,16 +63,10 @@ class Login extends Component {
     const { selectedOption } = this.state;
     selectedOption && localStorage.setItem('location', selectedOption.location)
 
-    // Display Login Error
-    if (loginError) {
-      toast.error(message, options);
-      localStorage.clear();
-      return <Redirect to="/" />;
-    }
-
     if (checkLogin()) {
       return <Redirect to="/ordermeal" />;
     }
+
     return (
       <div className="main-wrapper">
         <div className="grid-container">
@@ -94,7 +85,7 @@ class Login extends Component {
 
             <div className="action-wrapper">
               <div className="select-button">
-                <Select 
+                <Select
                   value={selectedOption}
                   onChange={this.handleChange}
                   options={countryLocation}
@@ -111,7 +102,7 @@ class Login extends Component {
                       alt="google-logo"
                     />
                   </div>
-                  <div className="login-button">                
+                  <div className="login-button">
                       LOGIN WITH GOOGLE
                   </div>
                 </div>

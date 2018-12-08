@@ -27,13 +27,13 @@ export const EngagementCard = ({
         <div className="custom-col-2">
           <span
             onClick={() => showEditModal(engagement)}
-            className="option-color edit-spacing"
+            className="edit-color edit-spacing"
           >
             Edit
           </span>
           <span
             onClick={() => showDeleteModal(engagement)}
-            className="option-color"
+            className="delete-color"
           >
             Delete
           </span>

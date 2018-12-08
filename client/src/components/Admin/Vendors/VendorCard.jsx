@@ -37,14 +37,14 @@ export const VendorCard = ({
           />
         </div>
         <div className="custom-col-3 options-wrapper">
-          <span 
+          <span className="edit-vendor"
             onClick={() => showEditModal(vendor)}
             role="button"
             tabIndex={0}
           >
             Edit
           </span>
-          <span 
+          <span className="suspend-vendor"
             onClick={() => showSuspendModal(vendor)}
             role="button"
             tabIndex={0}

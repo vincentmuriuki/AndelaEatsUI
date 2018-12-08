@@ -21,7 +21,7 @@ const CollectedAction = ({ rating, meal, showRatingModal }) => (
       { meal && !meal.hasRated && (<div>
         <p className="sub-head">Rate this meal</p>
         <a
-          className="button"
+          className="button rate-button"
           tabIndex="0"
           role="button"
           onClick={() => showRatingModal(meal)}

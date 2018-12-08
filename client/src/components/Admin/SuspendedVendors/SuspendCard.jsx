@@ -25,13 +25,13 @@ export const SuspendCard = ({
         <div className="custom-col-3">{ contactPerson }</div>
         <div className="custom-col-3">
           <span
-            className="option-color edit-spacing"
+            className="edit-color edit-spacing"
             onClick={() => showUnSuspendModal(vendor)}
           >
             Reinstate
           </span>
           <span
-            className="option-color"
+            className="delete-color"
           >
             Delete
           </span>

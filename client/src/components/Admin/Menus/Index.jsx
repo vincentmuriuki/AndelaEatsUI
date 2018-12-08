@@ -356,12 +356,12 @@ class Menus extends Component {
 
             <div className="custom-col-5">
               <Link to="#">
-                <span>Edit</span>
+                <span className="edit-menu">Edit</span>
               </Link>
 
-              <span to="#" onClick={() => this.showDeleteModal(menuItem)}>
-                Delete
-              </span>
+              <Link to="#" onClick={() => this.showDeleteModal(menuItem)}>
+                <span className="delete-menu">Delete</span>
+              </Link>
             </div>
           </div>
         </div>

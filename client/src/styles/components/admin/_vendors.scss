@@ -85,10 +85,25 @@
 
 .options-wrapper {
   display: flex;
-  span {
+
+  .edit-vendor {
     margin-left: 12px;
-    color: #3359DF;
+    color: $color-yellow;
     cursor: pointer;
+
+    &:hover {
+      text-decoration: underline solid $color-yellow;
+    }
+  }
+
+  .suspend-vendor {
+    margin-left: 12px;
+    color: $color-red;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline solid $color-red;
+    }
   }
 }
 

@@ -106,18 +106,40 @@
 
   .button {
     border-radius: 2px;
-    background-color: $color-red;
     padding: 6px 15px;
     margin-right: 9px;
     font-size: 12px;
-    color: $color-white;
-    border: 1px solid $color-red;
     cursor: pointer;
     outline: none;
+    background-color: $color-red;
+    color: $color-white;
+    border: 1px solid $color-red;
 
     &:hover {
       color: $color-red;
       background: $color-white;
     }
+  }
+
+  .rate-button {
+    background-color: $color-yellow;
+    color: $color-white;
+    border: 1px solid $color-yellow;
+
+    &:hover {
+      color: $color-yellow;
+      background: $color-white;
+    }
+  }
+}
+
+.delete-button {
+  background-color: $color-red;
+  color: $color-white;
+  border: 1px solid $color-red;
+
+  &:hover {
+    color: $color-red;
+    background: $color-white;
   }
 }

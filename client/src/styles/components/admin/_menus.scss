@@ -204,3 +204,19 @@
     max-width: px-to-rem(420px);
   }
 }
+
+.edit-menu {
+  color: $color-yellow !important;
+
+  &:hover {
+    text-decoration: underline solid $color-yellow;
+  }
+}
+
+.delete-menu {
+  color: $color-red !important;
+
+  &:hover {
+    text-decoration: underline solid $color-red;
+  }
+}

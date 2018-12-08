@@ -22,7 +22,7 @@ const NotCollectedAction = ({
           > Delete
           </a> :
           <a
-            className="button test"
+            className="button test rate-button"
             role="button"
             tabIndex="0"
             onClick={() => showModal(meal, 'Collect Order')}

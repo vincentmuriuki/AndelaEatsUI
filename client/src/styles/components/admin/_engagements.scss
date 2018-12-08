@@ -20,9 +20,24 @@
   line-height: 18px;
 }
 
-.option-color {
-  color: #3359DF;
+.edit-color {
+  color: $color-yellow;
+  font-family: "DINPro";
   cursor: pointer;
+
+  &:hover {
+    text-decoration: underline solid $color-yellow;
+  }
+}
+
+.delete-color {
+  color: $color-red;
+  font-family: "DINPro";
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline solid $color-red;
+  }
 }
 
 .edit-spacing {
