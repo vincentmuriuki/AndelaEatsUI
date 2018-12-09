@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Pagination from 'rc-pagination/lib';
 import OrderCard from './OrderCard';
 import EmptyContent from '../../common/EmptyContent';
 import Loader from '../../common/Loader/Loader';
-import { fetchOrders } from '../../../actions/admin/ordersAction';
+import { fetchOrders, handlePaginationChange } from '../../../actions/admin/ordersAction';
 import OrdersHeader from './OrdersHeader';
 import svg from '../../../assets/images/download-icon.svg';
 
@@ -21,7 +21,9 @@ export class OrderHistory extends Component {
 
   componentDidMount() {
     const { currentPage } = this.state;
-    this.props.fetchOrders(currentPage);
+    const { handlePaginationChange, fetchOrders } = this.props;
+    handlePaginationChange(currentPage)
+    fetchOrders(currentPage)
   }
 
   redirectToExport = () => {
@@ -30,16 +32,15 @@ export class OrderHistory extends Component {
   }
 
   onChange = (current) => {
-    this.props.fetchOrders(current)
+    const { handlePaginationChange, fetchOrders} = this.props;
+    handlePaginationChange(current)
+    fetchOrders(current)
+    
     this.setState({
       currentPage: current
     })
    }
    
-   handleFilter = (start, end) => {
-    const { currentPage } = this.state;
-    this.props.fetchOrders(currentPage, start, end)
-   }
 
   /**
    * @method renderOrder
@@ -61,19 +62,11 @@ export class OrderHistory extends Component {
 
   render() {
     const {
-      orderHistory: { orders },
+      orderHistory: { orders, meta },
       isLoading,
     } = this.props;
 
     const { currentPage } = this.state;
-
-    if (orders && orders.length === 0) {
-      return (
-        <div id="admin-orders-no-content">
-          <EmptyContent message="No meal orders requested yet" />
-        </div>
-      );
-    }
 
     return (
       <section className="admin-orders">
@@ -89,26 +82,36 @@ export class OrderHistory extends Component {
           />
         )}
 
-          <div className="table-header">
-            <div className="custom-col-4">Name</div>
-            <div className="custom-col-2">Date</div>
-            <div className="custom-col-4">Order Description</div>
-            <div className="custom-col-2">Status</div>
-          </div>
-
-          { orders && this.renderOrder(orders)}
-
           {
-            orders && orders.length > 15 && (
-              <Pagination
-                onChange={this.onChange}
-                current={currentPage}
-                pageSize={15}
-                total={orders.length}
-                className="pagination"
-              />
-            )
-          }
+            orders && orders.length === 0 ?
+              (
+                <div id="admin-orders-no-content">
+                  <EmptyContent message="No meal orders requested yet" />
+                </div>
+              ) : 
+              <Fragment>
+                <div className="table-header">
+                  <div className="custom-col-4">Name</div>
+                  <div className="custom-col-2">Date</div>
+                  <div className="custom-col-4">Order Description</div>
+                  <div className="custom-col-2">Status</div>
+                </div>
+
+                { orders && this.renderOrder(orders)}
+
+                {
+                  meta && meta.total_rows > 14 && (
+                    <Pagination
+                      onChange={this.onChange}
+                      current={currentPage}
+                      pageSize={15}
+                      total={meta.total_rows}
+                      className="pagination"
+                    />
+                  )
+                }
+              </Fragment>
+            }
         </div>
       </section>
     );
@@ -129,4 +132,4 @@ OrderHistory.propTypes = {
   })
 };
 
-export default connect(mapStateToProps, { fetchOrders })(OrderHistory);
+export default connect(mapStateToProps, { fetchOrders, handlePaginationChange })(OrderHistory);

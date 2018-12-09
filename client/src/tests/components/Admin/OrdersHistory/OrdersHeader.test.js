@@ -1,19 +1,20 @@
 /* eslint-disable no-undef */
 import React from 'react';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 
 import { OrdersHeader } from '../../../../components/Admin/OrderHistory/OrdersHeader';
 
 const setup = () => {
   const props = {
     title: '',
-    isLoading: false,
-    fetchOrders: jest.fn(),
     orders: [],
-    redirectToExport: jest.fn()
+    redirectToExport: jest.fn(),
+    svg: '',
+    type: 2,
+    headers: []
   }
 
-  return mount(<OrdersHeader {...props} />)
+  return shallow(<OrdersHeader {...props} />)
 }
 
 const wrapper = setup();
@@ -23,9 +24,4 @@ describe('OrdersHeader Component', () => {
   it('should render correctly', () => {
     expect(wrapper).toMatchSnapshot();
   })
-  
-  it('expects the following methods to be defined', () => {
-    wrapper.instance().handleSubmit();
-    wrapper.instance().toggleFilterModal();
-  })
-})
+});

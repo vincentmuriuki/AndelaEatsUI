@@ -41,7 +41,7 @@ export class ExportOrders extends Component {
       return (
         <div id="admin-orders-no-content">
           <EmptyContent
-            message="No meal has been ordered in the last 24 hours"
+            message="No meal has been booked in the next 24 hours"
           />
         </div>
       );

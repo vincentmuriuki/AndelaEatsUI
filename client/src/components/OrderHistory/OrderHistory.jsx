@@ -42,8 +42,8 @@ export class Orders extends Component {
     this.state = {
       isOpen: false,
       searchParam: '',
-      start: addDays(new Date, -5),
-      end: addDays(new Date(), 5),
+      start: addDays(new Date, -7),
+      end: addDays(new Date(), 7),
       showModal: false,
       modalContent: null,
       showRatingModal: false,
@@ -441,9 +441,9 @@ export class Orders extends Component {
                         />
                       ))
                     }
-                  </div>
+                    </div>
                   {
-                    orders.orders.length > 0 && (
+                    orders.orders.length > 15 && (
                       <Pagination
                         locale={{ items_per_page: 'Items' }}
                         onChange={this.handlePageChange}

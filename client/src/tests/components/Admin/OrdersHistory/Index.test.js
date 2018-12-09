@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import React from 'react';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 
 import { OrderHistory } from '../../../../components/Admin/OrderHistory/Index';
 
@@ -11,13 +11,14 @@ const setup = () => {
     },
     isLoading: false,
     fetchOrders: jest.fn(),
+    handlePaginationChange: jest.fn(),
     history: {
       push: jest.fn()
     },
     orders: []
   }
 
-  return mount(<OrderHistory {...props} />)
+  return shallow(<OrderHistory {...props} />)
 }
 
 const wrapper = setup();
@@ -32,7 +33,6 @@ describe('OrderHistory Component', () => {
     wrapper.instance().componentDidMount();
     wrapper.instance().redirectToExport();
     wrapper.instance().onChange();
-    wrapper.instance().handleFilter();
     wrapper.instance().renderOrder() 
   })
-})
+});

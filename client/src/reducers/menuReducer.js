@@ -1,9 +1,9 @@
 import {
-  SET_MENUS, 
-  SELECT_MEAL, 
-  MAKE_ORDER_SUCCESS, 
-  RESET_MENU, 
-  MAKE_ORDER_FAILURE, 
+  SET_MENUS,
+  SELECT_MEAL,
+  MAKE_ORDER_SUCCESS,
+  RESET_MENU,
+  MAKE_ORDER_FAILURE,
   MENU_IS_LOADING,
   FETCH_USERS_MENU_LOADING,
   FETCH_USERS_MENU_SUCCESS,
@@ -24,7 +24,7 @@ const menuReducer = (state = initialMenus, action) => {
       return { ...state, message: action.payload.message };
     case MAKE_ORDER_FAILURE:
       return { ...state, message: action.payload.message };
-    case RESET_MENU: 
+    case RESET_MENU:
       return {
         ...state, acc1: '', acc2: '', mainMeal: '', message: ''
       };

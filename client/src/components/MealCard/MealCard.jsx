@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CollectedAction from './CollectedAction';
 import NotCollectedAction from './NotCollectedAction';
-import dateFormatter from '../../helpers/dateFormatter';
-import formatDateToISOString from '../../helpers/dateFormatter';
+import { format } from 'date-fns';
 
 const MealCard = ({ meal: { id, dateBookedFor, mealItems, orderStatus }, showModal, meal, showRatingModal }) => (
   <div className="card-container">
@@ -21,7 +20,7 @@ const MealCard = ({ meal: { id, dateBookedFor, mealItems, orderStatus }, showMod
           <p className="heading">{`${mealItems[0].name}, ${mealItems[1].name}, ${mealItems[2].name}`}</p>
           <p>
             <span className="sub-head">Order date&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <span className="heading">{formatDateToISOString(dateBookedFor)}</span>
+            <span className="heading">{format(dateBookedFor, "dddd MMMM D")}</span>
           </p>
         </div>
 

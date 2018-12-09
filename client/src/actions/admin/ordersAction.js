@@ -2,7 +2,8 @@ import axios from 'axios';
 import {
   FETCH_MEAL_ORDERS_SUCCESS,
   FETCH_MEAL_ORDERS_FAILURE,
-  FETCH_MEAL_ORDERS_LOADING
+  FETCH_MEAL_ORDERS_LOADING,
+  PAGINATION_CHANGE
 } from '../actionTypes';
 
 import { config } from '../../config';
@@ -42,7 +43,18 @@ export const fetchOrders = (currentPage = '', startDate = '', endDate = '') => d
       dispatch(fecthOrdersLoading(false));
     })
     .catch((error) => {
+      if (error.response.status === 400) {
+        document.cookie = "jwt-token=; expires=Tue, 20 Nov 2018 13:21:57 GMT; Path=/; Domain=.andela.com";
+      }
       dispatch(fecthOrdersFailure(error));
       dispatch(fecthOrdersLoading(false));
     });
 };
+
+
+export const handlePaginationChange = currentPage => {
+  return {
+    type: PAGINATION_CHANGE,
+    payload: currentPage
+  }
+}

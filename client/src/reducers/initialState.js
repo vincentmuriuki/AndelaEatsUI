@@ -43,7 +43,8 @@ export const initialVendors = {
 
 export const mealOrders = {
   isLoading: false,
-  orders: []
+  orders: [],
+  currentPage: ''
 };
 
 export const initialMealItems = {
