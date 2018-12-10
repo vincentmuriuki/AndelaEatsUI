@@ -10,9 +10,9 @@ const allConfig = {
   },
 
   production: {
-    ANDELA_API_BASE_URL: 'https://api.andela.com',
+    ANDELA_API_BASE_URL: 'https://api-staging.andela.com',
     API_BASE_URL: 'https://andelaeats-staging-test.andela.com/api/v1',
-    BASE_URL: 'https://feed.andela.com',
+    BASE_URL: 'https://feed-staging.andela.com',
     SENTRY_URL: 'https://5a60f1efc4f8482eade3cbcfd0ab77dc@sentry.io/1234924',
     ANDELAEATS_API_BASE_URL: 'https://andelaeats.herokuapp.com/api/v1'
   },

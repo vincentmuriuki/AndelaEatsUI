@@ -15,10 +15,4 @@ module.exports = merge(webpackCommonConfig, {
     new webpack.EnvironmentPlugin({ NODE_ENV: 'production' }),
   ],
   devtool: "source-map",
-  devServer: {
-    compress: true,
-    historyApiFallback: true,
-    contentBase: '/',
-    hot: true
-  },
 });

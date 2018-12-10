@@ -1,8 +1,14 @@
 const express = require('express');
+const logger= require('morgan');
 
 const app = express();
 
-app.use('/', express.static('dist'));
-app.use('*', express.static('dist'));
+app.use(logger('dev'));
 
-app.listen(process.env.PORT || 8080);
+app.use(express.static(`${__dirname}/dist`));
+
+app.use('*', (request, response) => {
+  response.sendFile(`${__dirname}/dist/index.html`);
+});
+
+app.listen(process.env.PORT || 3000);
