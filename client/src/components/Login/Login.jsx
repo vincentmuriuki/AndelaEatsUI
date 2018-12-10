@@ -80,7 +80,7 @@ class Login extends Component {
             <div className="login-page-caption">
                 A convinent way to 
               <br /> 
-                order your meals
+                make orders
             </div>
 
             <div className="action-wrapper">
