@@ -4,9 +4,9 @@ const path = require('path');
 
 const dotEnv = require('dotenv');
 
-const {	
-  CLOUDINARY_CLOUD_NAME,	
-  CLOUDINARY_API_KEY,	
+const {
+  CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_API_KEY,
   CLOUDINARY_API_SECRET,
   CLOUDINARY_URL,
 } = dotEnv.config().parsed;

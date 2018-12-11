@@ -9,17 +9,21 @@ const props = {
     name: 'Larrystone Yakov',
     picture: ''
   },
+  userRole: {
+      role: 0
+  },
   logoutActiveUser: jest.fn(),
   loadActiveUser: jest.fn(),
+  getAdminUser: jest.fn(),
   history: {
     push: jest.fn()
   }
 };
 
 let wrapper;
-/* 
-global jest 
-expect 
+/*
+global jest
+expect
 */
 describe('NotCollectedAction Component', () => {
   it('should render atleast once', () => {
@@ -29,7 +33,7 @@ describe('NotCollectedAction Component', () => {
 
   describe('Class methods test', () => {
     it('componentDidUpdate method', () => {
-      const prevProp = { ...props, activeUser: { name: 'Bamboo HR' } };
+      const prevProp = { ...props, activeUser: { name: 'Bamboo HR', userRole: { role: 1 } } };
       wrapper = shallow(<Navbar {...props} />);
       wrapper.instance().componentDidUpdate(prevProp);
       expect(wrapper.instance().state.activeUser).toBe(props.activeUser);
@@ -44,17 +48,3 @@ describe('NotCollectedAction Component', () => {
   });
 });
 
-
-describe('ConnectedNavbar component', () => {
-  it('renders successfully', () => {
-    const middlewares = [thunk];
-    const mockStore = configureMockStore(middlewares);
-    const store = mockStore({
-      userReducer: {
-        activeUser: {}
-      }
-    });
-    wrapper = shallow(<ConnectedNavBar store={store} />);
-    expect(wrapper).toMatchSnapshot();
-  });
-});
