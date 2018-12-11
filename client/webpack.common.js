@@ -4,9 +4,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
-const outputPath = path.join(__dirname, "dist");
-const port = process.env.PORT || 3000;
-
 module.exports = {
   context: __dirname,
   devtool: 'inline-source-map',
@@ -67,11 +64,10 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      template: `${__dirname}/src/index.html`,
       inject: 'body',
       favicon: 'src/assets/images/favicon.ico'
     }),
-    
     new ExtractTextPlugin("css/bundle.css")
   ],
 };
