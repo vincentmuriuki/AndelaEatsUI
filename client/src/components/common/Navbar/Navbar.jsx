@@ -7,6 +7,7 @@ import logo from '../../../assets/images/andela-logo.png';
 
 // Actions
 import loadActiveUser from '../../../actions/activeUserAction';
+import { getAdminUser } from '../../../actions/admin/adminUserAction';
 
 // helper
 import logoutActiveUser from '../../../helpers/logoutUser';
@@ -15,7 +16,7 @@ import logoutActiveUser from '../../../helpers/logoutUser';
 /**
  * Application nav bar
  */
-export class Navbar extends Component { 
+export class Navbar extends Component {
 /**
  * Creates an instance of login form
  * @param {any} props -
@@ -24,7 +25,6 @@ export class Navbar extends Component {
     super(props);
     this.state = {
       activeUser: {}
-
     };
     this.logOutUser = this.logOutUser.bind(this);
   }
@@ -35,6 +35,7 @@ export class Navbar extends Component {
    */
   componentDidMount() {
     this.props.loadActiveUser();
+    this.props.getAdminUser();
   }
 
   /**
@@ -44,7 +45,10 @@ export class Navbar extends Component {
    */
   componentDidUpdate(prevProps) {
     if (prevProps.activeUser !== this.props.activeUser) {
-      this.setState({ activeUser: this.props.activeUser }); // eslint-disable-line
+      this.setState({ activeUser: this.props.activeUser });// eslint-disable-line
+    }
+    if (prevProps.userRole !== this.props.userRole) {
+      this.setState({ userRole: this.props.userRole });// eslint-disable-line
     }
   }
 
@@ -52,21 +56,21 @@ export class Navbar extends Component {
    * @memberof Navbar
    * @param {props} props
    * @returns {null} null
-   */  
+   */
   logOutUser(props) {
     this.props.logoutActiveUser();
     this.props.history.push('/');
   }
 
   /**
-   * 
+   *
    * This is React render method that render the UI on the dom
    * @function Navbar
    * @return { void }
    */
   render() {
-    const { activeUser } = this.state;
-    const { isAdmin, adminDashboard } = this.props;
+    const { activeUser, userRole } = this.state;
+    const { adminDashboard } = this.props;
 
     return (
       <header className="nav-bar">
@@ -90,8 +94,9 @@ export class Navbar extends Component {
             <div className="arrow-down" />
             <div className="dropdown-content">
               <a href="" onClick={logoutActiveUser}>Signout</a>
-              { isAdmin && adminDashboard ? <Link to="/">User Dashboard</Link>
+              { userRole === 1 ? adminDashboard ? <Link to="/">User Dashboard</Link>
                 : <Link to="/admin/orders">Admin Dashboard</Link>
+                : ''
               }
             </div>
           </div>
@@ -109,13 +114,16 @@ export class Navbar extends Component {
 function mapStateToProps(state) {
   return {
     activeUser: state.userReducer,
+    userRole: state.userRole.role,
   };
 }
 
 Navbar.propTypes = {
+  getAdminUser: PropTypes.func.isRequired,
   loadActiveUser: PropTypes.func.isRequired,
   logoutActiveUser: PropTypes.func.isRequired,
   activeUser: PropTypes.object.isRequired,
+  userRole: PropTypes.number.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }),
@@ -123,8 +131,9 @@ Navbar.propTypes = {
   adminDashboard: PropTypes.bool
 };
 
-export default connect(mapStateToProps, 
-  { 
+export default connect(mapStateToProps,
+  {
     loadActiveUser,
-    logoutActiveUser 
+    logoutActiveUser,
+    getAdminUser
   })(Navbar);

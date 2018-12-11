@@ -93,3 +93,7 @@ export const initialSuspendedVendors = {
   isLoading: false,
   vendors: [],
 };
+
+export const initialUserRole = {
+  role: 0
+};
